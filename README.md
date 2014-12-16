@@ -9,7 +9,7 @@ The logging system provided by System Platform is quite nice but there has alway
 
 A few years ago at the software conference in Dallas I had a conversation with a Wonderware engineer that had built a tool to read the log files and forward them to various different formats: Syslog, CSV, SQL Server, etc.  I thought this was a brilliant idea but unfortunately it was never productized so the the general customer base could benefit.  After some time I decided I would do something about it.
 
-So with a little patience, ingenuity, and an existing DLL in the system I was able to reverse engineer the format of the log files.  From that I wrote a library, based on the original system provided one, with some nice improvements and additions.  
+So with a little patience, ingenuity, and an existing DLL in the system I was able to reverse engineer the format of the log files.  No, I'm not a genius or a hacker, just spent a little special time with the files and the code before they agreed to show me their secrets.  From that I wrote a library, based heavily on the original system provided one, with some nice improvements and additions.  
 
 The first application that I plan to use the library for is an ultra simple console app that when run will output the latest unread messages to a STDOUT console.  From there you can configure your own application to consume this input for whatever purpose you wish.  I plan to create a [Splunk Universal Forwarder](http://docs.splunk.com/Splexicon:Universalforwarder) configuration to take this output and send to a Splunk Enterprise indexing system.  
 
@@ -36,6 +36,9 @@ In the example I am outputting the records in KVP (Key/Value Pair) format but I 
 
 ##The Magic
 You may ask, what's the magic sauce behind tracking unread records so easily?  If you look through the library carefully you will see where I create a cache file in the logs directory every time I read log records.  This cache file is just a JSON dump of the last record read.  When I go to determine all unread records I read in this cache file and look at the message number.  This tells me how far back to go.  From there I start by reading the last record and work my way back until I find the previous message number or the maximum number of records to return.
+
+##A Note on Performance
+I haven't done exhaustive scientific testing but I have done enough to know that performance simply isn't an issue.  I ran a number of tests reading the last 10,000 records.  On average this took about 200 ms.  For those who are mathematically challenged (like me sometimes) that means we are clipping at 50,000 records/second pace for reading.  This was done inside a Win2K8R2 VM with 6 GB of RAM.  Doing shorter reads the rate tends to go down as you are spending more time on the up front stuff like opening the file stream and reading the header as a portion of the overall cost.  Your output format will heavily influence the overall performance but for my money if you are blasting more than 50,000 log records a second then you have really serious issues in your environment that need to be addressed first before you worry about log consolidation and analysis.   
 
 ##Example Projects
 
@@ -65,6 +68,8 @@ See my current roadmap and overall [TODO list](/TODO.md)
 
 ## Shoutouts to ma Peeps
 Thanks to Brian Gilmore (@BrianMGilmore) and Terry McCorkle (@0psys) of @splunk for validating the fact that this work will be very useful in supporting some of the bigger initiatives that have going on at Splunk, specifically around log collection in ICS for security. 
+
+Also another huge piece of credit to my undercover elves in the 949 that inspired this work and might want to re-join the effort now that it's in the wild.
 
 ## License
 
