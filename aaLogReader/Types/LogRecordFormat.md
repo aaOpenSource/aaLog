@@ -57,21 +57,3 @@
 |[1004]|0|NULL|Empty Bytes (Field Delimiter)|
 |[1005]|0|NULL|Empty Bytes (Field Delimiter)|
 |[1006]|0|NULL|Empty Byte (Record Delimiter?)|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
-|0|0|NULL|0|
