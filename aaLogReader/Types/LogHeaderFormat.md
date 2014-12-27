@@ -1,5 +1,6 @@
 |Array Element|Byte Value|String Value|Description|
-|---|---|---|---|
+|---|---|---|---
+|[0]|4||End of Transmission (Header Delimiter Maybe?)|
 |[1]|0|#VALUE!|Unknown|
 |[2]|0|#VALUE!|Unknown|
 |[3]|0|#VALUE!|Unknown|
