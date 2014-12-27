@@ -18,6 +18,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogConsoleTester", "aaLog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogSplunkConsole", "aaLogSplunkConsole\aaLogSplunkConsole.csproj", "{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{883D3C70-5572-48C2-809C-8EFCA4B8EC66}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+		TODO.md = TODO.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogSavetoFileExample", "aaLogSavetoFileExample\aaLogSavetoFileExample.csproj", "{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +98,21 @@ Global
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|x86.ActiveCfg = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release - aaSplunkLogConsole|x86.ActiveCfg = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

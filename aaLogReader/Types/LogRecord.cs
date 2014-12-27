@@ -124,7 +124,6 @@ namespace aaLogReader
 
             return returnValue;
         }
-
         
         /// <summary>
         /// Get a header for a series of log records with a delimiter
