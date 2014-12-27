@@ -67,7 +67,12 @@ namespace aaLogReader
             return JsonConvert.SerializeObject(this);
         }
 
-        public string ToKVP(KVPFormat format = KVPFormat.Full)
+        /// <summary>
+        /// Return the record in the form of a Key-Value Pair
+        /// </summary>
+        /// <param name="format">Full or Minimal</param>
+        /// <returns></returns>
+        public string ToKVP(ExportFormat format = ExportFormat.Full)
         {
             string returnValue;
             StringBuilder localSB = new StringBuilder();
@@ -88,7 +93,7 @@ namespace aaLogReader
                 localSB.Append(((char)34).ToString() + this.HostFQDN + ((char)34).ToString());
 
 
-                if (format == KVPFormat.Full)
+                if (format == ExportFormat.Full)
                 {
                     // Use all parameters if we want a full format
                     localSB.Append(", MessageNumber=");
@@ -110,6 +115,46 @@ namespace aaLogReader
                     localSB.Append(((char)34).ToString() + this.SessionID + ((char)34).ToString());
 
                 }
+                returnValue = localSB.ToString();
+            }
+            catch
+            {
+                returnValue = "";
+            }
+
+            return returnValue;
+        }
+        
+        /// <summary>
+        /// Get a header for a series of log records with a delimiter
+        /// </summary>
+        /// <param name="Delimiter"></param>
+        /// <param name="format"></param>
+        /// <returns></returns>
+        private string localHeader(char Delimiter = ',', ExportFormat format = ExportFormat.Full)
+        {
+            string returnValue;
+            StringBuilder localSB = new StringBuilder();
+
+            try
+            {
+
+                localSB.Append("EventDateTime");
+                localSB.Append(Delimiter + "LogFlag");
+                localSB.Append(Delimiter + "Message");
+                localSB.Append(Delimiter + "HostFQDN");
+
+
+                if (format == ExportFormat.Full)
+                {
+                    // Use all parameters if we want a full format
+                    localSB.Append(Delimiter + "MessageNumber");
+                    localSB.Append(Delimiter + "ProcessID");
+                    localSB.Append(Delimiter + "ThreadID");
+                    localSB.Append(Delimiter + "Component");
+                    localSB.Append(Delimiter + "ProcessName");
+                    localSB.Append(Delimiter + "SessionID");
+                }
 
                 returnValue = localSB.ToString();
             }
@@ -119,10 +164,76 @@ namespace aaLogReader
             }
 
             return returnValue;
-
+        }
+        
+        public static string Header(char Delimiter = ',', ExportFormat format = ExportFormat.Full)
+        {
+            LogRecord lr = new LogRecord();
+            return lr.localHeader(Delimiter, format);
         }
 
-        public enum KVPFormat
+        public static string HeaderCSV(ExportFormat format = ExportFormat.Full)
+        {
+            return LogRecord.Header(',', format);
+        }
+
+        public static string HeaderTSV(ExportFormat format = ExportFormat.Full)
+        {
+            return LogRecord.Header('\t', format);
+        }
+
+        /// <summary>
+        ///  Get the record in the form of a delimited string
+        /// </summary>
+        /// <param name="Delimiter">Delimiter to Use</param>
+        /// <param name="format">Full or Minimal</param>
+        /// <returns></returns>
+        public string ToDelimitedString(char Delimiter = ',', ExportFormat format = ExportFormat.Full)
+        {
+
+            string returnValue;
+            StringBuilder localSB = new StringBuilder();
+
+            try
+            {
+
+                localSB.Append(this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append(Delimiter + this.LogFlag);
+                localSB.Append(Delimiter + ((char)34).ToString() + this.Message + ((char)34).ToString());
+                localSB.Append(Delimiter + this.HostFQDN);
+
+                if (format == ExportFormat.Full)
+                {
+                    // Use all parameters if we want a full format
+                    localSB.Append(Delimiter +this.MessageNumber.ToString());
+                    localSB.Append(Delimiter +this.ProcessID.ToString());
+                    localSB.Append(Delimiter +this.ThreadID.ToString());
+                    localSB.Append(Delimiter + ((char)34).ToString() + this.Component + ((char)34).ToString());
+                    localSB.Append(Delimiter + ((char)34).ToString() + this.ProcessName + ((char)34).ToString());
+                    localSB.Append(Delimiter +this.SessionID);
+                }
+
+                returnValue = localSB.ToString();
+            }
+            catch
+            {
+                returnValue = "";
+            }
+
+            return returnValue;
+        }
+
+        public string ToCSV(ExportFormat format = ExportFormat.Full)
+        {
+            return this.ToDelimitedString(',', format);
+        }
+
+        public string ToTSV(ExportFormat format = ExportFormat.Full)
+        {
+            return this.ToDelimitedString('\t',format);
+        }
+
+        public enum ExportFormat
         {
              Full=1
             ,Minimal = 2
