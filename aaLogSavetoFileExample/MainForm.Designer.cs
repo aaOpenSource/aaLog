@@ -35,6 +35,7 @@
             this.btnStart = new System.Windows.Forms.Button();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnStop = new System.Windows.Forms.Button();
+            this.btnWriteHeader = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtFileName
@@ -43,7 +44,7 @@
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.Size = new System.Drawing.Size(268, 20);
             this.txtFileName.TabIndex = 0;
-            this.txtFileName.Text = "c:\\temp\\output.tsv";
+            this.txtFileName.Text = "c:\\temp\\";
             // 
             // label1
             // 
@@ -57,7 +58,6 @@
             // tmrTimer1
             // 
             this.tmrTimer1.Interval = 1000;
-            this.tmrTimer1.Tick += new System.EventHandler(this.tmrTimer1_Tick);
             // 
             // btnStart
             // 
@@ -85,13 +85,23 @@
             this.btnStop.TabIndex = 5;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // btnWriteHeader
+            // 
+            this.btnWriteHeader.Location = new System.Drawing.Point(297, 24);
+            this.btnWriteHeader.Name = "btnWriteHeader";
+            this.btnWriteHeader.Size = new System.Drawing.Size(88, 23);
+            this.btnWriteHeader.TabIndex = 6;
+            this.btnWriteHeader.Text = "Write Header";
+            this.btnWriteHeader.UseVisualStyleBackColor = true;
+            this.btnWriteHeader.Click += new System.EventHandler(this.btnWriteHeader_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(950, 323);
+            this.Controls.Add(this.btnWriteHeader);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.btnStart);
@@ -112,6 +122,7 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.Button btnStop;
+        private System.Windows.Forms.Button btnWriteHeader;
     }
 }
 

@@ -19,6 +19,8 @@ namespace aaLogSavetoFileExample
         public MainForm()
         {
             InitializeComponent();
+            logReader = new aaLogReader.aaLogReader();
+            addlog("Start");
         }
 
         private void addlog(string Message)
@@ -39,10 +41,10 @@ namespace aaLogSavetoFileExample
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            logReader = new aaLogReader.aaLogReader();
-
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(txtFileName.Text, true))
-            {
+            
+            
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(txtFileName.Text + "output.csv", true))
+            {                
                 file.WriteLine(LogRecord.HeaderTSV());
             }
 
@@ -73,6 +75,15 @@ namespace aaLogSavetoFileExample
         private void btnStop_Click(object sender, EventArgs e)
         {
             tmrTimer1.Stop();
+        }
+
+        private void btnWriteHeader_Click(object sender, EventArgs e)
+        {                        
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(txtFileName.Text + "header.csv", true))
+            {     
+                file.WriteLine(LogHeader.HeaderCSV());
+                file.WriteLine(logReader.ReadLogHeader().ToCSV());
+            }
         }
     }
 }
