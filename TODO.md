@@ -9,7 +9,7 @@ No major items at the moment
 
 ## Minor
 - [X] Improve logging for Info and Debug
-- [X] Create Splunk Universal Forwarder configuration Commit f4fea28316b51b6a1388b92c2e927aa18742f7e8
+- [X] Create Splunk Universal Forwarder configuration
 
 ## Testing
 None planned at the moment
