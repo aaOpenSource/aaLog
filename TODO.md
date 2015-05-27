@@ -6,7 +6,7 @@ These are not issues or bugs, just a roadmap for my development.
 No major items at the moment
 
 ## Minor
-- [ ] Improve logging for Info and Debug
+- [X] Improve logging for Info and Debug
 - [ ] Create Splunk Universal Forwarder configuration
 
 ## Testing
