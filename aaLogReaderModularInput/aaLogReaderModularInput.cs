@@ -56,16 +56,7 @@ namespace aaLogReaderModularInput
                                 DataType = DataType.Number,
                                 RequiredOnCreate = true,
                                 Validation = "is_pos_int('maxmessagecount')"
-                            },
-                            new Argument
-                            {
-                                Name = "cycletime",
-                                Description = "Time to wait between log reads (milliseconds)",
-                                DataType = DataType.Number,
-                                RequiredOnCreate = true,
-                                Validation = "is_pos_int('cycletime')"
-                            },
-
+                            }
                     }
                 };
 
@@ -89,20 +80,12 @@ namespace aaLogReaderModularInput
             try
             {
 
-                string logfilepath = ((SingleValueParameter)(validation.Parameters["logfilepath"])).ToString();
-                Int32 cycletimeint = ((SingleValueParameter)(validation.Parameters["cycletime"])).ToInt32();
+                string logfilepath = ((SingleValueParameter)(validation.Parameters["logfilepath"])).ToString();                
 
                 // Verify path is valid
                 if (returnValue && !System.IO.Directory.Exists(logfilepath))
                 {
                     errorMessage = "LogFilePath " + logfilepath + " does not exist on local machine";
-                    return false;
-                }
-
-                //Verify cycle time is minimum value (250 ms)
-                if (returnValue && (cycletimeint < 250))
-                {
-                    errorMessage = "cycle time must be at least 250ms";
                     return false;
                 }
 
@@ -133,8 +116,6 @@ namespace aaLogReaderModularInput
             {
                 string logfilepath = ((SingleValueParameter)(inputDefinition.Parameters["logfilepath"])).ToString();
                 Int32 maxmessagecount = ((SingleValueParameter)(inputDefinition.Parameters["maxmessagecount"])).ToInt32();
-                Int32 cycletime = ((SingleValueParameter)(inputDefinition.Parameters["cycletime"])).ToInt32();
-
 
                 // Initialize the log reader
                 aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader(logfilepath);
@@ -144,9 +125,6 @@ namespace aaLogReaderModularInput
 
                 while (true)
                 {
-                    // Pause for the cycletime in milliseconds
-                    await Task.Delay(cycletime);
-
                     //Simple call to get all unread records, limiting the return count to max message count
                     List<LogRecord> logRecords = logReader.GetUnreadRecords(maxmessagecount);
 

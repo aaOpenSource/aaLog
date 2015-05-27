@@ -51,6 +51,13 @@ A simple GUI app that will send data to Splunk over a TCP connection.
 ###aaLogSplunkConsole
 A basic console app to send output to the STDOUT for consumption by Splunk or any other processing engine you wish.
 
+###aaLogReaderModularInput
+A Splunk modular input to simplify forwarding Archestra logs to [Splunk](http://www.splunk.com/).  To read about modular inputs for C# start with this link -
+[How to create modular inputs in Splunk SDK for C# v2.x](http://dev.splunk.com/view/csharp-sdk-pcl/SP-CAAAEY3)
+
+If you think at first blush that creating a modular input is a lot more work than just streaming data over TCP in KVP format you would be correct.  However, after you work through all of the details you will see that a modular input provides a package that provides for a much more consistent and repeatable experience for the end user.  It is important to note that you will require a Splunk Forwarder to be installed on the machine where you are collecting logs.  If this is not feasible then a standalone EXE that doesn't require an installation and run as a service might be a better option.
+
+
 ## Platforms
 
 All projects were compiled against .Net 4.0 but in concept you can probably go pretty far back as I don't believe I've used anything too exotic with the exception of Nuget packages for JSON parsing and Logging.
