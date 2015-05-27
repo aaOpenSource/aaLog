@@ -23,7 +23,7 @@ namespace aaLogConsoleTester
 
                 if (answer.ToLower() == "y")
                 {
-                    List<LogRecord> records = logReader.GetUnreadRecords(5);
+                    List<LogRecord> records = logReader.GetUnreadRecords(10, "Logger started",true);
 
                     Console.WriteLine("Record count : " + records.Count.ToString());
 
