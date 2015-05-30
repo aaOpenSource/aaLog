@@ -5,7 +5,7 @@ using System.Text;
 namespace aaLogReader
 {
     /// <summary>
-    /// A standard log record
+    /// A standard log lastRecord
     /// </summary>
     public class LogRecord
     {
@@ -68,7 +68,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        /// Return the record in the form of a Key-Value Pair
+        /// Return the lastRecord in the form of a Key-Value Pair
         /// </summary>
         /// <param name="format">Full or Minimal</param>
         /// <returns></returns>
@@ -183,7 +183,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        ///  Get the record in the form of a delimited string
+        ///  Get the lastRecord in the form of a delimited string
         /// </summary>
         /// <param name="Delimiter">Delimiter to Use</param>
         /// <param name="format">Full or Minimal</param>

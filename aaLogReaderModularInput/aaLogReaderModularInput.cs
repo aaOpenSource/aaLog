@@ -130,7 +130,7 @@ namespace aaLogReaderModularInput
 
                     //await eventWriter.LogAsync(Severity.Debug, "Read " + logRecords.Count.ToString() + " records");
                    
-                    // Loop through each record and send to Splunk
+                    // Loop through each lastRecord and send to Splunk
                     foreach (LogRecord record in logRecords)
                     {
                         await eventWriter.QueueEventForWriting(new Event

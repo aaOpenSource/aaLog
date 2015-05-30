@@ -146,7 +146,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        ///  Get the record in the form of a delimited string
+        ///  Get the lastRecord in the form of a delimited string
         /// </summary>
         /// <param name="Delimiter">Delimiter to Use</param>
         /// <param name="format">Full or Minimal</param>

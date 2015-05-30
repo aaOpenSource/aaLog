@@ -23,13 +23,14 @@ namespace aaLogConsoleTester
 
                 if (answer.ToLower() == "y")
                 {
-                    List<LogRecord> records = logReader.GetUnreadRecords(10, "Logger started",true);
+                    List<LogRecord> records = logReader.GetUnreadRecords(10);
 
                     Console.WriteLine("Record count : " + records.Count.ToString());
 
                     foreach (LogRecord lr in records)
                     {
-                        Console.WriteLine(lr.ToKVP());
+                        Console.WriteLine(lr.MessageNumber.ToString() + " " + lr.Message);
+                        //Console.WriteLine(lr.ToKVP());
                     }
                 }
             }

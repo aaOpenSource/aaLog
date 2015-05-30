@@ -343,11 +343,11 @@ namespace aaLogReader
                 workingPosition = 40;
                 localHeader.EndDateTime = this.GetDateTimeFromByteArray(byteArray, workingPosition);
 
-                // Offset for the first record
+                // Offset for the first lastRecord
                 workingPosition = 48;
                 localHeader.OffsetFirstRecord = (int)BitConverter.ToUInt32(byteArray, workingPosition);
 
-                // Offset for the last record
+                // Offset for the last lastRecord
                 workingPosition = 52;
                 localHeader.OffsetLastRecord = (int)BitConverter.ToUInt32(byteArray, workingPosition);
 
@@ -390,10 +390,10 @@ namespace aaLogReader
         }
 
         /// <summary>
-        /// Read a log record that starts at the specified offset
+        /// Read a log lastRecord that starts at the specified offset
         /// </summary>
         /// <param name="FileOffset">Offset for the current file stream</param>
-        /// <param name="MessageNumber">Passed message number to set on the log record.  This should be calculated from external logic</param>
+        /// <param name="MessageNumber">Passed message number to set on the log lastRecord.  This should be calculated from external logic</param>
         /// <returns></returns>
         private LogRecord ReadLogRecord(int FileOffset, ulong MessageNumber = 0)
         {
@@ -434,10 +434,10 @@ namespace aaLogReader
                 }
 
                 //Get the first 4 byteArray of data byte array that we just retrieved.  
-                // This tells us how long this record is.
+                // This tells us how long this lastRecord is.
                 recordLength = BitConverter.ToInt32(byteArray, 4);
 
-                // If the record length is not > 0 then bail on the function, returning an empty record with status code
+                // If the lastRecord length is not > 0 then bail on the function, returning an empty lastRecord with status code
                 if(recordLength <= 0)
                 {
                     throw new aaLogReaderException("Record Length is 0");
@@ -449,7 +449,7 @@ namespace aaLogReader
                 //Recreate the byte array with the proper length
                 byteArray = new byte[checked(recordLength + 1)];
 
-                //Now get the actual record data into the byte array for processing
+                //Now get the actual lastRecord data into the byte array for processing
                 this.globalFileStream.Read(byteArray, 0, recordLength);
 
                 // Record Length.  We've already calculated this so just use internal variable
@@ -502,7 +502,7 @@ namespace aaLogReader
 
                 localRecord.ReturnCode.Status = true;
                 localRecord.ReturnCode.Message = "";
-                // Set the message number on the record based on the value passed
+                // Set the message number on the lastRecord based on the value passed
                 localRecord.MessageNumber = MessageNumber;
 
             }
@@ -513,7 +513,7 @@ namespace aaLogReader
                 {               
                     this.ReturnCloseValue = this.CloseCurrentLogFile();
 
-                    // Re-init the record to make sure it's totally blank.  Don't want to return a partial record
+                    // Re-init the lastRecord to make sure it's totally blank.  Don't want to return a partial lastRecord
                     localRecord = new LogRecord();
                     localRecord.ReturnCode.Status = false;
                     localRecord.ReturnCode.Message = saex.Message;
@@ -528,15 +528,15 @@ namespace aaLogReader
                 throw;
             }
 
-            // Set the last record read to this one.
+            // Set the last lastRecord read to this one.
             this.lastRecordRead = localRecord;
 
-            // Return the working record
+            // Return the working lastRecord
             return localRecord;
         }
 
         /// <summary>
-        /// Get the first record in the log as specified by the OffsetFirstRecord in the header.
+        /// Get the first lastRecord in the log as specified by the OffsetFirstRecord in the header.
         /// </summary>
         /// <returns></returns>
         public LogRecord GetFirstRecord()
@@ -558,7 +558,7 @@ namespace aaLogReader
 		}
 
         /// <summary>
-        /// Get the last record in the log as specified by the OffsetLastRecord in the header.
+        /// Get the last lastRecord in the log as specified by the OffsetLastRecord in the header.
         /// </summary>
         /// <returns></returns>
 		public LogRecord GetLastRecord()
@@ -581,7 +581,7 @@ namespace aaLogReader
         }
         
         /// <summary>
-        /// Get the next record in the log file
+        /// Get the next lastRecord in the log file
         /// </summary>
         /// <returns></returns>
         public LogRecord GetNextRecord()
@@ -592,7 +592,7 @@ namespace aaLogReader
 
                 if (this.lastRecordRead.OffsetToNextRecord == 0)
                 {
-                    // We haven't read any records yet so just get the first record
+                    // We haven't read any records yet so just get the first lastRecord
                     return this.GetFirstRecord();
                 }
                 else
@@ -606,7 +606,7 @@ namespace aaLogReader
                         throw new aaLogReaderException("Attempt to read past End-Of-Log-File");
                     }
 
-                    // Read the record based off offset information from last record read
+                    // Read the lastRecord based off offset information from last lastRecord read
                     localRecord = this.ReadLogRecord(this.lastRecordRead.OffsetToNextRecord, Convert.ToUInt64(decimal.Add(new decimal(LastMessageNumber), decimal.One)));
                 }
 
@@ -614,7 +614,7 @@ namespace aaLogReader
 		}
 
         /// <summary>
-        /// Get the record immediately previous to the current record in the log file.  This call will swap to previous log files as required.
+        /// Get the lastRecord immediately previous to the current lastRecord in the log file.  This call will swap to previous log files as required.
         /// </summary>
         /// <returns></returns>
 		public LogRecord GetPrevRecord()
@@ -631,7 +631,7 @@ namespace aaLogReader
 
                     // Cache the last message number
                     LastMessageNumber = this.lastRecordRead.MessageNumber;
-                    // Read the record based off offset information from last record read
+                    // Read the lastRecord based off offset information from last lastRecord read
 
                     localRecord = this.ReadLogRecord(this.lastRecordRead.OffsetToPrevRecord, Convert.ToUInt64(decimal.Subtract(new decimal(LastMessageNumber), decimal.One)));
 
@@ -681,7 +681,7 @@ namespace aaLogReader
 		}
 
         /// <summary>
-        /// Get all unread messages starting from the last record working backwards.
+        /// Get all unread messages starting from the last lastRecord working backwards.
         /// </summary>
         /// <param name="maximumMessages">Maximum number of messages to return</param>
         /// <param name="messagePatternToStop">Message pattern to match for ending search</param>
@@ -711,7 +711,7 @@ namespace aaLogReader
 
                     log.Debug("lastRecordFromCacheFile - " + lastRecordFromCacheFile.ToJSON());
                 
-                    // Get the last message number from the retrieved record if it's available
+                    // Get the last message number from the retrieved lastRecord if it's available
                     if (lastRecordFromCacheFile != null)
                     {
                         lastMessageNumber = lastRecordFromCacheFile.MessageNumber;
@@ -731,7 +731,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        /// Get all unread messages starting from the last record and stopping at the last read message number.
+        /// Get all unread messages starting from the last lastRecord and stopping at the last read message number.
         /// </summary>
         /// <param name="lastReadMessageNumber">Last message number previously read.</param>
         /// <param name="maximumMessages">Maximum number of messages to return</param>
@@ -759,21 +759,21 @@ namespace aaLogReader
                 // Check the header to see if any new records have been added
                 if(this.logHeader.MsgLastNumber > lastReadMessageNumber)
                 { 
-                    // Start with the last record
+                    // Start with the last lastRecord
                     localRecord = this.GetLastRecord();
 
                     log.Debug("GetLastRecord Message Number - " + localRecord.MessageNumber);
                     log.Debug("GetLastRecord localRecord.ReturnCode.Status - " + localRecord.ReturnCode.Status);
 
-                    // If we get a record then add to the list and start iterating
+                    // If we get a lastRecord then add to the list and start iterating
                     if (localRecord.ReturnCode.Status)
                     {
                         logRecordList.Add(localRecord);
 
                         /* If the last retrieval was good 
-                         * and we have an offset for previous record 
-                         * and we haven't passed the maximum record count limit
-                         * retrieve the next previous record
+                         * and we have an offset for previous lastRecord 
+                         * and we haven't passed the maximum lastRecord count limit
+                         * retrieve the next previous lastRecord
                          */
 
                         getAnotherRecord = this.ShouldGetNextRecord(localRecord, logRecordList.Count, lastReadMessageNumber, maximumMessages, messagePatternToStop);
@@ -793,7 +793,7 @@ namespace aaLogReader
                                 logRecordList.Add(localRecord);
                             }
 
-                            // Calculate if we should get another record
+                            // Calculate if we should get another lastRecord
                             //getAnotherRecord = localRecord.ReturnCode.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > lastReadMessageNumber) && (logRecordList.Count < maximumMessages);
                             
                             getAnotherRecord = this.ShouldGetNextRecord(localRecord, logRecordList.Count, lastReadMessageNumber, maximumMessages, messagePatternToStop);
@@ -816,7 +816,7 @@ namespace aaLogReader
 
         }
 
-        private bool ShouldGetNextRecord(LogRecord record,int logRecordCount, ulong lastReadMessageNumber, int maximumMessages, string messagePatternToStop)
+        private bool ShouldGetNextRecord(LogRecord lastRecord,int logRecordCount, ulong lastReadMessageNumber, int maximumMessages, string messagePatternToStop)
         {
             bool returnValue = false;
 
@@ -828,18 +828,18 @@ namespace aaLogReader
                 log.Debug("messagePattern - " + messagePatternToStop);
 
                 /* If the last retrieval was good 
-                * and we have an offset for previous record 
-                * and we haven't passed the maximum record count limit
-                * retrieve the next previous record
+                * and we have an offset for previous lastRecord 
+                * and we haven't passed the maximum lastRecord count limit
+                * retrieve the next previous lastRecord
                 */
-                returnValue = (record.ReturnCode.Status && (record.OffsetToNextRecord > 0) && (record.MessageNumber > lastReadMessageNumber) && (logRecordCount < maximumMessages));
+                returnValue = (lastRecord.ReturnCode.Status && (lastRecord.OffsetToNextRecord > 0) && (lastRecord.MessageNumber > (lastReadMessageNumber+1)) && (logRecordCount < maximumMessages));
 
                 /* If the message pattern is not blank then apply a regex to see if we get a match 
-                 * If we match then that means this is the last record we should retrieve so return false
+                 * If we match then that means this is the last lastRecord we should retrieve so return false
                  */
                 if(returnValue && messagePatternToStop != "")
                 {
-                    returnValue &= !System.Text.RegularExpressions.Regex.IsMatch(record.Message, messagePatternToStop, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    returnValue &= !System.Text.RegularExpressions.Regex.IsMatch(lastRecord.Message, messagePatternToStop, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                 }
             }
             catch(Exception ex)
@@ -858,7 +858,7 @@ namespace aaLogReader
         /// <summary>
         /// Translate a byte array to a date time
         /// </summary>
-        /// <param name="byteArray">Byte array containing record data</param>
+        /// <param name="byteArray">Byte array containing lastRecord data</param>
         /// <param name="startingOffset">Starting offset for the data field</param>
         /// <returns></returns>
         private DateTime GetDateTimeFromByteArray(byte[] byteArray, long startingOffset)
@@ -887,7 +887,7 @@ namespace aaLogReader
         /// <summary>
         /// Get a single string field starting at a specified offset.
         /// </summary>
-        /// <param name="byteArray">Byte array containing record data</param>
+        /// <param name="byteArray">Byte array containing lastRecord data</param>
         /// <param name="startingOffset">Starting offset for the data field</param>
         /// <returns></returns>
         private string GetSingleStringFieldFromByteArray(byte[] byteArray, long startingOffset)
@@ -939,7 +939,7 @@ namespace aaLogReader
         /// <summary>
         /// Cast an array of byteArray to a string
         /// </summary>
-        /// <param name="byteArray">Byte array containing record data</param>
+        /// <param name="byteArray">Byte array containing lastRecord data</param>
         /// <param name="startingOffset">Starting offset for the data field</param>
         /// <param name="Length">Length of field</param>
         /// <returns></returns>
@@ -954,7 +954,7 @@ namespace aaLogReader
         /// <summary>
         /// Get the length of a string field in a byte array
         /// </summary>
-        /// <param name="byteArray">Byte array containing record data</param>
+        /// <param name="byteArray">Byte array containing lastRecord data</param>
         /// <param name="startingOffset">Starting offset for the data field</param>
         /// <returns></returns>
         private int GetStringFieldInByteArrayLength(byte[] byteArray, long startingOffset)
@@ -1015,7 +1015,7 @@ namespace aaLogReader
         /// <summary>
         /// Extract SessionID segments from a byte array
         /// </summary>
-        /// <param name="byteArray">Byte array containing record data</param>
+        /// <param name="byteArray">Byte array containing lastRecord data</param>
         /// <param name="startingOffset">Starting offset for the data field</param>
         /// <returns></returns>
         private SessionIDSegments GetSessionIDSegments(byte[] byteArray, long startingOffset)
@@ -1058,7 +1058,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        /// Read the contents on the StatusCacheFile into a log record.
+        /// Read the contents on the StatusCacheFile into a log lastRecord.
         /// </summary>
         /// <returns></returns>
         public LogRecord ReadStatusCacheFile()

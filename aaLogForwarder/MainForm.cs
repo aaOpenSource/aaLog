@@ -90,7 +90,7 @@ namespace aaLogForwarder
             try
             {
 
-                //aaLogReader.LogRecord record = new LogRecord();
+                //aaLogReader.LogRecord lastRecord = new LogRecord();
 
                 Stopwatch sw = new Stopwatch();
 
@@ -106,11 +106,11 @@ namespace aaLogForwarder
                 //addlog("Rate (records/s): " + ((int)(1000.0 * (float)records.Count / (float)sw.ElapsedMilliseconds)).ToString());
                 //addlog("");
                 //addlog(JsonConvert.SerializeObject(records, Formatting.Indented));
-                ////record = logReader.ReadStatusCacheFile();
-                //addlog(JsonConvert.SerializeObject(record, Formatting.Indented));
+                ////lastRecord = logReader.ReadStatusCacheFile();
+                //addlog(JsonConvert.SerializeObject(lastRecord, Formatting.Indented));
                 //addlog("");
                 //addlog(JsonConvert.SerializeObject(logReader.ReadLogHeader(), Formatting.Indented));
-                ////Debug.Print(JsonConvert.SerializeObject(record,Formatting.Indented));
+                ////Debug.Print(JsonConvert.SerializeObject(lastRecord,Formatting.Indented));
                
                 TcpClient vSocket = new System.Net.Sockets.TcpClient("localhost", 14500);
                 System.Net.Sockets.NetworkStream ServerStream = vSocket.GetStream();
