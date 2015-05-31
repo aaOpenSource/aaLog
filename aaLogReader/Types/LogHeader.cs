@@ -36,7 +36,6 @@ namespace aaLogReader
             return JsonConvert.SerializeObject(this);
         }
 
-
         /// <summary>
         /// Return the log header data in the form of a Key-Value Pair
         /// </summary>

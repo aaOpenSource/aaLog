@@ -128,6 +128,7 @@
     </None>
     <None Include="aaLogReaderModularInput\README\inputs.conf.spec" />
     <None Include="app.config" />
+    <None Include="LICENSE" />
     <None Include="log.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

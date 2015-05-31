@@ -41,6 +41,8 @@ namespace aaLogReader
         public aaLogReader(string LogPath)
         {
             log.Debug("Create aaLogReader");
+            log.Debug("LogPath - " + LogPath);
+
             this.Initialize(LogPath);
         }
 
@@ -91,9 +93,6 @@ namespace aaLogReader
                 
                 // Setup logging
                 log4net.Config.BasicConfigurator.Configure();
-
-                // Initialize the internal byte array we will use later                
-                //this.byteArray = new byte[1];
                 
                 if (LogDirectory == "")
                 {
@@ -105,9 +104,7 @@ namespace aaLogReader
                     // Open current log file
                     returnValue = this.OpenCurrentLogFile(LogDirectory);
                 }
-
             }
-
             catch
             {
                 throw;
@@ -133,10 +130,12 @@ namespace aaLogReader
                 localReturnCode.Message = "";
 
                 log.Debug("LogFilePath - " + LogFilePath);
-
+                
                 // Verify we have a file path
                 if (LogFilePath != "")
                 {
+                    log.Info("Opening log file " + LogFilePath);
+
                     // Save the log path
                     this.currentLogFilePath = LogFilePath;
 
@@ -146,6 +145,7 @@ namespace aaLogReader
                     if ((this.globalFileStream.CanRead) && (this.globalFileStream.Length > 0))
                     {
                         log.Info("Opened log file " + LogFilePath);
+                        
                         // If opening the file was a success then go ahead and read in the header
                         this.ReadLogHeader(this.globalFileStream);
 
@@ -183,7 +183,6 @@ namespace aaLogReader
         {
             log.Debug("");
             ReturnCode localReturnCode;
-            string fullFileName = "";
             
             try
             {                
@@ -194,15 +193,7 @@ namespace aaLogReader
 
                 log.Debug("LogDirectory - " + LogDirectory);
 
-                // Get directory info for the referenced directories
-                DirectoryInfo localDirectoryInfo = new DirectoryInfo(LogDirectory);
-
-                // Get the last written file in the directory
-                fullFileName = localDirectoryInfo.GetFiles("*.aalog").OrderByDescending(f => f.LastWriteTimeUtc).First().FullName;
-
-                log.Debug("fullFileName - " + fullFileName);
-
-                localReturnCode = this.OpenLogFile(fullFileName);
+                localReturnCode = this.OpenLogFile(this.LatestFileInPath(LogDirectory, "*.aalog"));
 
                 log.Debug("localReturnCode - " + localReturnCode.ToString());
 
@@ -215,6 +206,34 @@ namespace aaLogReader
             }
 
             return localReturnCode;
+        }
+
+        /// <summary>
+        /// Return the full file name of the latest file in the directory
+        /// </summary>
+        /// <param name="Path">Directory path</param>
+        /// <param name="FileSearchPattern">Search file pattern</param>
+        /// <returns></returns>
+        private string LatestFileInPath(string Path, string FileSearchPattern)
+        {
+            string fullFileName = "";
+
+            try
+            {
+                // Get directory info for the referenced directories
+                DirectoryInfo localDirectoryInfo = new DirectoryInfo(Path);
+
+                // Get the last written file in the directory
+                fullFileName = localDirectoryInfo.GetFiles(FileSearchPattern).OrderByDescending(f => f.LastWriteTimeUtc).First().FullName;
+
+            }
+            catch(Exception ex)
+            {
+                log.Error(ex);
+                fullFileName = "";
+            }
+
+            return fullFileName;
         }
 
 		/// <summary>
@@ -320,8 +339,8 @@ namespace aaLogReader
                 readResult = logFileStream.Read(byteArray, 0, headerLength);
 
                 // Log the actual information to the debug for review later
-                log.Debug("Header Byte Data : " + GetStringFromBytes(byteArray, 0, byteArray.Length - 1));
-
+                //log.Debug("Header Byte Data : " + GetStringFromBytes(byteArray, 0, byteArray.Length - 1));
+                
                 string headerString = GetStringFromBytes(byteArray, 0, headerLength);
 
                 // Start to pick out the values
@@ -365,6 +384,8 @@ namespace aaLogReader
 
                 //HostFQDN
                 localHeader.HostFQDN = this.GetFQDN();
+
+                log.Debug("Local Header - " + localHeader.ToJSON());
 
                 localHeader.ReturnCode.Status = true;
                 localHeader.ReturnCode.Message = "";
@@ -750,6 +771,15 @@ namespace aaLogReader
                 log.Debug("maximumMessages - " + maximumMessages.ToString());
                 log.Debug("messagePatternToStop - " + messagePatternToStop);
 
+                //If the latest file in the directory does not match the file we are currently working on
+                if (this.currentLogFilePath != this.LatestFileInPath(this.GetConfiguredLocalLogDirectory(),"*.aalog"))
+                {
+                    log.Info("Latest log file has changed.  Forcing a reread.");
+
+                    // Force a reread
+                    this.OpenCurrentLogFile();
+                }
+                
                 // Force a reread of the header so we know the latest values
                 this.ReadLogHeader(this.globalFileStream, true);
 
