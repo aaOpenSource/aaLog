@@ -65,6 +65,9 @@ All projects were compiled against .Net 4.0 but in concept you can probably go p
 ##Path Forward
 From here I would like for others to pick up the core and extend it with more sophisticated features as well as building full blown applications.  You can see a lot of my focus at the moment is getting these logs into Splunk.  However, there is no reason the community can't write more forwarders to other storage platforms.  My preference would be to keep the core library relatively clean and write your forwarders as separate projects that utilize the library. 
 
+## Build Notes
+For some reason, probably 100% due to my lack of understanding, when you Git Clone, the aaLogReader project does not build because it is missing a reference to log4Net.  I have found the easiest way to resolve this is to click on the missing reference in the list, change Copy Local to True and then rebuild.  This will go out and restore the nuget package.  Another method is to manage the NuGet references and uninstall/reinstall log4Net.  I have also had intermittent issues with the GuiTester complaining about mismatched assemblies related to the JSON package.  You can safely upgrade to version 6.08 if for some reason your version when you pull down is 6.06. If you have any more questions please feel free to give me a shout and I'll do my best to help/make up for my lack of mastery in the subject :-)
+
 ## TODO List
 
 See my current roadmap and overall [TODO list](/TODO.md)
