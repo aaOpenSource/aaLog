@@ -15,35 +15,38 @@ namespace aaLogReader
 	{
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public SessionIDSegments SessionSeg;
+        public SessionIDSegments sessionSeg;
         public FileTime sTime;
 		public LogHeader logHeader;
 		public LogRecord lastRecordRead;
-		public ReturnCode ReturnValue;
-		public ReturnCode ReturnCloseValue;
+		public ReturnCode returnValue;
+		public ReturnCode returnCloseValue;
 		private FileStream globalFileStream;
-        private string currentLogFilePath;
-        private const string cacheFileName = "aaLogReaderCache.txt";
-
-		/// <summary>
-		/// Default Constructor
-		/// </summary>
-        public aaLogReader()
-		{
-            log.Debug("Create aaLogReader");
-            this.Initialize("");
-        }
+        private string currentLogFilePath;        
+        private static Options globalOptions;
 
         /// <summary>
-        /// Constructor specifying the path to a specific log file
-        /// </summary>
-        /// <param name="LogPath"></param>
-        public aaLogReader(string LogPath)
+        /// Constructor specifying options in JSON format
+        /// </summary> 
+        /// <param name="Options">Options in JSON Format</param>
+        public aaLogReader(string Options = "")
         {
-            log.Debug("Create aaLogReader");
-            log.Debug("LogPath - " + LogPath);
+            // Setup logging
+            log4net.Config.BasicConfigurator.Configure();
 
-            this.Initialize(LogPath);
+            log.Debug("Create aaLogReader");
+            log.Debug("Options - " + Options);
+
+            try
+            {                
+                globalOptions = JsonConvert.DeserializeObject<Options>(Options);
+
+                this.Initialize();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -82,28 +85,15 @@ namespace aaLogReader
         /// <summary>
         /// Initialize the log reader by opening the correct log file
         /// </summary>
-        /// <param name="LogDirectory">Directory to inspect for current log file (Optional)</param>
-        private void Initialize(string LogDirectory = "")
+        private void Initialize()
         {
             log.Debug("");
             ReturnCode returnValue;
 
             try
-            {
-                
-                // Setup logging
-                log4net.Config.BasicConfigurator.Configure();
-                
-                if (LogDirectory == "")
-                {
-                    // Open the current log file
-                    returnValue = this.OpenCurrentLogFile();
-                }
-                else
-                {
-                    // Open current log file
-                    returnValue = this.OpenCurrentLogFile(LogDirectory);
-                }
+            {                             
+                // Open current log file
+                returnValue = this.OpenCurrentLogFile(globalOptions.LogDirectory);
             }
             catch
             {
@@ -188,7 +178,7 @@ namespace aaLogReader
             {                
                 if (LogDirectory == "")
                 {
-                    LogDirectory = this.GetConfiguredLocalLogDirectory();
+                    LogDirectory = this.GetLogDirectory();
                 }
 
                 log.Debug("LogDirectory - " + LogDirectory);
@@ -394,7 +384,7 @@ namespace aaLogReader
             catch(Exception ex)
             {
                 
-                this.ReturnCloseValue = this.CloseCurrentLogFile();
+                this.returnCloseValue = this.CloseCurrentLogFile();
 
                 localHeader.ReturnCode.Status = false;
                 localHeader.ReturnCode.Message = ex.Message;
@@ -485,7 +475,7 @@ namespace aaLogReader
 
                 // Session ID
                 workingOffset = 12;
-                localRecord.SessionID = this.GetSessionIDSegments(byteArray, (long)workingOffset).SessionID; //this.SessionSeg.SessionID;
+                localRecord.SessionID = this.GetSessionIDSegments(byteArray, (long)workingOffset).SessionID; //this.sessionSeg.SessionID;
 
                 // Process ID
                 workingOffset = 16;
@@ -532,7 +522,7 @@ namespace aaLogReader
                 // If this is a past the end of file message then handle gracefully
                 if(saex.Message == "Attempt to read past End-Of-Log-File")
                 {               
-                    this.ReturnCloseValue = this.CloseCurrentLogFile();
+                    this.returnCloseValue = this.CloseCurrentLogFile();
 
                     // Re-init the lastRecord to make sure it's totally blank.  Don't want to return a partial lastRecord
                     localRecord = new LogRecord();
@@ -678,7 +668,7 @@ namespace aaLogReader
                     // Close the currently opened log file
                     this.globalFileStream.Close();
                     
-                    string newPreviousLogFile = string.Concat(new string[] {this.GetConfiguredLocalLogDirectory(), "\\", this.logHeader.PrevFileName });
+                    string newPreviousLogFile = string.Concat(new string[] {this.GetLogDirectory(), "\\", this.logHeader.PrevFileName });
 
                     log.Debug("newPreviousLogFile - " + newPreviousLogFile);
 
@@ -772,7 +762,7 @@ namespace aaLogReader
                 log.Debug("messagePatternToStop - " + messagePatternToStop);
 
                 //If the latest file in the directory does not match the file we are currently working on
-                if (this.currentLogFilePath != this.LatestFileInPath(this.GetConfiguredLocalLogDirectory(),"*.aalog"))
+                if (this.currentLogFilePath != this.LatestFileInPath(this.GetLogDirectory(),"*.aalog"))
                 {
                     log.Info("Latest log file has changed.  Forcing a reread.");
 
@@ -1070,21 +1060,38 @@ namespace aaLogReader
         }
 
         /// <summary>
-        /// Write a text file out with metadata that can be used if the application is closed and reopened to read logs again
+        /// Write the status cache file with the last record read
         /// </summary>
-        public bool WriteStatusCacheFile()        
+        /// <returns></returns>
+        public bool WriteStatusCacheFile()
         {
-            log.Debug("");
             try
-            {                
-                System.IO.File.WriteAllText(this.GetStatusCacheFilePath(), this.GetLastRecord().ToJSON());                
+            {
+                return this.WriteStatusCacheFile(this.GetLastRecord());
             }
             catch
             {
                 throw;
             }
+        }
 
-            return true;
+        /// <summary>
+        /// Write a text file out with metadata that can be used if the application is closed and reopened to read logs again
+        /// </summary>
+        public bool WriteStatusCacheFile(LogRecord CacheRecord)
+        {
+            log.Debug("");
+            log.Debug("CacheRecord - " + CacheRecord.ToJSON());
+
+            try
+            {            
+                System.IO.File.WriteAllText(this.GetStatusCacheFilePath(), this.GetLastRecord().ToJSON());
+                return true;
+            }
+            catch
+            {
+                throw;
+            }            
         }
 
         /// <summary>
@@ -1100,8 +1107,9 @@ namespace aaLogReader
             {
                 localRecord = JsonConvert.DeserializeObject<LogRecord>(File.ReadAllText(this.GetStatusCacheFilePath()));                
             }
-            catch
+            catch(Exception ex)
             {
+                log.Error(ex);
                 throw;
             }
 
@@ -1109,29 +1117,71 @@ namespace aaLogReader
         }
 
         /// <summary>
-        /// Simple function to retrieve the path to the status cache file
+        /// Calculate the path to the cache file
         /// </summary>
         /// <returns></returns>
         private string GetStatusCacheFilePath()
         {
-            return Path.GetDirectoryName(this.currentLogFilePath) + "\\" + cacheFileName;
+            log.Debug("");
+            string returnValue = "";
+
+            try
+            {
+                string cacheFileName = "";
+
+                // Check the global options to determine the features that have been configured
+
+                if (globalOptions.CacheFileNameCustom != "")
+                {
+                    cacheFileName = globalOptions.CacheFileNameCustom;
+                }
+                else if (globalOptions.CacheFileAppendProcessNameToBaseFileName)
+                {
+                    cacheFileName = System.Diagnostics.Process.GetCurrentProcess().ProcessName + globalOptions.CacheFileBaseName;
+                }
+                else
+                {
+                    cacheFileName = globalOptions.CacheFileBaseName;
+                }
+
+                returnValue = Path.GetDirectoryName(this.currentLogFilePath) + "\\" + cacheFileName;
+            }
+            catch
+            {                
+                returnValue = "";
+            }
+
+            return returnValue;
         }
 
         /// <summary>
         /// Get the path to the local log directory
         /// </summary>
-        /// <returns></returns>
-        private string GetConfiguredLocalLogDirectory()
+        /// <returns></returns>        
+        private string GetLogDirectory()
         {
-            //TODO: Figure out how to programatically determine the local log directory
+            log.Debug("");
+           
+            string returnValue;
+
+            //TODO: Figure out how to programatically determine the local log directory more deterministically            
             try
             {
-                return Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ArchestrA\Framework\Logger", "LogDir", @"C:\ProgramData\ArchestrA\LogFiles").ToString();
+                if (System.IO.Directory.Exists(globalOptions.LogDirectory))
+                {
+                    returnValue = globalOptions.LogDirectory;
+                }
+                else
+                {
+                    returnValue = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ArchestrA\Framework\Logger", "LogDir", globalOptions.LogDirectory).ToString();
+                }
             }
             catch
             {
-                return "";
+                returnValue = "";
             }
+
+            return returnValue;
         }
 
         /// <summary>
@@ -1140,6 +1190,8 @@ namespace aaLogReader
         /// <returns></returns>
         private string GetFQDN()
         {
+            log.Debug("");
+
             // Credits: http://stackoverflow.com/questions/804700/how-to-find-fqdn-of-local-machine-in-c-net
 
             string hostName;

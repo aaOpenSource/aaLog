@@ -63,6 +63,7 @@
     <Compile Include="aaLogReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Struct\FileTime.cs" />
+    <Compile Include="Struct\Options.cs" />
     <Compile Include="Struct\SessionIDSegments.cs" />
     <Compile Include="Struct\ReturnCode.cs" />
     <Compile Include="Types\LogRecord.cs" />

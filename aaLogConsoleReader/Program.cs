@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using aaLogReader;
 
+
 namespace aaLogConsoleTester
 {
     class Program
@@ -13,6 +14,8 @@ namespace aaLogConsoleTester
         {
             string answer;
             aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader();
+
+            aaLogReader.Options testOptions = new aaLogReader.Options();
 
             answer = "y";
 
