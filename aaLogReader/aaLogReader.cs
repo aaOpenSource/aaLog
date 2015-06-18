@@ -26,6 +26,8 @@ namespace aaLogReader
         private static aaLogReaderOptions globalOptions;
 
 
+        #region CTOR/DTOR
+
         /// <summary>
         /// Default constructor using default options
         /// </summary>
@@ -106,6 +108,10 @@ namespace aaLogReader
             }
             // free native resources if there are any.
         }
+    
+       #endregion
+
+        #region Initilization
 
         /// <summary>
         /// Initialize the log reader by opening the correct log file
@@ -126,6 +132,22 @@ namespace aaLogReader
             }
 
         }
+
+         #endregion
+
+
+        #region Options Management
+
+        /// <summary>
+        /// Set the options for the instance on the fly
+        /// </summary>
+        /// <param name="OptionsObject"></param>
+        public void SetOptions(aaLogReaderOptions OptionsObject)
+        {
+            globalOptions = OptionsObject;
+        }
+
+        #endregion
 
         #region File Management
 
@@ -283,7 +305,7 @@ namespace aaLogReader
         
         #endregion
 
-        #region Record Reading Functions
+        #region Log Record Functions
 
         /// <summary>
         /// Read the log file header with default options

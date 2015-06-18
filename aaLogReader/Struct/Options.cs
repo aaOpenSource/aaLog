@@ -12,8 +12,5 @@ namespace aaLogReader
         public string CacheFileBaseName = "aaLogReaderCache";
         public string CacheFileNameCustom = "";
         public bool CacheFileAppendProcessNameToBaseFileName = true;
-
-        public DateTime EarliestDateTime = DateTime.MinValue;
-        public DateTime LatestDate = DateTime.MaxValue;
     }
 }

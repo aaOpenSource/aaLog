@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using aaLogReader;
 using Newtonsoft.Json;
+//using ArchestrA.Logging;
 
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log.config", Watch = true)]
 
@@ -21,16 +22,16 @@ namespace aaLogConsoleTester
 
             string answer;
 
-            aaLogReader.aaLogReaderOptions testOptions = new aaLogReader.aaLogReaderOptions();
+            //aaLogReader.aaLogReaderOptions testOptions = new aaLogReader.aaLogReaderOptions();
 
-            System.IO.File.WriteAllText("options.json", JsonConvert.SerializeObject(testOptions));
+            //System.IO.File.WriteAllText("options.json", JsonConvert.SerializeObject(testOptions));
 
+            aaLogReader.aaLogReaderOptions testOptions = JsonConvert.DeserializeObject<aaLogReaderOptions>(System.IO.File.ReadAllText("options.json"));
 
             answer = "y";
 
-            aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader();
-
-
+            aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader(testOptions);
+            
             while (answer.ToLower() == "y")
             {
                 Console.WriteLine("Read Unread Records (Y=Yes, N=Exit)");
@@ -38,6 +39,10 @@ namespace aaLogConsoleTester
 
                 if (answer.ToLower() == "y")
                 {
+
+                    //Force reread of options file on every cycle
+                    logReader.SetOptions(JsonConvert.DeserializeObject<aaLogReaderOptions>(System.IO.File.ReadAllText("options.json")));
+
                     List<LogRecord> records = logReader.GetUnreadRecords(10);
 
                     Console.WriteLine("Record count : " + records.Count.ToString());
