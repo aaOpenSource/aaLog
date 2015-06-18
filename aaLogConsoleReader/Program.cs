@@ -4,20 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using aaLogReader;
+using Newtonsoft.Json;
 
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log.config", Watch = true)]
 
 namespace aaLogConsoleTester
 {
     class Program
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         static void Main(string[] args)
         {
-            string answer;
-            aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader();
+            // Setup logging
+            log4net.Config.BasicConfigurator.Configure();
 
-            aaLogReader.Options testOptions = new aaLogReader.Options();
+            string answer;
+
+            aaLogReader.aaLogReaderOptions testOptions = new aaLogReader.aaLogReaderOptions();
+
+            System.IO.File.WriteAllText("options.json", JsonConvert.SerializeObject(testOptions));
+
 
             answer = "y";
+
+            aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader();
+
 
             while (answer.ToLower() == "y")
             {

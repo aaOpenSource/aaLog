@@ -23,23 +23,48 @@ namespace aaLogReader
 		public ReturnCode returnCloseValue;
 		private FileStream globalFileStream;
         private string currentLogFilePath;        
-        private static Options globalOptions;
+        private static aaLogReaderOptions globalOptions;
+
 
         /// <summary>
-        /// Constructor specifying options in JSON format
-        /// </summary> 
-        /// <param name="Options">Options in JSON Format</param>
-        public aaLogReader(string Options = "")
+        /// Default constructor using default options
+        /// </summary>
+        public aaLogReader()
+        {
+            // Setup logging
+            log4net.Config.BasicConfigurator.Configure();
+
+            log.Debug("Create aaLogReader");            
+
+            try
+            {
+                // Initialize with default options
+                globalOptions = new aaLogReaderOptions();
+
+                this.Initialize();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Constructor specifying options
+        /// </summary>       
+        ///<param name="InitializationOptions">Options passed as an aaLogReaderOptions object </param>
+        public aaLogReader(aaLogReaderOptions InitializationOptions)
         {
             // Setup logging
             log4net.Config.BasicConfigurator.Configure();
 
             log.Debug("Create aaLogReader");
-            log.Debug("Options - " + Options);
+            log.Debug("Options - " + JsonConvert.SerializeObject(InitializationOptions));
 
             try
-            {                
-                globalOptions = JsonConvert.DeserializeObject<Options>(Options);
+            {
+                globalOptions = InitializationOptions;
 
                 this.Initialize();
             }

@@ -4,7 +4,7 @@
  * Date: 4/19/2014
  * Time: 8:30 AM
  * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ * To change this template use Tools | aaLogReaderOptions | Coding | Edit Standard Headers.
  */
 namespace aaLogForwarder
 {
