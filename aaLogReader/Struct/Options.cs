@@ -12,5 +12,6 @@ namespace aaLogReader
         public string CacheFileBaseName = "aaLogReaderCache";
         public string CacheFileNameCustom = "";
         public bool CacheFileAppendProcessNameToBaseFileName = true;
+        public bool IgnoreCacheFileOnFirstRead = false;
     }
 }

@@ -43,7 +43,7 @@ namespace aaLogConsoleTester
                     //Force reread of options file on every cycle
                     logReader.SetOptions(JsonConvert.DeserializeObject<aaLogReaderOptions>(System.IO.File.ReadAllText("options.json")));
 
-                    List<LogRecord> records = logReader.GetUnreadRecords(10);
+                    List<LogRecord> records = logReader.GetUnreadRecords(500);
 
                     Console.WriteLine("Record count : " + records.Count.ToString());
 

@@ -122,7 +122,24 @@ namespace aaLogReader
             ReturnCode returnValue;
 
             try
-            {                             
+            {   
+                /*
+                 * If the option to ignore the cache file on first read is set then we just delete
+                 * the current cache file and let it get written after the first record read
+                */
+                
+                if(globalOptions.IgnoreCacheFileOnFirstRead)
+                {
+                    try
+                    {
+                        System.IO.File.Delete(this.GetStatusCacheFilePath(globalOptions.LogDirectory));
+                    }
+                    catch
+                    {
+                        //Do nothing if the file did not exist
+                    }
+                }
+          
                 // Open current log file
                 returnValue = this.OpenCurrentLogFile(globalOptions.LogDirectory);
             }
@@ -1167,7 +1184,7 @@ namespace aaLogReader
         /// Calculate the path to the cache file
         /// </summary>
         /// <returns></returns>
-        private string GetStatusCacheFilePath()
+        private string GetStatusCacheFilePath(string LogFilePath = "")
         {
             log.Debug("");
             string returnValue = "";
@@ -1191,7 +1208,12 @@ namespace aaLogReader
                     cacheFileName = globalOptions.CacheFileBaseName;
                 }
 
-                returnValue = Path.GetDirectoryName(this.currentLogFilePath) + "\\" + cacheFileName;
+                if(LogFilePath == "")
+                {
+                    LogFilePath = Path.GetDirectoryName(this.currentLogFilePath);
+                }
+
+                returnValue = LogFilePath + "\\" + cacheFileName;
             }
             catch
             {                
