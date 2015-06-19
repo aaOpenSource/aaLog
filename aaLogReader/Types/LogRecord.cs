@@ -24,7 +24,15 @@ namespace aaLogReader
 
         public int ThreadID;
 
-        public DateTime EventDateTime;
+        public ulong EventFileTimeUTC;
+
+        // TODO: Add UTC Offset for Exact Timestamp
+        // public int EventUTCOffset; 
+
+        public DateTime EventDateTime
+        {
+            get { return DateTime.FromFileTime((long)this.EventFileTimeUTC); }
+        }
 
         [JsonIgnore]
         public DateTime EventDate

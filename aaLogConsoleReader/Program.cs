@@ -22,15 +22,28 @@ namespace aaLogConsoleTester
 
             string answer;
 
-            //aaLogReader.aaLogReaderOptions testOptions = new aaLogReader.aaLogReaderOptions();
-
-            //System.IO.File.WriteAllText("options.json", JsonConvert.SerializeObject(testOptions));
-
             aaLogReader.aaLogReaderOptions testOptions = JsonConvert.DeserializeObject<aaLogReaderOptions>(System.IO.File.ReadAllText("options.json"));
+            testOptions.IgnoreCacheFileOnFirstRead = true;
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter() { Field = "Message", Filter = "Warning 40|Message 41" });
+
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter() { Field = "MessageNumberMin", Filter = "6826080" });
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter() { Field = "MessageNumberMax", Filter = "6826085" });
+
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter() { Field = "DateTimeMin", Filter = "2015-06-19 01:45:00" });
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter() { Field = "DateTimeMax", Filter = "2015-06-19 01:45:05" });
+
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter() { Field = "ProcessID", Filter = "7260" });
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter() { Field = "ThreadID", Filter = "7264" });
+            
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter() { Field = "Message", Filter = "Started" });
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter() { Field = "HostFQDN", Filter = "865" });
+
 
             answer = "y";
 
             aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader(testOptions);
+
+            //testOptions.LogRecordPostFilters.Add(new LogRecordFilter(){Field="LogFlag",Filter="Warning"});
             
             while (answer.ToLower() == "y")
             {
@@ -40,16 +53,15 @@ namespace aaLogConsoleTester
                 if (answer.ToLower() == "y")
                 {
 
-                    //Force reread of options file on every cycle
-                    logReader.SetOptions(JsonConvert.DeserializeObject<aaLogReaderOptions>(System.IO.File.ReadAllText("options.json")));
-
-                    List<LogRecord> records = logReader.GetUnreadRecords(500);
+                    List<LogRecord> records = logReader.GetUnreadRecords(100);
 
                     Console.WriteLine("Record count : " + records.Count.ToString());
 
                     foreach (LogRecord lr in records)
                     {
-                        Console.WriteLine(lr.MessageNumber.ToString() + " " + lr.Message);
+                        string writeMsg = (lr.MessageNumber.ToString() + '\t' + lr.EventFileTimeUTC.ToString()  + '\t' + lr.EventDateTime.ToString("yyyy-MM-dd hh:mm:ss.fff tt") + '\t' + lr.LogFlag + '\t' + lr.Message);
+                        log.Info(writeMsg);
+                        Console.WriteLine(writeMsg);
                         //Console.WriteLine(lr.ToKVP());
                     }
                 }

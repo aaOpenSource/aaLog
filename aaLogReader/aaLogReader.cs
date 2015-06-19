@@ -4,6 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Net;
 using System.Net.NetworkInformation;
 
@@ -24,7 +25,6 @@ namespace aaLogReader
 		private FileStream globalFileStream;
         private string currentLogFilePath;        
         private static aaLogReaderOptions globalOptions;
-
 
         #region CTOR/DTOR
 
@@ -549,9 +549,13 @@ namespace aaLogReader
                 workingOffset = 20;
                 localRecord.ThreadID = (int)BitConverter.ToUInt32(byteArray, workingOffset);
 
+                // File Time
+
                 // Date Time
                 workingOffset = 24;
-                localRecord.EventDateTime = this.GetDateTimeFromByteArray(byteArray, workingOffset);
+                localRecord.EventFileTimeUTC = this.GetFileTimeFromByteArray(byteArray, workingOffset);
+
+                //localRecord.EventDateTime = this.GetDateTimeFromByteArray(byteArray, workingOffset);
 
                 // Log Flag
                 workingOffset = 32;
@@ -706,15 +710,10 @@ namespace aaLogReader
 
                     // Cache the last message number
                     LastMessageNumber = this.lastRecordRead.MessageNumber;
+
                     // Read the lastRecord based off offset information from last lastRecord read
 
                     localRecord = this.ReadLogRecord(this.lastRecordRead.OffsetToPrevRecord, Convert.ToUInt64(decimal.Subtract(new decimal(LastMessageNumber), decimal.One)));
-
-                    // Calculate the new message number
-                    //localRecord.MessageNumber = Convert.ToUInt64(decimal.Subtract(new decimal(LastMessageNumber), decimal.One));
-
-                    //this.lastRecordRead.ReturnCode.Status = true;
-                    //this.lastRecordRead.ReturnCode.Message = "";
 				}
                 // Check to see if we are at the beginning of if there is another log file we can connect to
 				else if (System.String.Compare(this.logHeader.PrevFileName, "", false) == 0)  
@@ -736,12 +735,15 @@ namespace aaLogReader
 
                     log.Debug("newPreviousLogFile - " + newPreviousLogFile);
 
-                    if(this.OpenLogFile(newPreviousLogFile).Status)
+                    try
                     {
-                        localRecord = this.GetLastRecord();
-                        log.Debug("localRecord.ReturnCode.Status - " + localRecord.ReturnCode.Status);
+                        if (this.OpenLogFile(newPreviousLogFile).Status)
+                        {
+                            localRecord = this.GetLastRecord();
+                            log.Debug("localRecord.ReturnCode.Status - " + localRecord.ReturnCode.Status);
+                        }
                     }
-
+                    catch
                     {
                         throw new aaLogReaderException("Error attempting to open previous log file.");
                     }
@@ -886,8 +888,17 @@ namespace aaLogReader
                         }
 
                         // Write out the cache file if we read records
-                        this.WriteStatusCacheFile();
+                        this.WriteStatusCacheFile(logRecordList.OrderByDescending(item => item.MessageNumber).First());
                     }                    
+                }
+
+                // After all records have been retrieved, apply filter
+                // TODO: Consider profiling application at this layer vs during actual record retrieval.  The issue with at record retrieval is that it might interfere with 
+                // tracking mechanisms around last record etc.
+
+                foreach(LogRecordFilter CurrentFilter in globalOptions.LogRecordPostFilters)
+                {
+                    ApplyLogRecordPostFilter(ref logRecordList, CurrentFilter);
                 }
 
             }
@@ -898,6 +909,103 @@ namespace aaLogReader
 
             return logRecordList;
 
+        }
+
+        private void ApplyLogRecordPostFilter(ref List<LogRecord> LogRecordList, LogRecordFilter RecordFilter)
+        {
+            log.Debug("");
+            log.Debug("LogRecordList.Count - " + LogRecordList.Count.ToString());
+            log.Debug("Filter - " + JsonConvert.SerializeObject(RecordFilter));
+
+                try
+                {
+                    switch(RecordFilter.Field.ToLower())
+                    {
+
+                        case "messagemumbermin":
+                            ulong MessageNumberMinFilter = ulong.MaxValue;
+
+                            if (ulong.TryParse(RecordFilter.Filter, out MessageNumberMinFilter))
+                            {
+                                LogRecordList = LogRecordList.Where<LogRecord>(x => x.MessageNumber >= MessageNumberMinFilter).ToList();
+                            }
+                            break;
+
+                        case "messagenumbermax":
+                            ulong MessageNumberMaxFilter = ulong.MinValue;
+
+                            if (ulong.TryParse(RecordFilter.Filter, out MessageNumberMaxFilter))
+                            {
+                                LogRecordList = LogRecordList.Where<LogRecord>(x => x.MessageNumber <= MessageNumberMaxFilter).ToList();
+                            }
+                            break;
+
+                        case "datetimemin":
+                            DateTime DateTimeMinFilter = DateTime.MaxValue;
+
+                            if (DateTime.TryParse(RecordFilter.Filter, out DateTimeMinFilter))
+                            {
+                                LogRecordList = LogRecordList.Where<LogRecord>(x => x.EventDateTime >= DateTimeMinFilter).ToList();
+                            }
+                            break;
+
+                        case "datetimemax":
+                            DateTime DateTimeMaxFilter = DateTime.MinValue;
+
+                            if (DateTime.TryParse(RecordFilter.Filter, out DateTimeMaxFilter))
+                            {
+                                LogRecordList = LogRecordList.Where<LogRecord>(x => x.EventDateTime <= DateTimeMaxFilter).ToList();
+                            }
+                            break;
+
+                        case "processid":
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => RecordFilter.Filter.Contains(x.ProcessID.ToString())).ToList();
+                            break;
+
+                        case "threadid":
+                            Regex ThreadIDRegexSearch = new Regex(RecordFilter.Filter, RegexOptions.IgnoreCase);
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => ThreadIDRegexSearch.IsMatch(x.ThreadID.ToString())).ToList();                            
+                            break;
+
+                        case "logflag":
+                            Regex LogFlagRegexSearch = new Regex(RecordFilter.Filter, RegexOptions.IgnoreCase);
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => LogFlagRegexSearch.IsMatch(x.LogFlag)).ToList();                            
+                            break;
+
+                        case "component":
+                            Regex ComponentRegexSearch = new Regex(RecordFilter.Filter, RegexOptions.IgnoreCase);
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => ComponentRegexSearch.IsMatch(x.Component)).ToList();
+                            break;
+
+                        case "message":
+                            Regex MessageRegexSearch = new Regex(RecordFilter.Filter, RegexOptions.IgnoreCase);
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => MessageRegexSearch.IsMatch(x.Message)).ToList();
+                            break;
+
+                        case "processname":
+                            Regex ProcessNameRegexSearch = new Regex(RecordFilter.Filter, RegexOptions.IgnoreCase);
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => ProcessNameRegexSearch.IsMatch(x.Message)).ToList();
+                            break;
+
+                        case "sessionid":
+                            Regex SessionIDRegexSearch = new Regex(RecordFilter.Filter, RegexOptions.IgnoreCase);
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => SessionIDRegexSearch.IsMatch(x.SessionID)).ToList();
+                            break;
+
+                        case "hostfqdn":
+                            Regex HostFQDNRegexSearch = new Regex(RecordFilter.Filter, RegexOptions.IgnoreCase);
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => HostFQDNRegexSearch.IsMatch(x.HostFQDN)).ToList();
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            catch
+                {
+                throw;
+
+                }
         }
 
         private bool ShouldGetNextRecord(LogRecord lastRecord,int logRecordCount, ulong lastReadMessageNumber, int maximumMessages, string messagePatternToStop)
@@ -938,7 +1046,39 @@ namespace aaLogReader
         #endregion
 
         #region Private Helper Functions
-        
+
+        /// <summary>
+        /// Translate a byte array to a filetime
+        /// </summary>
+        /// <param name="byteArray">Byte array containing lastRecord data</param>
+        /// <param name="startingOffset">Starting offset for the data field</param>
+        /// <returns>Filetime in ulong format</returns>
+        private ulong GetFileTimeFromByteArray(byte[] byteArray, long startingOffset)
+        {            
+            FileTime localFileTimeStruct;
+            ulong returnFileTime;
+
+            try
+            {
+                localFileTimeStruct = new FileTime();
+
+                // DateTime is an 8 byte value with a Low Byte and High Byte.
+                // We use a custom structure called file time with Low Byte and High Byte Elements
+                // Then in the FileTime struct we calculate the value by combining the high byte and low byte
+
+                localFileTimeStruct.dwLowDateTime = BitConverter.ToUInt32(byteArray, (int)startingOffset);
+                localFileTimeStruct.dwHighDateTime = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
+
+                returnFileTime = localFileTimeStruct.value;
+            }
+            catch
+            {
+                throw;
+            }
+
+            return returnFileTime;
+        }
+
         /// <summary>
         /// Translate a byte array to a date time
         /// </summary>
@@ -949,16 +1089,33 @@ namespace aaLogReader
         {
 
             DateTime localDate;
+            FileTime localFileTime;
 
             try
             {
+
+                localFileTime = new FileTime();
+
                 // DateTime is an 8 byte value with a Low Byte and High Byte.
                 // We use a custom structure called file time with Low Byte and High Byte Elements
                 // Then in the FileTime struct we calculate the value by combining the high byte and low byte
-                this.sTime.dwLowDateTime = BitConverter.ToUInt32(byteArray, (int)startingOffset);
-                this.sTime.dwHighDateTime = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
+                //this.sTime.dwLowDateTime = BitConverter.ToUInt32(byteArray, (int)startingOffset);
+                //this.sTime.dwHighDateTime = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
 
-                localDate = DateTime.Parse((DateTime.FromFileTime((long)this.sTime.value).ToString("MM/dd/yyyy hh:mm:ss.fff tt")));
+                log.Debug("Low Byte - " + BitConverter.ToUInt32(byteArray, (int)startingOffset).ToString());
+                log.Debug("High Byte - " + BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4)).ToString());
+
+                localFileTime.dwLowDateTime = BitConverter.ToUInt32(byteArray, (int)startingOffset);
+                localFileTime.dwHighDateTime = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
+
+                //localDate = DateTime.Parse((DateTime.FromFileTime((long)this.sTime.value).ToString("MM/dd/yyyy hh:mm:ss.fff tt")));
+
+                //localDate = DateTime.Parse((DateTime.FromFileTime((long)localFileTime.value).ToString("MM/dd/yyyy hh:mm:ss.fff tt")));
+                localDate = DateTime.FromFileTime((long)localFileTime.value);
+                
+                log.Debug("Calculated FileTime - " + localFileTime.value.ToString());
+                log.Debug("Now FileTime - " + DateTime.Now.ToFileTime().ToString());
+                log.Debug("Calculated DateTime - " + localDate.ToString("yyyy-MM-dd hh:mm:ss.fff tt"));
             }
             catch
             {
@@ -1124,24 +1281,9 @@ namespace aaLogReader
         }
 
         /// <summary>
-        /// Write the status cache file with the last record read
-        /// </summary>
-        /// <returns></returns>
-        public bool WriteStatusCacheFile()
-        {
-            try
-            {
-                return this.WriteStatusCacheFile(this.GetLastRecord());
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
         /// Write a text file out with metadata that can be used if the application is closed and reopened to read logs again
         /// </summary>
+        /// <param name="CacheRecord">Complete record to write out containing cache information</param>
         public bool WriteStatusCacheFile(LogRecord CacheRecord)
         {
             log.Debug("");

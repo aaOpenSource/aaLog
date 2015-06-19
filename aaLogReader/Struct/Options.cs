@@ -13,5 +13,6 @@ namespace aaLogReader
         public string CacheFileNameCustom = "";
         public bool CacheFileAppendProcessNameToBaseFileName = true;
         public bool IgnoreCacheFileOnFirstRead = false;
+        public List<LogRecordFilter> LogRecordPostFilters = new List<LogRecordFilter>();
     }
 }

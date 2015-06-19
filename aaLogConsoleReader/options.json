@@ -3,5 +3,5 @@
     "CacheFileBaseName": "aaLogReaderCache",
     "CacheFileNameCustom": "",
     "CacheFileAppendProcessNameToBaseFileName": true,
-    "IgnoreCacheFileOnFirstRead": true
+    "IgnoreCacheFileOnFirstRead": false
 }

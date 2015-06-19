@@ -74,7 +74,6 @@
   <ItemGroup>
     <None Include="LICENSE" />
     <None Include="log.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
