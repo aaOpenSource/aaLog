@@ -761,42 +761,44 @@ namespace aaLogReader
         /// <param name="messagePatternToStop">Message pattern to match for ending search</param>
         /// <param name="IgnoreCacheFile">Ignore the cache file and read all messages up to maximum or message pattern</param>
         /// <returns></returns>
-        public List<LogRecord>GetUnreadRecords(int maximumMessages = 1000, string messagePatternToStop = "", bool IgnoreCacheFile = false)        
+        public List<LogRecord> GetUnreadRecords(ulong maximumMessages = 1000, string messagePatternToStop = "", bool IgnoreCacheFile = false, ulong startMessageNumber = ulong.MaxValue)        
         {
             try
             {
-                log.Debug("");
                 log.Debug("maximumMessages - " + maximumMessages.ToString());
                 log.Debug("messagePatternToStop - " + messagePatternToStop);
-
-                string cacheFilePath = this.GetStatusCacheFilePath();
-
-                log.Debug("cacheFilePath - " + cacheFilePath);
-
-                ulong lastMessageNumber = 0;
-
-                // If the cache file exists and we should not ignore it
-                if (File.Exists(cacheFilePath) && !IgnoreCacheFile)
-                {                
-                    // Get the JSON from the file
-                    string objectJSONFromCacheFile = File.ReadAllText(this.GetStatusCacheFilePath());
-                    // Deserialize into the Log Record
-                    LogRecord lastRecordFromCacheFile = JsonConvert.DeserializeObject<LogRecord>(objectJSONFromCacheFile);
-
-                    log.Debug("lastRecordFromCacheFile - " + lastRecordFromCacheFile.ToJSON());
+                log.Debug("IgnoreCacheFile - " + IgnoreCacheFile);
+                log.Debug("startMessageNumber - " + startMessageNumber.ToString());
                 
-                    // Get the last message number from the retrieved lastRecord if it's available
-                    if (lastRecordFromCacheFile != null)
+                ulong lastMessageNumber = ulong.MinValue;
+
+                // If we are not explicitely ignoring the cache file AND we haven't specified a starting message number
+                // then read the cache file to rigure out where we stopped last time.
+                if ((!IgnoreCacheFile) && (startMessageNumber == ulong.MaxValue))
+                {
+                    string cacheFilePath = this.GetStatusCacheFilePath();
+                    log.Debug("cacheFilePath - " + cacheFilePath);
+
+                    // If the cache file exists and we should not ignore it
+                    if (File.Exists(cacheFilePath))
                     {
-                        lastMessageNumber = lastRecordFromCacheFile.MessageNumber;
+                        // Get the JSON from the file
+                        string objectJSONFromCacheFile = File.ReadAllText(this.GetStatusCacheFilePath());
+                        // Deserialize into the Log Record
+                        LogRecord lastRecordFromCacheFile = JsonConvert.DeserializeObject<LogRecord>(objectJSONFromCacheFile);
+
+                        log.Debug("lastRecordFromCacheFile - " + lastRecordFromCacheFile.ToJSON());
+
+                        // Get the last message number from the retrieved lastRecord if it's available
+                        if (lastRecordFromCacheFile != null)
+                        {
+                            lastMessageNumber = lastRecordFromCacheFile.MessageNumber;
+                        }
+
+                        log.Debug("lastMessageNumber - " + lastMessageNumber.ToString());
                     }
-
-                    log.Debug("lastMessageNumber - " + lastMessageNumber.ToString());
-
                 }
-
-                return this.GetUnreadRecords(lastMessageNumber, maximumMessages, messagePatternToStop);
-
+                return this.GetUnreadRecords(lastMessageNumber,startMessageNumber, maximumMessages, messagePatternToStop);
             }
             catch
             {
@@ -807,48 +809,76 @@ namespace aaLogReader
         /// <summary>
         /// Get all unread messages starting from the last lastRecord and stopping at the last read message number.
         /// </summary>
-        /// <param name="lastReadMessageNumber">Last message number previously read.</param>
+        /// <param name="stopReadMessageNumber">Message number to stop reading records.  Default is ulong min value.</param>
+        /// <param name="startReadMessageNumber">Message number to start reading.  Default is ulong max value</param>
         /// <param name="maximumMessages">Maximum number of messages to return</param>
         /// <param name="messagePatternToStop">Message pattern to match for ending search</param>
         /// <returns></returns>
-        private List<LogRecord> GetUnreadRecords(ulong lastReadMessageNumber, int maximumMessages = 1000, string messagePatternToStop = "")
+        private List<LogRecord> GetUnreadRecords(ulong stopReadMessageNumber = ulong.MinValue, ulong startReadMessageNumber = ulong.MaxValue, ulong maximumMessages = 1000, string messagePatternToStop = "")
         {
             List<LogRecord> logRecordList = new List<LogRecord>();
             LogRecord localRecord; 
             bool getAnotherRecord;
+            ReturnCodeStruct localReturnCode;
             
             try
-            {
-                log.Debug("");
-                log.Debug("lastReadMessageNumber - " + lastReadMessageNumber.ToString());
+            {                
+                log.Debug("stopReadMessageNumber - " + stopReadMessageNumber.ToString());
+                log.Debug("startReadMessageNumber - " + startReadMessageNumber.ToString());
                 log.Debug("maximumMessages - " + maximumMessages.ToString());
                 log.Debug("messagePatternToStop - " + messagePatternToStop);
-
+                
                 //If the latest file in the directory does not match the file we are currently working on
                 if (this.currentLogFilePath != this.LatestFileInPath(this.GetLogDirectory(),"*.aalog"))
                 {
                     log.Info("Latest log file has changed.  Forcing a reread.");
 
                     // Force a reread
-                    this.OpenCurrentLogFile();
+                    localReturnCode = this.OpenCurrentLogFile();
+
+                    if(!localReturnCode.Status)
+                    {
+                        throw new aaLogReaderException("Error opening Current Log File.");
+                    }
                 }
                 
                 // Force a reread of the header so we know the latest values
                 this.ReadLogHeader(this.globalFileStream, true);
 
+                if(!this.logHeader.ReturnCode.Status)
+                {
+                    throw new aaLogReaderException("Error reading log header.");
+                }
+
                 log.Debug("logHeader.MsgLastNumber - " + this.logHeader.MsgLastNumber.ToString());
-                log.Debug("lastReadMessageNumber - " + lastReadMessageNumber);
+                log.Debug("lastReadMessageNumber - " + stopReadMessageNumber);
+
+                // Short circuit if there are no new records
+                if (this.logHeader.MsgLastNumber <= stopReadMessageNumber)
+                {
+                    log.Debug(string.Format("Short circuit return because this.logHeader.MsgLastNumber <= stopReadMessageNumber {0} <= {1}",this.logHeader.MsgLastNumber,stopReadMessageNumber));
+                    return logRecordList;
+                }
 
                 // Check the header to see if any new records have been added
-                if(this.logHeader.MsgLastNumber > lastReadMessageNumber)
-                { 
+                //if(this.logHeader.MsgLastNumber > stopReadMessageNumber)
+                //{ 
                     // Start with the last lastRecord
                     localRecord = this.GetLastRecord();
-
+                    
                     log.Debug("GetLastRecord Message Number - " + localRecord.MessageNumber);
                     log.Debug("GetLastRecord localRecord.ReturnCode.Status - " + localRecord.ReturnCode.Status);
 
-                    // If we get a lastRecord then add to the list and start iterating
+                    // Start to iterate through the records to find the appropriate starting record
+                    log.Debug(string.Format("Searching for starting message number {0}", startReadMessageNumber));
+                    while(localRecord.MessageNumber > startReadMessageNumber)
+                    {
+                        localRecord = GetPrevRecord();
+                    }
+
+                    log.Debug(string.Format("Completed search for starting message.  Current message number is {0}", localRecord.MessageNumber));
+
+                    // If we get a lastRecord then add to the list and start iterating backwards through the message list.
                     if (localRecord.ReturnCode.Status)
                     {
                         logRecordList.Add(localRecord);
@@ -859,9 +889,9 @@ namespace aaLogReader
                          * retrieve the next previous lastRecord
                          */
 
-                        getAnotherRecord = this.ShouldGetNextRecord(localRecord, logRecordList.Count, lastReadMessageNumber, maximumMessages, messagePatternToStop);
+                        getAnotherRecord = this.ShouldGetNextRecord(localRecord, (ulong)logRecordList.Count, stopReadMessageNumber, maximumMessages, messagePatternToStop);
 
-                        //getAnotherRecord = localRecord.ReturnCodeStruct.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > lastReadMessageNumber) && (logRecordList.Count < maximumMessages);
+                        //getAnotherRecord = localRecord.ReturnCodeStruct.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > stopReadMessageNumber) && (logRecordList.Count < maximumMessages);
 
                         log.Debug("getAnotherRecord - " + getAnotherRecord);
 
@@ -877,9 +907,9 @@ namespace aaLogReader
                             }
 
                             // Calculate if we should get another lastRecord
-                            //getAnotherRecord = localRecord.ReturnCodeStruct.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > lastReadMessageNumber) && (logRecordList.Count < maximumMessages);
+                            //getAnotherRecord = localRecord.ReturnCodeStruct.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > stopReadMessageNumber) && (logRecordList.Count < maximumMessages);
                             
-                            getAnotherRecord = this.ShouldGetNextRecord(localRecord, logRecordList.Count, lastReadMessageNumber, maximumMessages, messagePatternToStop);
+                            getAnotherRecord = this.ShouldGetNextRecord(localRecord, (ulong)logRecordList.Count, stopReadMessageNumber, maximumMessages, messagePatternToStop);
 
                             log.Debug("getAnotherRecord - " + getAnotherRecord);
                         }
@@ -887,7 +917,7 @@ namespace aaLogReader
                         // Write out the cache file if we read records
                         this.WriteStatusCacheFile(logRecordList.OrderByDescending(item => item.MessageNumber).First());
                     }                    
-                }
+                //}
 
                 // After all records have been retrieved, apply filter
                 // TODO: Consider profiling application at this layer vs during actual record retrieval.  The issue with at record retrieval is that it might interfere with 
@@ -1005,7 +1035,7 @@ namespace aaLogReader
                 }
         }
 
-        private bool ShouldGetNextRecord(LogRecord lastRecord,int logRecordCount, ulong lastReadMessageNumber, int maximumMessages, string messagePatternToStop)
+        private bool ShouldGetNextRecord(LogRecord lastRecord,ulong logRecordCount, ulong lastReadMessageNumber, ulong maximumMessages, string messagePatternToStop)
         {
             bool returnValue = false;
 
