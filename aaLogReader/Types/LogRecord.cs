@@ -7,24 +7,24 @@ namespace aaLogReader
     /// <summary>
     /// A standard log lastRecord
     /// </summary>
-    public class LogRecord
+    public class LogRecord : ILogRecord
     {
         [JsonIgnore]
-        public int RecordLength;
+        public int RecordLength { get; set; }
 
         [JsonIgnore]
-        public int OffsetToPrevRecord;
+        public int OffsetToPrevRecord { get; set; }
 
         [JsonIgnore]
-        public int OffsetToNextRecord;
+        public int OffsetToNextRecord { get; set; }
 
-        public ulong MessageNumber;
+        public ulong MessageNumber { get; set; }
 
-        public int ProcessID;
+        public int ProcessID { get; set; }
 
-        public int ThreadID;
+        public int ThreadID { get; set; }
 
-        public ulong EventFileTimeUTC;
+        public ulong EventFileTimeUTC { get; set; }
 
         // TODO: Add UTC Offset for Exact Timestamp
         // public int EventUTCOffset; 
@@ -55,20 +55,20 @@ namespace aaLogReader
             get { return this.EventDateTime.Millisecond;}
         }
 
-        public string LogFlag;
+        public string LogFlag { get; set; }
 
-        public string Component;
+        public string Component { get; set; }
 
-        public string Message;
+        public string Message { get; set; }
 
-        public string ProcessName;
+        public string ProcessName { get; set; }
 
-        public string SessionID;
+        public string SessionID { get; set; }
 
-        public string HostFQDN;
+        public string HostFQDN { get; set; }
 
         [JsonIgnore]
-        public ReturnCode ReturnCode;
+        public ReturnCodeStruct ReturnCode;
 
         public string ToJSON()
         {
@@ -239,12 +239,6 @@ namespace aaLogReader
         public string ToTSV(ExportFormat format = ExportFormat.Full)
         {
             return this.ToDelimitedString('\t',format);
-        }
-
-        public enum ExportFormat
-        {
-             Full=1
-            ,Minimal = 2
         }
     }
 }

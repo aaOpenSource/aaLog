@@ -4,32 +4,32 @@ using System.Text;
 
 namespace aaLogReader
 {
-    public class LogHeader
+    public class LogHeader : ILogHeader
     {
-        public ulong MsgStartingNumber;
+        public ulong MsgStartingNumber { get; set; }
 
-        public ulong MsgCount;
+        public ulong MsgCount { get; set; }
 
-        public ulong MsgLastNumber;
+        public ulong MsgLastNumber { get; set; }
 
-        public DateTime StartDateTime;
+        public DateTime StartDateTime { get; set; }
 
-        public DateTime EndDateTime;
+        public DateTime EndDateTime { get; set; }
 
-        public int OffsetFirstRecord;
+        public int OffsetFirstRecord { get; set; }
 
-        public int OffsetLastRecord;
+        public int OffsetLastRecord { get; set; }
 
-        public string ComputerName;
+        public string ComputerName { get; set; }
 
-        public string Session;
+        public string Session { get; set; }
 
-        public string PrevFileName;
+        public string PrevFileName { get; set; }
 
-        public string HostFQDN;
+        public string HostFQDN { get; set; }
 
         [JsonIgnore]
-        public ReturnCode ReturnCode;
+        public ReturnCodeStruct ReturnCode { get; set; }
 
         public string ToJSON()
         {
