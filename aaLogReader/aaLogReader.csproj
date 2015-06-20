@@ -61,12 +61,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="aaLogReader.cs" />
+    <Compile Include="Enum\enumExportFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Struct\FileTime.cs" />
     <Compile Include="Struct\LogRecordFilter.cs" />
     <Compile Include="Struct\Options.cs" />
     <Compile Include="Struct\SessionIDSegments.cs" />
     <Compile Include="Struct\ReturnCode.cs" />
+    <Compile Include="Types\ILogHeader.cs" />
+    <Compile Include="Types\ILogRecord.cs" />
     <Compile Include="Types\LogRecord.cs" />
     <Compile Include="Types\LogHeader.cs" />
     <Compile Include="Types\aaLogReaderException.cs" />
