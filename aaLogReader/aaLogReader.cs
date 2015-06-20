@@ -20,8 +20,8 @@ namespace aaLogReader
         public FileTime sTime;
 		public LogHeader logHeader;
 		public LogRecord lastRecordRead;
-		public ReturnCode returnValue;
-		public ReturnCode returnCloseValue;
+		public ReturnCodeStruct returnValue;
+		public ReturnCodeStruct returnCloseValue;
 		private FileStream globalFileStream;
         private string currentLogFilePath;        
         private static aaLogReaderOptions globalOptions;
@@ -119,7 +119,7 @@ namespace aaLogReader
         private void Initialize()
         {
             log.Debug("");
-            ReturnCode returnValue;
+            ReturnCodeStruct returnValue;
 
             try
             {   
@@ -173,10 +173,10 @@ namespace aaLogReader
         /// </summary>
         /// <param name="LogFilePath">Complete file path to log file</param>
         /// <returns></returns>
-        public ReturnCode OpenLogFile(string LogFilePath)
+        public ReturnCodeStruct OpenLogFile(string LogFilePath)
         {
             log.Debug("");
-            ReturnCode localReturnCode;
+            ReturnCodeStruct localReturnCode;
 
             try
             {
@@ -233,10 +233,10 @@ namespace aaLogReader
         /// </summary>
         /// <param name="LogDirectory">Directory to inspect for latest log file</param>
         /// <returns></returns>
-        public ReturnCode OpenCurrentLogFile(string LogDirectory = "")
+        public ReturnCodeStruct OpenCurrentLogFile(string LogDirectory = "")
         {
             log.Debug("");
-            ReturnCode localReturnCode;
+            ReturnCodeStruct localReturnCode;
             
             try
             {                
@@ -294,10 +294,10 @@ namespace aaLogReader
 		/// Close the currently open log file
 		/// </summary>
 		/// <returns></returns>
-        public ReturnCode CloseCurrentLogFile()
+        public ReturnCodeStruct CloseCurrentLogFile()
 		{
             log.Debug("");
-            ReturnCode localReturnCode;
+            ReturnCodeStruct localReturnCode;
 
             localReturnCode.Status = true;
             localReturnCode.Message = "";
@@ -441,18 +441,15 @@ namespace aaLogReader
 
                 log.Debug("Local Header - " + localHeader.ToJSON());
 
-                localHeader.ReturnCode.Status = true;
-                localHeader.ReturnCode.Message = "";
-
+                localHeader.ReturnCode = new ReturnCodeStruct { Status = true, Message = "" };                
             }
             catch(Exception ex)
             {
                 
                 this.returnCloseValue = this.CloseCurrentLogFile();
 
-                localHeader.ReturnCode.Status = false;
-                localHeader.ReturnCode.Message = ex.Message;
-                
+                localHeader.ReturnCode = new ReturnCodeStruct { Status = false, Message = ex.Message };
+
                 throw;
             }
             finally
@@ -864,7 +861,7 @@ namespace aaLogReader
 
                         getAnotherRecord = this.ShouldGetNextRecord(localRecord, logRecordList.Count, lastReadMessageNumber, maximumMessages, messagePatternToStop);
 
-                        //getAnotherRecord = localRecord.ReturnCode.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > lastReadMessageNumber) && (logRecordList.Count < maximumMessages);
+                        //getAnotherRecord = localRecord.ReturnCodeStruct.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > lastReadMessageNumber) && (logRecordList.Count < maximumMessages);
 
                         log.Debug("getAnotherRecord - " + getAnotherRecord);
 
@@ -880,7 +877,7 @@ namespace aaLogReader
                             }
 
                             // Calculate if we should get another lastRecord
-                            //getAnotherRecord = localRecord.ReturnCode.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > lastReadMessageNumber) && (logRecordList.Count < maximumMessages);
+                            //getAnotherRecord = localRecord.ReturnCodeStruct.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > lastReadMessageNumber) && (logRecordList.Count < maximumMessages);
                             
                             getAnotherRecord = this.ShouldGetNextRecord(localRecord, logRecordList.Count, lastReadMessageNumber, maximumMessages, messagePatternToStop);
 
