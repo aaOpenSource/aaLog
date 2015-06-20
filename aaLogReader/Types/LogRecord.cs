@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace aaLogReader
 {
@@ -18,6 +19,7 @@ namespace aaLogReader
         [JsonIgnore]
         public int OffsetToNextRecord { get; set; }
 
+        [Key]
         public ulong MessageNumber { get; set; }
 
         public int ProcessID { get; set; }
