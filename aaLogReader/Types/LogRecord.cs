@@ -10,6 +10,12 @@ namespace aaLogReader
     /// </summary>
     public class LogRecord : ILogRecord
     {
+        // Default constructor
+        public LogRecord()
+        {
+            this.ReturnCode.Status = false;
+            this.ReturnCode.Message = "";
+        }
 
         [JsonIgnore]        
         public int RecordLength { get; set; }
