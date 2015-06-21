@@ -13,17 +13,21 @@ using System.Net.NetworkInformation;
 namespace aaLogReader
 {
 	public class aaLogReader : IDisposable
-	{
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    {
 
-        private LogHeader _logHeader;
+        #region Globals
+
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private LogHeader _currentLogHeader;
         private List<LogHeader> _logHeaderIndex;
         private LogRecord _lastRecordRead;
         private ReturnCodeStruct _returnCloseValue;
 		private FileStream _fileStream;
-        private string _currentLogFilePath;        
+        private string _currentLogFilePath;
         private aaLogReaderOptionsStruct _options;
 
+        #endregion
+        
         #region CTOR/DTOR
 
         /// <summary>
@@ -39,7 +43,7 @@ namespace aaLogReader
             try
             {
                 // Initialize with default options
-                _options = new aaLogReaderOptionsStruct();
+                Options = new aaLogReaderOptionsStruct();
 
                 this.Initialize();
             }
@@ -64,7 +68,7 @@ namespace aaLogReader
 
             try
             {
-                _options = InitializationOptions;
+                Options = InitializationOptions;
 
                 this.Initialize();
             }
@@ -126,11 +130,11 @@ namespace aaLogReader
                  * the current cache file and let it get written after the first record read
                 */
                 
-                if(_options.IgnoreCacheFileOnFirstRead)
+                if(Options.IgnoreCacheFileOnFirstRead)
                 {
                     try
                     {
-                        System.IO.File.Delete(this.GetStatusCacheFilePath(_options.LogDirectory));
+                        System.IO.File.Delete(this.GetStatusCacheFilePath(Options.LogDirectory));
                     }
                     catch
                     {
@@ -139,7 +143,7 @@ namespace aaLogReader
                 }
           
                 // Open current log file
-                returnValue = this.OpenCurrentLogFile(_options.LogDirectory);
+                returnValue = this.OpenCurrentLogFile(Options.LogDirectory);
             }
             catch
             {
@@ -149,17 +153,54 @@ namespace aaLogReader
         }
 
          #endregion
-        
-        #region Options Management
 
-        /// <summary>
-        /// Set the options for the instance on the fly
-        /// </summary>
-        /// <param name="OptionsObject"></param>
-        public void SetOptions(aaLogReaderOptionsStruct OptionsObject)
+        #region Properties
+
+        public List<LogHeader> LogHeaderIndex
         {
-            _options = OptionsObject;
+            get
+            {
+                // Force a re-index any time this function is called to make sure we have most up to date data.
+                this.IndexLogHeaders();
+                return _logHeaderIndex;             
+            }
+
+            private set { _logHeaderIndex = value; }
         }
+
+        public LogHeader CurrentLogHeader
+        {
+            get { return _currentLogHeader; }
+            private set { _currentLogHeader = value;  }
+        }
+
+        public LogRecord LastRecordRead
+        {
+            get { return _lastRecordRead; }
+            private set { _lastRecordRead = value; }
+        }
+
+        public ReturnCodeStruct ReturnCloseValue
+        {
+            get { return _returnCloseValue; }
+            private set { _returnCloseValue = value; }
+        }
+
+        public string CurrentLogFilePath
+        {
+            get { return _currentLogFilePath; }
+            private set { _currentLogFilePath = value; }
+        }
+
+        public aaLogReaderOptionsStruct Options
+        {
+            get { return _options; }
+            set { _options = value; }
+        }
+
+        #endregion
+
+        #region Options Management
 
         #endregion
 
@@ -189,7 +230,7 @@ namespace aaLogReader
                     log.Info("Opening log file " + LogFilePath);
 
                     // Save the log path
-                    this._currentLogFilePath = LogFilePath;
+                    this.CurrentLogFilePath = LogFilePath;
 
                     // Open up a filestream.  Make sure we access in read only and also allow others processes to read/write while we have it open
                     this._fileStream = new FileStream(LogFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -202,9 +243,9 @@ namespace aaLogReader
                         this.ReadLogHeader(this._fileStream);
 
                         // Get the return code from the log header read
-                        localReturnCode = this._logHeader.ReturnCode;
+                        localReturnCode = this.CurrentLogHeader.ReturnCode;
 
-                        log.Debug("logHeader - " + this._logHeader.ToJSON());
+                        log.Debug("logHeader - " + this.CurrentLogHeader.ToJSON());
                         log.Debug("localReturnCode - " + localReturnCode);
 
                     }
@@ -310,7 +351,7 @@ namespace aaLogReader
                 if (this._fileStream != null)
                 {                    
 				    this._fileStream.Close();
-                    log.Info("Closed log file " + this._currentLogFilePath);
+                    log.Info("Closed log file " + this.CurrentLogFilePath);
                 }
 			}
 			catch (Exception ex)
@@ -333,9 +374,9 @@ namespace aaLogReader
         public LogHeader ReadLogHeader()
         {
             log.Debug("");
-            if (this._logHeader != null)
+            if (this.CurrentLogHeader != null)
             {
-                return this._logHeader;
+                return this.CurrentLogHeader;
             }
             else
             {
@@ -368,9 +409,9 @@ namespace aaLogReader
 
                 if (!ForceReread)
                 {
-                    if (this._logHeader != null)
+                    if (this.CurrentLogHeader != null)
                     {
-                        return this._logHeader;
+                        return this.CurrentLogHeader;
                     }
                 }
 
@@ -449,7 +490,7 @@ namespace aaLogReader
             catch (Exception ex)
             {
 
-                this._returnCloseValue = this.CloseCurrentLogFile();
+                this.ReturnCloseValue = this.CloseCurrentLogFile();
 
                 localHeader.ReturnCode = new ReturnCodeStruct { Status = false, Message = ex.Message };
 
@@ -458,7 +499,7 @@ namespace aaLogReader
             finally
             {
                 // Set the log header to this locaheader we have calculated
-                this._logHeader = localHeader;
+                this.CurrentLogHeader = localHeader;
             }
 
             return localHeader;
@@ -468,7 +509,7 @@ namespace aaLogReader
         /// Create an index of all log header information in the current log directory
         /// </summary>
         /// <returns></returns>
-        public List<LogHeader> IndexLogHeaders()
+        private List<LogHeader> IndexLogHeaders()
         {
             return this.IndexLogHeaders(this.GetLogDirectory());
         }
@@ -478,7 +519,7 @@ namespace aaLogReader
         /// </summary>
         /// <param name="LogDirectory">Path to Log File Directory</param>
         /// <returns></returns>
-        public List<LogHeader> IndexLogHeaders(string LogDirectory)
+        private List<LogHeader> IndexLogHeaders(string LogDirectory)
         {
             log.Debug("LogDirectory - " + LogDirectory);
 
@@ -524,7 +565,7 @@ namespace aaLogReader
                 CorrectLogHeaderIndexErrors(ref localLogHeaderIndex);
                 
                 //Push to a global variable for persistence
-                this._logHeaderIndex = localLogHeaderIndex;
+                this.LogHeaderIndex = localLogHeaderIndex;
 
             }
             catch
@@ -541,7 +582,7 @@ namespace aaLogReader
         /// <param name="LogHeaderIndex">Reference to log header Index</param>
         private void CorrectLogHeaderIndexErrors(ref List<LogHeader> LogHeaderIndex)
         {
-            log.DebugFormat("_logHeaderIndex.Count - {0}", LogHeaderIndex.Count);
+            log.DebugFormat("LogHeaderIndex.Count - {0}", LogHeaderIndex.Count);
 
             try
             {
@@ -703,7 +744,7 @@ namespace aaLogReader
                 // If this is a past the end of file message then handle gracefully
                 if(saex.Message == "Attempt to read past End-Of-Log-File")
                 {               
-                    this._returnCloseValue = this.CloseCurrentLogFile();
+                    this.ReturnCloseValue = this.CloseCurrentLogFile();
 
                     // Re-init the lastRecord to make sure it's totally blank.  Don't want to return a partial lastRecord
                     localRecord = new LogRecord();
@@ -721,7 +762,7 @@ namespace aaLogReader
             }
 
             // Set the last lastRecord read to this one.
-            this._lastRecordRead = localRecord;
+            this.LastRecordRead = localRecord;
 
             // Return the working lastRecord
             return localRecord;
@@ -736,14 +777,13 @@ namespace aaLogReader
             log.Debug("");
             LogRecord localRecord = new LogRecord();
 
-			if (this._logHeader.OffsetFirstRecord == 0)
+			if (this.CurrentLogHeader.OffsetFirstRecord == 0)
 			{
-				this._lastRecordRead.ReturnCode.Status = false;
-                this._lastRecordRead.ReturnCode.Message = "";
+                this.LastRecordRead = new LogRecord();
 			}
 			else
 			{
-                localRecord = this.ReadLogRecord(this._logHeader.OffsetFirstRecord, this._logHeader.MsgStartingNumber);
+                localRecord = this.ReadLogRecord(this.CurrentLogHeader.OffsetFirstRecord, this.CurrentLogHeader.MsgStartingNumber);
 			}
 
             return localRecord;
@@ -758,14 +798,14 @@ namespace aaLogReader
             log.Debug("");
             LogRecord localRecord = new LogRecord();
 
-			if (this._logHeader.OffsetLastRecord == 0)
+			if (this.CurrentLogHeader.OffsetLastRecord == 0)
 			{
                 localRecord.ReturnCode.Status = false;
                 localRecord.ReturnCode.Message = "Offset to Last Record is 0.  No record returned.";
 			}
 			else
 			{
-                localRecord = this.ReadLogRecord(this._logHeader.OffsetLastRecord, this._logHeader.MsgLastNumber);
+                localRecord = this.ReadLogRecord(this.CurrentLogHeader.OffsetLastRecord, this.CurrentLogHeader.MsgLastNumber);
 			}
 
             return localRecord;
@@ -782,7 +822,7 @@ namespace aaLogReader
             LogRecord localRecord;
             ulong LastMessageNumber;
 
-                if (this._lastRecordRead.OffsetToNextRecord == 0)
+                if (this.LastRecordRead.OffsetToNextRecord == 0)
                 {
                     // We haven't read any records yet so just get the first lastRecord
                     return this.GetFirstRecord();
@@ -790,16 +830,16 @@ namespace aaLogReader
                 else
                 {
                     // Cache the last message number
-                    LastMessageNumber = this._lastRecordRead.MessageNumber;
+                    LastMessageNumber = this.LastRecordRead.MessageNumber;
 
                     // If we are already at the end of the log file
-                    if (LastMessageNumber >= this._logHeader.MsgLastNumber)
+                    if (LastMessageNumber >= this.CurrentLogHeader.MsgLastNumber)
                     {
                         throw new aaLogReaderException("Attempt to read past End-Of-Log-File");
                     }
 
                     // Read the lastRecord based off offset information from last lastRecord read
-                    localRecord = this.ReadLogRecord(this._lastRecordRead.OffsetToNextRecord, Convert.ToUInt64(decimal.Add(new decimal(LastMessageNumber), decimal.One)));
+                    localRecord = this.ReadLogRecord(this.LastRecordRead.OffsetToNextRecord, Convert.ToUInt64(decimal.Add(new decimal(LastMessageNumber), decimal.One)));
                 }
 
             return localRecord;
@@ -817,19 +857,19 @@ namespace aaLogReader
 
 			try
             {                
-                if (this._lastRecordRead.OffsetToPrevRecord != 0)
+                if (this.LastRecordRead.OffsetToPrevRecord != 0)
 				{
                     log.Debug("this.lastRecordRead.OffsetToPrevRecord != 0");
 
                     // Cache the last message number
-                    LastMessageNumber = this._lastRecordRead.MessageNumber;
+                    LastMessageNumber = this.LastRecordRead.MessageNumber;
 
                     // Read the lastRecord based off offset information from last lastRecord read
 
-                    localRecord = this.ReadLogRecord(this._lastRecordRead.OffsetToPrevRecord, Convert.ToUInt64(decimal.Subtract(new decimal(LastMessageNumber), decimal.One)));
+                    localRecord = this.ReadLogRecord(this.LastRecordRead.OffsetToPrevRecord, Convert.ToUInt64(decimal.Subtract(new decimal(LastMessageNumber), decimal.One)));
 				}
                 // Check to see if we are at the beginning of if there is another log file we can connect to
-				else if (System.String.Compare(this._logHeader.PrevFileName, "", false) == 0)  
+				else if (System.String.Compare(this.CurrentLogHeader.PrevFileName, "", false) == 0)  
 				{
                     log.Debug("this.lastRecordRead.OffsetToPrevRecord = 0 AND this.logHeader.PrevFileName == 0");
 
@@ -844,7 +884,7 @@ namespace aaLogReader
                     // Close the currently opened log file
                     this._fileStream.Close();
                     
-                    string newPreviousLogFile = string.Concat(new string[] {this.GetLogDirectory(), "\\", this._logHeader.PrevFileName });
+                    string newPreviousLogFile = string.Concat(new string[] {this.GetLogDirectory(), "\\", this.CurrentLogHeader.PrevFileName });
 
                     log.Debug("newPreviousLogFile - " + newPreviousLogFile);
 
@@ -875,7 +915,7 @@ namespace aaLogReader
         /// </summary>
         /// <param name="MessageNumber">Message number to search for</param>
         /// <returns>Complete path to log file containing specific message number.  Will return "" if no log file found</returns>
-        public string GetLogFilePathForMessageNumber(ulong MessageNumber)
+        public string GetLogFilePathForMessageNumber(ulong MessageNumber, EarliestOrLatest GetEarliestOrLatest = EarliestOrLatest.Latest)
         {
             log.Debug("MessageNumber - " + MessageNumber);
 
@@ -884,16 +924,39 @@ namespace aaLogReader
             try
             {
                 //Now try to find the specific file where the 
-                LogHeader foundLogHeader = this.IndexLogHeaders().Find(x => x.MsgStartingNumber <= MessageNumber && MessageNumber <= x.MsgLastNumber);
+                List<LogHeader> foundLogHeaders = this.IndexLogHeaders().FindAll(x => x.MsgStartingNumber <= MessageNumber && MessageNumber <= x.MsgLastNumber).OrderBy(x => x.StartFileTime).ToList<LogHeader>();
 
-                if(foundLogHeader != null)
+                
+                if(foundLogHeaders.Count == 1)
                 {
-                    returnValue = foundLogHeader.LogFilePath;
+                    if (foundLogHeaders[0] != null)
+                    {
+                        returnValue = foundLogHeaders[0].LogFilePath;
+                    }
+                    else
+                    {
+                        log.WarnFormat("Could not find log file for MessageNumber {0}", MessageNumber);
+                        returnValue = "";
+                    }
                 }
                 else
                 {
-                    log.WarnFormat("Could not find log file for message number {0}", MessageNumber);
-                    returnValue = "";
+                    log.WarnFormat("Found more than one possible log file for MessageNumber {0}", MessageNumber);
+                    
+                    switch(GetEarliestOrLatest)
+                    { 
+                        case EarliestOrLatest.Earliest:
+                            returnValue = foundLogHeaders.First<LogHeader>().LogFilePath;
+                            break;
+
+                        case EarliestOrLatest.Latest:
+                            returnValue = foundLogHeaders.Last<LogHeader>().LogFilePath;
+                            break;
+
+                        default:
+                            returnValue = foundLogHeaders.Last<LogHeader>().LogFilePath;
+                            break;
+                    }
                 }
             }
             catch(Exception ex)
@@ -910,7 +973,7 @@ namespace aaLogReader
         /// </summary>
         /// <param name="MessageFiletime">Message timestamp to search for</param>
         /// <returns>Complete path to log file containing specific message timestamp.  Will return "" if no log file found</returns>
-        public string GetLogFilePathForMessageTimestamp(DateTime MessageTimestamp)
+        public string GetLogFilePathForMessageTimestamp(DateTime MessageTimestamp, EarliestOrLatest GetEarliestOrLatest = EarliestOrLatest.Latest)
         {
             return this.GetLogFilePathForMessageTimestamp((ulong)MessageTimestamp.ToFileTime());
         }
@@ -920,7 +983,7 @@ namespace aaLogReader
         /// </summary>
         /// <param name="MessageFiletime">Message filetime to search for</param>
         /// <returns>Complete path to log file containing specific message filetime.  Will return "" if no log file found</returns>
-        public string GetLogFilePathForMessageTimestamp(ulong MessageFiletime)
+        public string GetLogFilePathForMessageTimestamp(ulong MessageFiletime, EarliestOrLatest GetEarliestOrLatest = EarliestOrLatest.Latest)
         {
             log.DebugFormat ("MessageFiletime - {0}",MessageFiletime);
 
@@ -928,17 +991,39 @@ namespace aaLogReader
 
             try
             {
-                //Now try to find the specific file where the 
-                LogHeader foundLogHeader = this.IndexLogHeaders().Find(x => x.StartFileTime <= MessageFiletime && MessageFiletime <= x.EndFileTime);
+                //Now try to find the specific file where the message is located based on timestamp
+                List<LogHeader> foundLogHeaders = this.IndexLogHeaders().FindAll(x => x.StartFileTime <= MessageFiletime && MessageFiletime <= x.EndFileTime).OrderBy(x => x.StartFileTime).ToList<LogHeader>();
 
-                if (foundLogHeader != null)
+                if(foundLogHeaders.Count == 1)
                 {
-                    returnValue = foundLogHeader.LogFilePath;
+                    if (foundLogHeaders[0] != null)
+                    {
+                        returnValue = foundLogHeaders[0].LogFilePath;
+                    }
+                    else
+                    {
+                        log.WarnFormat("Could not find log file for message filetime {0}", MessageFiletime);
+                        returnValue = "";
+                    }
                 }
                 else
                 {
-                    log.WarnFormat("Could not find log file for message filetime {0}", MessageFiletime);
-                    returnValue = "";
+                    log.WarnFormat("Found more than one possible log file for messagefiletime {0}", MessageFiletime);
+                    
+                    switch(GetEarliestOrLatest)
+                    { 
+                        case EarliestOrLatest.Earliest:
+                            returnValue = foundLogHeaders.First<LogHeader>().LogFilePath;
+                            break;
+
+                        case EarliestOrLatest.Latest:
+                            returnValue = foundLogHeaders.Last<LogHeader>().LogFilePath;
+                            break;
+
+                        default:
+                            returnValue = foundLogHeaders.Last<LogHeader>().LogFilePath;
+                            break;
+                    }
                 }
             }
             catch (Exception ex)
@@ -1061,7 +1146,7 @@ namespace aaLogReader
                 log.Debug("messagePatternToStop - " + messagePatternToStop);
                 
                 //If the latest file in the directory does not match the file we are currently working on
-                if (this._currentLogFilePath != this.LatestFileInPath(this.GetLogDirectory(),"*.aalog"))
+                if (this.CurrentLogFilePath != this.LatestFileInPath(this.GetLogDirectory(),"*.aalog"))
                 {
                     log.Info("Latest log file has changed.  Forcing a reread.");
 
@@ -1077,23 +1162,23 @@ namespace aaLogReader
                 // Force a reread of the header so we know the latest values
                 this.ReadLogHeader(this._fileStream, true);
 
-                if(!this._logHeader.ReturnCode.Status)
+                if(!this.CurrentLogHeader.ReturnCode.Status)
                 {
                     throw new aaLogReaderException("Error reading log header.");
                 }
 
-                log.Debug("logHeader.MsgLastNumber - " + this._logHeader.MsgLastNumber.ToString());
+                log.Debug("logHeader.MsgLastNumber - " + this.CurrentLogHeader.MsgLastNumber.ToString());
                 log.Debug("lastReadMessageNumber - " + stopReadMessageNumber);
 
                 // Short circuit if there are no new records
-                if (this._logHeader.MsgLastNumber <= stopReadMessageNumber)
+                if (this.CurrentLogHeader.MsgLastNumber <= stopReadMessageNumber)
                 {
-                    log.Debug(string.Format("Short circuit return because this.logHeader.MsgLastNumber <= stopReadMessageNumber {0} <= {1}",this._logHeader.MsgLastNumber,stopReadMessageNumber));
+                    log.Debug(string.Format("Short circuit return because this.logHeader.MsgLastNumber <= stopReadMessageNumber {0} <= {1}",this.CurrentLogHeader.MsgLastNumber,stopReadMessageNumber));
                     return logRecordList;
                 }
 
                 // Check the header to see if any new records have been added
-                //if(this._logHeader.MsgLastNumber > stopReadMessageNumber)
+                //if(this.CurrentLogHeader.MsgLastNumber > stopReadMessageNumber)
                 //{ 
                     // Start with the last lastRecord
                     localRecord = this.GetLastRecord();
@@ -1155,7 +1240,7 @@ namespace aaLogReader
                 // TODO: Consider profiling application at this layer vs during actual record retrieval.  The issue with at record retrieval is that it might interfere with 
                 // tracking mechanisms around last record etc.
 
-                foreach(LogRecordFilterStruct CurrentFilter in _options.LogRecordPostFilters)
+                foreach(LogRecordFilterStruct CurrentFilter in Options.LogRecordPostFilters)
                 {
                     ApplyLogRecordPostFilter(ref logRecordList, CurrentFilter);
                 }
@@ -1596,22 +1681,22 @@ namespace aaLogReader
 
                 // Check the global options to determine the features that have been configured
 
-                if (_options.CacheFileNameCustom != "")
+                if (Options.CacheFileNameCustom != "")
                 {
-                    cacheFileName = _options.CacheFileNameCustom;
+                    cacheFileName = Options.CacheFileNameCustom;
                 }
-                else if (_options.CacheFileAppendProcessNameToBaseFileName)
+                else if (Options.CacheFileAppendProcessNameToBaseFileName)
                 {
-                    cacheFileName = System.Diagnostics.Process.GetCurrentProcess().ProcessName + _options.CacheFileBaseName;
+                    cacheFileName = System.Diagnostics.Process.GetCurrentProcess().ProcessName + Options.CacheFileBaseName;
                 }
                 else
                 {
-                    cacheFileName = _options.CacheFileBaseName;
+                    cacheFileName = Options.CacheFileBaseName;
                 }
 
                 if(LogFilePath == "")
                 {
-                    LogFilePath = Path.GetDirectoryName(this._currentLogFilePath);
+                    LogFilePath = Path.GetDirectoryName(this.CurrentLogFilePath);
                 }
 
                 returnValue = LogFilePath + "\\" + cacheFileName;
@@ -1637,13 +1722,13 @@ namespace aaLogReader
             //TODO: Figure out how to programatically determine the local log directory more deterministically            
             try
             {
-                if (System.IO.Directory.Exists(_options.LogDirectory))
+                if (System.IO.Directory.Exists(Options.LogDirectory))
                 {
-                    returnValue = _options.LogDirectory;
+                    returnValue = Options.LogDirectory;
                 }
                 else
                 {
-                    returnValue = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ArchestrA\Framework\Logger", "LogDir", _options.LogDirectory).ToString();
+                    returnValue = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ArchestrA\Framework\Logger", "LogDir", Options.LogDirectory).ToString();
                 }
             }
             catch
