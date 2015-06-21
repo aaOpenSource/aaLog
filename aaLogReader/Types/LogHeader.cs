@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Text;
 
+
 namespace aaLogReader
 {
     public class LogHeader : ILogHeader
