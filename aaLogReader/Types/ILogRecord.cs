@@ -15,11 +15,11 @@ namespace aaLogReader
         ulong MessageNumber { get; set; }
         int OffsetToNextRecord { get; set; }
         int OffsetToPrevRecord { get; set; }
-        int ProcessID { get; set; }
+        uint ProcessID { get; set; }
         string ProcessName { get; set; }
         int RecordLength { get; set; }
         string SessionID { get; set; }
-        int ThreadID { get; set; }
+        uint ThreadID { get; set; }
         string ToCSV(ExportFormat format = ExportFormat.Full);
         string ToDelimitedString(char Delimiter = ',', ExportFormat format = ExportFormat.Full);
         string ToJSON();
