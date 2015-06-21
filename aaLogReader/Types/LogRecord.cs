@@ -227,7 +227,6 @@ namespace aaLogReader
                     localSB.Append(Delimiter + ((char)34).ToString() + this.ProcessName + ((char)34).ToString());
                     localSB.Append(Delimiter + this.SessionID);
                     localSB.Append(Delimiter + this.EventFileTime.ToString());
-
                 }
 
                 returnValue = localSB.ToString();
