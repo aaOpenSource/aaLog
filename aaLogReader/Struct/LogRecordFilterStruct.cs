@@ -5,7 +5,7 @@ using System.Text;
 
 namespace aaLogReader
 {
-    public struct LogRecordFilter
+    public struct LogRecordFilterStruct
     {
         public string Field;
         public string Filter;

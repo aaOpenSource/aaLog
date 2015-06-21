@@ -6,15 +6,27 @@ namespace aaLogReader
 {
     public class LogHeader : ILogHeader
     {
+        public string LogFilePath { get; set; }
+
         public ulong MsgStartingNumber { get; set; }
 
         public ulong MsgCount { get; set; }
 
         public ulong MsgLastNumber { get; set; }
 
-        public DateTime StartDateTime { get; set; }
+        public ulong StartFileTime { get; set; }
 
-        public DateTime EndDateTime { get; set; }
+        public DateTime StartDateTime
+        {
+            get { return DateTime.FromFileTime((long)this.StartFileTime); }
+        }
+        
+        public ulong EndFileTime { get; set; }
+
+        public DateTime EndDateTime
+        {
+            get { return DateTime.FromFileTime((long)this.EndFileTime); }
+        }
 
         public int OffsetFirstRecord { get; set; }
 
@@ -105,12 +117,14 @@ namespace aaLogReader
 
             try
             {
-
-                localSB.Append("MsgStartingNumber");
+                localSB.Append("LogFilePath");
+                localSB.Append(Delimiter + "MsgStartingNumber");
                 localSB.Append(Delimiter + "MsgCount");
                 localSB.Append(Delimiter + "MsgLastNumber");
                 localSB.Append(Delimiter + "StartDateTime");
+                localSB.Append(Delimiter + "StartFileTime");
                 localSB.Append(Delimiter + "EndDateTime");
+                localSB.Append(Delimiter + "EndFileTime");
                 localSB.Append(Delimiter + "OffsetFirstRecord");
                 localSB.Append(Delimiter + "OffsetLastRecord");
                 localSB.Append(Delimiter + "ComputerName");
@@ -158,17 +172,20 @@ namespace aaLogReader
 
             try
             {
-                localSB.Append(this.MsgStartingNumber.ToString());
+                localSB.Append(((char)34).ToString() + this.LogFilePath + ((char)34).ToString());
+                localSB.Append(Delimiter + this.MsgStartingNumber.ToString());
                 localSB.Append(Delimiter + this.MsgCount.ToString());
                 localSB.Append(Delimiter + this.MsgLastNumber.ToString());
-                localSB.Append(Delimiter + this.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                localSB.Append(Delimiter + this.EndDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append(Delimiter + ((char)34).ToString() + this.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
+                localSB.Append(Delimiter + this.StartFileTime.ToString());
+                localSB.Append(Delimiter + ((char)34).ToString() + this.EndDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
+                localSB.Append(Delimiter + this.EndFileTime.ToString());
                 localSB.Append(Delimiter + this.OffsetFirstRecord.ToString());
                 localSB.Append(Delimiter + this.OffsetLastRecord.ToString());
-                localSB.Append(Delimiter + this.ComputerName);
+                localSB.Append(Delimiter + ((char)34).ToString() + this.ComputerName + ((char)34).ToString());
                 localSB.Append(Delimiter + this.Session);
-                localSB.Append(Delimiter + this.PrevFileName);
-                localSB.Append(Delimiter + this.HostFQDN);
+                localSB.Append(Delimiter + ((char)34).ToString() + this.PrevFileName + ((char)34).ToString());
+                localSB.Append(Delimiter + ((char)34).ToString() + this.HostFQDN + ((char)34).ToString());
 
                 returnValue = localSB.ToString();
             }

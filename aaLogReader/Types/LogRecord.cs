@@ -10,10 +10,11 @@ namespace aaLogReader
     /// </summary>
     public class LogRecord : ILogRecord
     {
-        [JsonIgnore]
+
+        [JsonIgnore]        
         public int RecordLength { get; set; }
 
-        [JsonIgnore]
+        [JsonIgnore]        
         public int OffsetToPrevRecord { get; set; }
 
         [JsonIgnore]
@@ -26,14 +27,14 @@ namespace aaLogReader
 
         public int ThreadID { get; set; }
 
-        public ulong EventFileTimeUTC { get; set; }
+        public ulong EventFileTime { get; set; }
 
         // TODO: Add UTC Offset for Exact Timestamp
         // public int EventUTCOffset; 
 
         public DateTime EventDateTime
         {
-            get { return DateTime.FromFileTime((long)this.EventFileTimeUTC); }
+            get { return DateTime.FromFileTime((long)this.EventFileTime); }
         }
 
         [JsonIgnore]
@@ -124,6 +125,9 @@ namespace aaLogReader
                     localSB.Append(", SessionID=");
                     localSB.Append(((char)34).ToString() + this.SessionID + ((char)34).ToString());
 
+                    localSB.Append(", EventFileTime=");
+                    localSB.Append(((char)34).ToString() + this.EventFileTime.ToString() + ((char)34).ToString());
+
                 }
                 returnValue = localSB.ToString();
             }
@@ -164,6 +168,7 @@ namespace aaLogReader
                     localSB.Append(Delimiter + "Component");
                     localSB.Append(Delimiter + "ProcessName");
                     localSB.Append(Delimiter + "SessionID");
+                    localSB.Append(Delimiter + "EventFileTime");
                 }
 
                 returnValue = localSB.ToString();
@@ -207,7 +212,7 @@ namespace aaLogReader
             try
             {
 
-                localSB.Append(this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append(((char)34).ToString() + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
                 localSB.Append(Delimiter + this.LogFlag);
                 localSB.Append(Delimiter + ((char)34).ToString() + this.Message + ((char)34).ToString());
                 localSB.Append(Delimiter + this.HostFQDN);
@@ -215,12 +220,14 @@ namespace aaLogReader
                 if (format == ExportFormat.Full)
                 {
                     // Use all parameters if we want a full format
-                    localSB.Append(Delimiter +this.MessageNumber.ToString());
-                    localSB.Append(Delimiter +this.ProcessID.ToString());
-                    localSB.Append(Delimiter +this.ThreadID.ToString());
+                    localSB.Append(Delimiter + this.MessageNumber.ToString());
+                    localSB.Append(Delimiter + this.ProcessID.ToString());
+                    localSB.Append(Delimiter + this.ThreadID.ToString());
                     localSB.Append(Delimiter + ((char)34).ToString() + this.Component + ((char)34).ToString());
                     localSB.Append(Delimiter + ((char)34).ToString() + this.ProcessName + ((char)34).ToString());
-                    localSB.Append(Delimiter +this.SessionID);
+                    localSB.Append(Delimiter + this.SessionID);
+                    localSB.Append(Delimiter + this.EventFileTime.ToString());
+
                 }
 
                 returnValue = localSB.ToString();

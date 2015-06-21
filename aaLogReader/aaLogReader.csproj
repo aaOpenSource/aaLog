@@ -51,6 +51,8 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -63,11 +65,11 @@
     <Compile Include="aaLogReader.cs" />
     <Compile Include="Enum\enumExportFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Struct\FileTime.cs" />
-    <Compile Include="Struct\LogRecordFilter.cs" />
-    <Compile Include="Struct\Options.cs" />
-    <Compile Include="Struct\SessionIDSegments.cs" />
-    <Compile Include="Struct\ReturnCode.cs" />
+    <Compile Include="Struct\FileTimeStruct.cs" />
+    <Compile Include="Struct\LogRecordFilterStruct.cs" />
+    <Compile Include="Struct\aaLogReaderOptionsStruct.cs" />
+    <Compile Include="Struct\SessionIDSegmentsStruct.cs" />
+    <Compile Include="Struct\ReturnCodeStruct.cs" />
     <Compile Include="Types\ILogHeader.cs" />
     <Compile Include="Types\ILogRecord.cs" />
     <Compile Include="Types\LogRecord.cs" />

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace aaLogReader
 {
-    public struct FileTime
+    public struct FileTimeStruct
     {
         [JsonIgnore]
         public uint dwLowDateTime;

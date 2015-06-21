@@ -3,8 +3,10 @@ namespace aaLogReader
 {
     interface ILogHeader
     {
+        string LogFilePath { get; set; }
         string ComputerName { get; set; }
-        DateTime EndDateTime { get; set; }
+        ulong EndFileTime { get; set; }
+        DateTime EndDateTime { get; }
         string HostFQDN { get; set; }
         ulong MsgCount { get; set; }
         ulong MsgLastNumber { get; set; }
@@ -14,7 +16,8 @@ namespace aaLogReader
         string PrevFileName { get; set; }
         ReturnCodeStruct ReturnCode { get; set; }
         string Session { get; set; }
-        DateTime StartDateTime { get; set; }
+        ulong StartFileTime { get; set; }
+        DateTime StartDateTime { get;}
         string ToCSV();
         string ToDelimitedString(char Delimiter = ',');
         string ToJSON();

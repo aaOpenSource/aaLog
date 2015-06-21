@@ -6,7 +6,7 @@ namespace aaLogReader
         string Component { get; set; }
         DateTime EventDate { get; }
         DateTime EventDateTime { get; }
-        ulong EventFileTimeUTC { get; set; }
+        ulong EventFileTime { get; set; }
         int EventMillisec { get; }
         string EventTime { get; }
         string HostFQDN { get; set; }
