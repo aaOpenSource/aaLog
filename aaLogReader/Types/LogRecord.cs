@@ -29,9 +29,9 @@ namespace aaLogReader
         [Key]
         public ulong MessageNumber { get; set; }
 
-        public int ProcessID { get; set; }
+        public uint ProcessID { get; set; }
 
-        public int ThreadID { get; set; }
+        public uint ThreadID { get; set; }
 
         public ulong EventFileTime { get; set; }
 
@@ -98,7 +98,7 @@ namespace aaLogReader
             {                
                 
                 localSB.Append("Timestamp=");
-                localSB.Append(this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append(((char)34).ToString() + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
 
                 localSB.Append(", LogFlag=");
                 localSB.Append(((char)34).ToString() + this.LogFlag + ((char)34).ToString());
