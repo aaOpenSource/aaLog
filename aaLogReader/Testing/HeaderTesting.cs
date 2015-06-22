@@ -26,26 +26,26 @@ namespace aaLogReader.Testing
 
                         WriteMessage("Starting Message Number Test", ConsoleColor.Cyan);
                         msgBase = "Start Message in " + localHeader.LogFilePath;
-                        WriteResultMessage(msgBase, logreader.GetLogFilePathForMessageNumber(localHeader.MsgStartingNumber) == localHeader.LogFilePath, includePassingTests);
+                        WriteResultMessage(msgBase, logreader.GetLogFilePathsForMessageNumber(localHeader.StartMsgNumber)[0] == localHeader.LogFilePath, includePassingTests);
 
                         msgBase = "Last Message in " + localHeader.LogFilePath;
-                        WriteResultMessage(msgBase, logreader.GetLogFilePathForMessageNumber(localHeader.MsgLastNumber) == localHeader.LogFilePath, includePassingTests);
+                        WriteResultMessage(msgBase, logreader.GetLogFilePathsForMessageNumber(localHeader.EndMsgNumber)[0] == localHeader.LogFilePath, includePassingTests);
 
-                        RandomUlong = (ulong)rnd.Next(Convert.ToInt32(localHeader.MsgCount)) + localHeader.MsgStartingNumber;
+                        RandomUlong = (ulong)rnd.Next(Convert.ToInt32(localHeader.MsgCount)) + localHeader.StartMsgNumber;
                         msgBase = string.Format("Random Message {0} in {1}", RandomUlong, localHeader.LogFilePath);
-                        WriteResultMessage(msgBase, logreader.GetLogFilePathForMessageNumber(RandomUlong) == localHeader.LogFilePath, includePassingTests);
+                        WriteResultMessage(msgBase, logreader.GetLogFilePathsForMessageNumber(RandomUlong)[0] == localHeader.LogFilePath, includePassingTests);
                         WriteMessage("Completed Message Number Test", ConsoleColor.Cyan);
 
                         WriteMessage("Starting Time Test", ConsoleColor.Cyan);
                         msgBase = "Start Time in " + localHeader.LogFilePath;
-                        WriteResultMessage(msgBase, logreader.GetLogFilePathForMessageTimestamp(localHeader.StartFileTime) == localHeader.LogFilePath, includePassingTests);
+                        WriteResultMessage(msgBase, logreader.GetLogFilePathsForMessageTimestamp(localHeader.StartFileTime)[0] == localHeader.LogFilePath, includePassingTests);
 
                         msgBase = "Last Time in " + localHeader.LogFilePath;
-                        WriteResultMessage(msgBase, logreader.GetLogFilePathForMessageTimestamp(localHeader.EndFileTime) == localHeader.LogFilePath, includePassingTests);
+                        WriteResultMessage(msgBase, logreader.GetLogFilePathsForMessageTimestamp(localHeader.EndFileTime)[0] == localHeader.LogFilePath, includePassingTests);
 
                         RandomUlong = (ulong)rnd.Next(10000) + localHeader.StartFileTime;
                         msgBase = string.Format("Random FileTime {0} in {1}", RandomUlong, localHeader.LogFilePath);
-                        WriteResultMessage(msgBase, logreader.GetLogFilePathForMessageTimestamp(RandomUlong) == localHeader.LogFilePath, includePassingTests);
+                        WriteResultMessage(msgBase, logreader.GetLogFilePathsForMessageTimestamp(RandomUlong)[0] == localHeader.LogFilePath, includePassingTests);
 
                         WriteMessage("Completed Time Test", ConsoleColor.Cyan);
                     }
