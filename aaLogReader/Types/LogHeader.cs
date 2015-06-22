@@ -9,11 +9,11 @@ namespace aaLogReader
     {
         public string LogFilePath { get; set; }
 
-        public ulong MsgStartingNumber { get; set; }
+        public ulong StartMsgNumber { get; set; }
 
         public ulong MsgCount { get; set; }
 
-        public ulong MsgLastNumber { get; set; }
+        public ulong EndMsgNumber { get; set; }
 
         public ulong StartFileTime { get; set; }
 
@@ -63,13 +63,13 @@ namespace aaLogReader
             {
 
                 localSB.Append("MsgStartingNumber=");
-                localSB.Append(((char)34).ToString() + this.MsgStartingNumber.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append(((char)34).ToString() + this.StartMsgNumber.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
                 localSB.Append(", MsgCount=");
                 localSB.Append(((char)34).ToString() + this.MsgCount + ((char)34).ToString());
 
                 localSB.Append(", MsgLastNumber=");
-                localSB.Append(((char)34).ToString() + this.MsgLastNumber + ((char)34).ToString());
+                localSB.Append(((char)34).ToString() + this.EndMsgNumber + ((char)34).ToString());
 
                 localSB.Append(", StartDateTime=");
                 localSB.Append(((char)34).ToString() + this.StartDateTime + ((char)34).ToString());
@@ -174,9 +174,9 @@ namespace aaLogReader
             try
             {
                 localSB.Append(((char)34).ToString() + this.LogFilePath + ((char)34).ToString());
-                localSB.Append(Delimiter + this.MsgStartingNumber.ToString());
+                localSB.Append(Delimiter + this.StartMsgNumber.ToString());
                 localSB.Append(Delimiter + this.MsgCount.ToString());
-                localSB.Append(Delimiter + this.MsgLastNumber.ToString());
+                localSB.Append(Delimiter + this.EndMsgNumber.ToString());
                 localSB.Append(Delimiter + ((char)34).ToString() + this.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
                 localSB.Append(Delimiter + this.StartFileTime.ToString());
                 localSB.Append(Delimiter + ((char)34).ToString() + this.EndDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
