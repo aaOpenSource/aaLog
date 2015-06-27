@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace aaLogReader
 {
-    public struct SessionIDSegments
+    public struct SessionIDSegmentsStruct
     {
         [JsonIgnore]
         public byte Segment1;

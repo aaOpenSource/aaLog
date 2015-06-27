@@ -2,34 +2,52 @@
 using Newtonsoft.Json;
 using System.Text;
 
+
 namespace aaLogReader
 {
-    public class LogHeader
+    public class LogHeader : ILogHeader
     {
-        public ulong MsgStartingNumber;
+        public string LogFilePath { get; set; }
 
-        public ulong MsgCount;
+        public ulong StartMsgNumber { get; set; }
 
-        public ulong MsgLastNumber;
+        public ulong MsgCount { get; set; }
 
-        public DateTime StartDateTime;
+        public ulong EndMsgNumber { 
+            get
+            {
+                return (ulong)(checked(this.StartMsgNumber + this.MsgCount) - 1);
+            }                                
+        }
 
-        public DateTime EndDateTime;
+        public ulong StartFileTime { get; set; }
 
-        public int OffsetFirstRecord;
+        public DateTime StartDateTime
+        {
+            get { return DateTime.FromFileTime((long)this.StartFileTime); }
+        }
+        
+        public ulong EndFileTime { get; set; }
 
-        public int OffsetLastRecord;
+        public DateTime EndDateTime
+        {
+            get { return DateTime.FromFileTime((long)this.EndFileTime); }
+        }
 
-        public string ComputerName;
+        public int OffsetFirstRecord { get; set; }
 
-        public string Session;
+        public int OffsetLastRecord { get; set; }
 
-        public string PrevFileName;
+        public string ComputerName { get; set; }
 
-        public string HostFQDN;
+        public string Session { get; set; }
+
+        public string PrevFileName { get; set; }
+
+        public string HostFQDN { get; set; }
 
         [JsonIgnore]
-        public ReturnCode ReturnCode;
+        public ReturnCodeStruct ReturnCode { get; set; }
 
         public string ToJSON()
         {
@@ -50,13 +68,13 @@ namespace aaLogReader
             {
 
                 localSB.Append("MsgStartingNumber=");
-                localSB.Append(((char)34).ToString() + this.MsgStartingNumber.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append(((char)34).ToString() + this.StartMsgNumber.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
                 localSB.Append(", MsgCount=");
                 localSB.Append(((char)34).ToString() + this.MsgCount + ((char)34).ToString());
 
                 localSB.Append(", MsgLastNumber=");
-                localSB.Append(((char)34).ToString() + this.MsgLastNumber + ((char)34).ToString());
+                localSB.Append(((char)34).ToString() + this.EndMsgNumber + ((char)34).ToString());
 
                 localSB.Append(", StartDateTime=");
                 localSB.Append(((char)34).ToString() + this.StartDateTime + ((char)34).ToString());
@@ -105,12 +123,14 @@ namespace aaLogReader
 
             try
             {
-
-                localSB.Append("MsgStartingNumber");
+                localSB.Append("LogFilePath");
+                localSB.Append(Delimiter + "MsgStartingNumber");
                 localSB.Append(Delimiter + "MsgCount");
                 localSB.Append(Delimiter + "MsgLastNumber");
                 localSB.Append(Delimiter + "StartDateTime");
+                localSB.Append(Delimiter + "StartFileTime");
                 localSB.Append(Delimiter + "EndDateTime");
+                localSB.Append(Delimiter + "EndFileTime");
                 localSB.Append(Delimiter + "OffsetFirstRecord");
                 localSB.Append(Delimiter + "OffsetLastRecord");
                 localSB.Append(Delimiter + "ComputerName");
@@ -145,7 +165,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        ///  Get the lastRecord in the form of a delimited string
+        ///  Get the lastRecordRead in the form of a delimited string
         /// </summary>
         /// <param name="Delimiter">Delimiter to Use</param>
         /// <param name="format">Full or Minimal</param>
@@ -158,17 +178,20 @@ namespace aaLogReader
 
             try
             {
-                localSB.Append(this.MsgStartingNumber.ToString());
+                localSB.Append(((char)34).ToString() + this.LogFilePath + ((char)34).ToString());
+                localSB.Append(Delimiter + this.StartMsgNumber.ToString());
                 localSB.Append(Delimiter + this.MsgCount.ToString());
-                localSB.Append(Delimiter + this.MsgLastNumber.ToString());
-                localSB.Append(Delimiter + this.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                localSB.Append(Delimiter + this.EndDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append(Delimiter + this.EndMsgNumber.ToString());
+                localSB.Append(Delimiter + ((char)34).ToString() + this.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
+                localSB.Append(Delimiter + this.StartFileTime.ToString());
+                localSB.Append(Delimiter + ((char)34).ToString() + this.EndDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
+                localSB.Append(Delimiter + this.EndFileTime.ToString());
                 localSB.Append(Delimiter + this.OffsetFirstRecord.ToString());
                 localSB.Append(Delimiter + this.OffsetLastRecord.ToString());
-                localSB.Append(Delimiter + this.ComputerName);
+                localSB.Append(Delimiter + ((char)34).ToString() + this.ComputerName + ((char)34).ToString());
                 localSB.Append(Delimiter + this.Session);
-                localSB.Append(Delimiter + this.PrevFileName);
-                localSB.Append(Delimiter + this.HostFQDN);
+                localSB.Append(Delimiter + ((char)34).ToString() + this.PrevFileName + ((char)34).ToString());
+                localSB.Append(Delimiter + ((char)34).ToString() + this.HostFQDN + ((char)34).ToString());
 
                 returnValue = localSB.ToString();
             }

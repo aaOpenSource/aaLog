@@ -1,0 +1,7 @@
+{
+    "LogDirectory": "C:\\ProgramData\\ArchestrA\\LogFiles",
+    "CacheFileBaseName": "aaLogReaderCache",
+    "CacheFileNameCustom": "",
+    "CacheFileAppendProcessNameToBaseFileName": true,
+    "IgnoreCacheFileOnFirstRead": false
+}

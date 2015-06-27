@@ -1,30 +1,47 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace aaLogReader
 {
     /// <summary>
-    /// A standard log lastRecord
+    /// A standard log record
     /// </summary>
-    public class LogRecord
+    public class LogRecord : ILogRecord
     {
-        [JsonIgnore]
-        public int RecordLength;
+        // Default constructor
+        public LogRecord()
+        {
+            this.ReturnCode.Status = false;
+            this.ReturnCode.Message = "";
+        }
+
+        [JsonIgnore]        
+        public int RecordLength { get; set; }
+
+        [JsonIgnore]        
+        public int OffsetToPrevRecord { get; set; }
 
         [JsonIgnore]
-        public int OffsetToPrevRecord;
+        public int OffsetToNextRecord { get; set; }
 
-        [JsonIgnore]
-        public int OffsetToNextRecord;
+        [Key]
+        public ulong MessageNumber { get; set; }
 
-        public ulong MessageNumber;
+        public uint ProcessID { get; set; }
 
-        public int ProcessID;
+        public uint ThreadID { get; set; }
 
-        public int ThreadID;
+        public ulong EventFileTime { get; set; }
 
-        public DateTime EventDateTime;
+        // TODO: Add UTC Offset for Exact Timestamp
+        // public int EventUTCOffset; 
+
+        public DateTime EventDateTime
+        {
+            get { return DateTime.FromFileTime((long)this.EventFileTime); }
+        }
 
         [JsonIgnore]
         public DateTime EventDate
@@ -47,20 +64,20 @@ namespace aaLogReader
             get { return this.EventDateTime.Millisecond;}
         }
 
-        public string LogFlag;
+        public string LogFlag { get; set; }
 
-        public string Component;
+        public string Component { get; set; }
 
-        public string Message;
+        public string Message { get; set; }
 
-        public string ProcessName;
+        public string ProcessName { get; set; }
 
-        public string SessionID;
+        public string SessionID { get; set; }
 
-        public string HostFQDN;
+        public string HostFQDN { get; set; }
 
         [JsonIgnore]
-        public ReturnCode ReturnCode;
+        public ReturnCodeStruct ReturnCode;
 
         public string ToJSON()
         {
@@ -68,7 +85,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        /// Return the lastRecord in the form of a Key-Value Pair
+        /// Return the log record in the form of a Key-Value Pair
         /// </summary>
         /// <param name="format">Full or Minimal</param>
         /// <returns></returns>
@@ -81,7 +98,7 @@ namespace aaLogReader
             {                
                 
                 localSB.Append("Timestamp=");
-                localSB.Append(this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append(((char)34).ToString() + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
 
                 localSB.Append(", LogFlag=");
                 localSB.Append(((char)34).ToString() + this.LogFlag + ((char)34).ToString());
@@ -113,6 +130,9 @@ namespace aaLogReader
 
                     localSB.Append(", SessionID=");
                     localSB.Append(((char)34).ToString() + this.SessionID + ((char)34).ToString());
+
+                    localSB.Append(", EventFileTime=");
+                    localSB.Append(((char)34).ToString() + this.EventFileTime.ToString() + ((char)34).ToString());
 
                 }
                 returnValue = localSB.ToString();
@@ -154,6 +174,7 @@ namespace aaLogReader
                     localSB.Append(Delimiter + "Component");
                     localSB.Append(Delimiter + "ProcessName");
                     localSB.Append(Delimiter + "SessionID");
+                    localSB.Append(Delimiter + "EventFileTime");
                 }
 
                 returnValue = localSB.ToString();
@@ -183,7 +204,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        ///  Get the lastRecord in the form of a delimited string
+        ///  Get the log record in the form of a delimited string
         /// </summary>
         /// <param name="Delimiter">Delimiter to Use</param>
         /// <param name="format">Full or Minimal</param>
@@ -197,7 +218,7 @@ namespace aaLogReader
             try
             {
 
-                localSB.Append(this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append(((char)34).ToString() + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
                 localSB.Append(Delimiter + this.LogFlag);
                 localSB.Append(Delimiter + ((char)34).ToString() + this.Message + ((char)34).ToString());
                 localSB.Append(Delimiter + this.HostFQDN);
@@ -205,12 +226,13 @@ namespace aaLogReader
                 if (format == ExportFormat.Full)
                 {
                     // Use all parameters if we want a full format
-                    localSB.Append(Delimiter +this.MessageNumber.ToString());
-                    localSB.Append(Delimiter +this.ProcessID.ToString());
-                    localSB.Append(Delimiter +this.ThreadID.ToString());
+                    localSB.Append(Delimiter + this.MessageNumber.ToString());
+                    localSB.Append(Delimiter + this.ProcessID.ToString());
+                    localSB.Append(Delimiter + this.ThreadID.ToString());
                     localSB.Append(Delimiter + ((char)34).ToString() + this.Component + ((char)34).ToString());
                     localSB.Append(Delimiter + ((char)34).ToString() + this.ProcessName + ((char)34).ToString());
-                    localSB.Append(Delimiter +this.SessionID);
+                    localSB.Append(Delimiter + this.SessionID);
+                    localSB.Append(Delimiter + this.EventFileTime.ToString());
                 }
 
                 returnValue = localSB.ToString();
@@ -231,12 +253,6 @@ namespace aaLogReader
         public string ToTSV(ExportFormat format = ExportFormat.Full)
         {
             return this.ToDelimitedString('\t',format);
-        }
-
-        public enum ExportFormat
-        {
-             Full=1
-            ,Minimal = 2
         }
     }
 }
