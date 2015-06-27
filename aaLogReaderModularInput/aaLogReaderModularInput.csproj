@@ -192,4 +192,3 @@ xcopy "$(TargetDir)\*.*" "$(SPLUNK_HOME)\etc\apps\$(ProjectName)\bin" /F /R /Y /
 echo Deployed Application to $(SPLUNK_HOME)\etc\apps\$(ProjectName)</PostBuildEvent>
   </PropertyGroup>
 </Project>
-

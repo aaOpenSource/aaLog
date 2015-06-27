@@ -148,7 +148,7 @@ namespace aaLogReaderModularInput
                     //Simple call to get all unread records, limiting the return count to max message count
                     List<LogRecord> logRecords = logReader.GetUnreadRecords(maxmessagecount);
 
-                    // Loop through each lastRecord and send to Splunk
+                    // Loop through each lastRecordRead and send to Splunk
                     foreach (LogRecord record in logRecords)
                     {
                         await eventWriter.QueueEventForWriting(new Event
