@@ -13,7 +13,12 @@ namespace aaLogReader
 
         public ulong MsgCount { get; set; }
 
-        public ulong EndMsgNumber { get; set; }
+        public ulong EndMsgNumber { 
+            get
+            {
+                return (ulong)(checked(this.StartMsgNumber + this.MsgCount) - 1);
+            }                                
+        }
 
         public ulong StartFileTime { get; set; }
 
@@ -160,7 +165,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        ///  Get the lastRecord in the form of a delimited string
+        ///  Get the lastRecordRead in the form of a delimited string
         /// </summary>
         /// <param name="Delimiter">Delimiter to Use</param>
         /// <param name="format">Full or Minimal</param>

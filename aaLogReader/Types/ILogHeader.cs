@@ -9,7 +9,7 @@ namespace aaLogReader
         DateTime EndDateTime { get; }
         string HostFQDN { get; set; }
         ulong MsgCount { get; set; }
-        ulong EndMsgNumber { get; set; }
+        ulong EndMsgNumber { get;}
         ulong StartMsgNumber { get; set; }
         int OffsetFirstRecord { get; set; }
         int OffsetLastRecord { get; set; }
