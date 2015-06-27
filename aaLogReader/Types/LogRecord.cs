@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace aaLogReader
 {
     /// <summary>
-    /// A standard log lastRecord
+    /// A standard log record
     /// </summary>
     public class LogRecord : ILogRecord
     {
@@ -85,7 +85,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        /// Return the lastRecord in the form of a Key-Value Pair
+        /// Return the log record in the form of a Key-Value Pair
         /// </summary>
         /// <param name="format">Full or Minimal</param>
         /// <returns></returns>
@@ -204,7 +204,7 @@ namespace aaLogReader
         }
 
         /// <summary>
-        ///  Get the lastRecord in the form of a delimited string
+        ///  Get the log record in the form of a delimited string
         /// </summary>
         /// <param name="Delimiter">Delimiter to Use</param>
         /// <param name="format">Full or Minimal</param>
