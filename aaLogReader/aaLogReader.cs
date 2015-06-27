@@ -39,18 +39,10 @@ namespace aaLogReader
 
             log.Debug("Create aaLogReader");            
 
-            try
-            {
-                // Initialize with default options
-                Options = new aaLogReaderOptionsStruct();
+            // Initialize with default options
+            Options = new aaLogReaderOptionsStruct();
 
-                this.Initialize();
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
+            this.Initialize();
         }
 
 
@@ -66,16 +58,9 @@ namespace aaLogReader
             log.Debug("Create aaLogReader");
             log.Debug("Options - " + JsonConvert.SerializeObject(InitializationOptions));
 
-            try
-            {
-                this.Options = InitializationOptions;
-                this.Initialize();
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
+            this.Options = InitializationOptions;
+            this.Initialize();
+
         }
 
         /// <summary>
@@ -126,9 +111,7 @@ namespace aaLogReader
         {
             log.Debug("");
             ReturnCodeStruct returnValue;
-
-            try
-            {   
+  
                 /*
                  * If the option to ignore the cache file on first read is set then we just delete
                  * the current cache file and let it get written after the first record read
@@ -149,12 +132,6 @@ namespace aaLogReader
           
                 // Open current log file
                 returnValue = this.OpenCurrentLogFile(Options.LogDirectory);
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
 
         }
 
@@ -219,8 +196,6 @@ namespace aaLogReader
 
             ReturnCodeStruct localReturnCode;
 
-            try
-            {
                 localReturnCode.Status = false;
                 localReturnCode.Message = "";
 
@@ -239,7 +214,7 @@ namespace aaLogReader
 
                     if ((this._fileStream.CanRead) && (this._fileStream.Length > 0))
                     {
-                        log.Info("Opened log file " + LogFilePath);
+                        log.DebugFormat("Opened log file {0}",LogFilePath);
                         
                         // If opening the file was a success then go ahead and read in the header
                         this.ReadLogHeader(this._fileStream);
@@ -260,12 +235,6 @@ namespace aaLogReader
                 {
                     throw new aaLogReaderException("Attempted to open log file with blank path");
                 }
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
 
             return localReturnCode;
         }
@@ -297,9 +266,9 @@ namespace aaLogReader
             }
             catch (Exception ex)
             {
+                log.Error(ex);
                 localReturnCode.Status = false;
                 localReturnCode.Message = ex.ToString();
-                throw;
             }
 
             return localReturnCode;
@@ -345,9 +314,6 @@ namespace aaLogReader
             log.Debug("");
             ReturnCodeStruct localReturnCode;
 
-            localReturnCode.Status = true;
-            localReturnCode.Message = "";
-
 			try
 			{
                 // Close the global file stream to cleanup
@@ -356,13 +322,17 @@ namespace aaLogReader
 				    this._fileStream.Close();
                     log.Info("Closed log file " + this.CurrentLogFilePath);
                 }
+
+                localReturnCode.Status = true;
+                localReturnCode.Message = "";
+
 			}
 			catch (Exception ex)
 			{
+                log.Error(ex);
 				localReturnCode.Status = false;
                 localReturnCode.Message = ex.ToString();
-                throw;			
-			}
+            }
             return localReturnCode;
 		}
         
@@ -471,11 +441,9 @@ namespace aaLogReader
             }
             catch (Exception ex)
             {
-
                 this.ReturnCloseValue = this.CloseCurrentLogFile();
                 localHeader.ReturnCode = new ReturnCodeStruct { Status = false, Message = ex.Message };
                 log.Error(ex);
-                throw;
             }
             finally
             {
@@ -510,8 +478,6 @@ namespace aaLogReader
             FileStream localFileStream;
             List<LogHeader> localLogHeaderIndex;
 
-            try
-            {
                 localLogHeaderIndex = new List<LogHeader>();
 
                 //Verify the directory is valid
@@ -549,13 +515,6 @@ namespace aaLogReader
                 //Push to a global variable for persistence
                 this.LogHeaderIndex = localLogHeaderIndex;
 
-            }
-            catch(Exception)
-            {
-                //log.Error();
-                throw;
-            }
-
             return localLogHeaderIndex;
         }
 
@@ -567,9 +526,6 @@ namespace aaLogReader
         {
             log.DebugFormat("LogHeaderIndex.Count - {0}", LogHeaderIndex.Count);
 
-            try
-            {
-                
                 for(int i = 0; i < LogHeaderIndex.Count; i++)
                 {
 
@@ -595,40 +551,37 @@ namespace aaLogReader
                         }
                    }
 
-                    /* 
-                     * Phase 2 
-                     * Sometimes the last message number in one file overlaps with the first message number of the next file
-                     */
+                    
+                    // Remove for now because this creates inconsistencies with the actual log files.  
+                    // TODO: Update Log File Headers with consistent Data
+                    // * Phase 2 
+                    // * Sometimes the last message number in one file overlaps with the first message number of the next file
+                    // */
                                         
-                    //Only execute up to the next to the last index
-                    if(i < LogHeaderIndex.Count-2 )
-                    {
-                        //First identify if we have this situation
-                        if(LogHeaderIndex[i].EndMsgNumber >= LogHeaderIndex[i+1].StartMsgNumber)
-                        {
-                            /*
-                             * Ugghh, now we have to step through all of the start and end msgnumbers and shift them for constistency
-                             * But, if we do this right then we should only have to go through this once.
-                             */
+                    ////Only execute up to the next to the last index
+                    //if(i < LogHeaderIndex.Count-2 )
+                    //{
+                    //    //First identify if we have this situation
+                    //    if(LogHeaderIndex[i].EndMsgNumber >= LogHeaderIndex[i+1].StartMsgNumber)
+                    //    {
+                    //        /*
+                    //         * Ugghh, now we have to step through all of the start and end msgnumbers and shift them for constistency
+                    //         * But, if we do this right then we should only have to go through this once.
+                    //         */
 
-                            for(int k = i; k<= LogHeaderIndex.Count-2 ; k++)
-                            {
-                               //log.InfoFormat("k {0}/{1}", k, LogHeaderIndex.Count);
+                    //        for(int k = i; k<= LogHeaderIndex.Count-2 ; k++)
+                    //        {
+                    //           //log.InfoFormat("k {0}/{1}", k, LogHeaderIndex.Count);
 
-                                // Correct the starting message for the next record
-                                //By looping through all subsequent records they should all be made consistent with each other
-                                //No need to rewrite EndMsgNumber because it is calculated on the fly
-                                LogHeaderIndex[k+1].StartMsgNumber = (LogHeaderIndex[k].EndMsgNumber + 1);                                
-                            }
-                        }
-                    }                   
+                    //            // Correct the starting message for the next record
+                    //            //By looping through all subsequent records they should all be made consistent with each other
+                    //            //No need to rewrite EndMsgNumber because it is calculated on the fly
+                    //            LogHeaderIndex[k+1].StartMsgNumber = (LogHeaderIndex[k].EndMsgNumber + 1);                                
+                    //        }
+                    //    }
+                    //}                   
                 }
-            }
-            catch(Exception)
-            {
-                //log.Error(ex);
-                throw;
-            }
+
         }
         
         #endregion
@@ -640,7 +593,7 @@ namespace aaLogReader
         /// </summary>
         /// <param name="FileOffset">Offset for the current file stream</param>
         /// <param name="MessageNumber">Passed message number to set on the log lastRecordRead.  This should be calculated from external logic</param>
-        /// <returns></returns>
+        /// <returns>A single log record</returns>
         private LogRecord ReadLogRecord(int FileOffset, ulong MessageNumber = 0)
         {
             log.Debug("");
@@ -785,7 +738,7 @@ namespace aaLogReader
         /// <summary>
         /// Get the first lastRecordRead in the log as specified by the OffsetFirstRecord in the header.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A single log record</returns>
         public LogRecord GetFirstRecord()
 		{
             log.Debug("");
@@ -806,8 +759,8 @@ namespace aaLogReader
         /// <summary>
         /// Get the last lastRecordRead in the log as specified by the OffsetLastRecord in the header.
         /// </summary>
-        /// <returns></returns>
-		public LogRecord GetLastRecord()
+        /// <returns>A single log record</returns>
+        public LogRecord GetLastRecord()
 		{
             log.Debug("");
             LogRecord localRecord = new LogRecord();
@@ -829,16 +782,13 @@ namespace aaLogReader
         /// <summary>
         /// Get the next lastRecordRead in the log file
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A single log record</returns>
         public LogRecord GetNextRecord()
 		{
 
             log.Debug("");
             LogRecord localRecord;
             ulong LastMessageNumber;
-
-            try
-            {
 
                 if (this.LastRecordRead.OffsetToNextRecord == 0)
                 {
@@ -887,28 +837,20 @@ namespace aaLogReader
                         localRecord = this.ReadLogRecord(this.LastRecordRead.OffsetToNextRecord, Convert.ToUInt64(decimal.Add(new decimal(LastMessageNumber), decimal.One)));
                     }
                 }
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
 
-            return localRecord;
+                return localRecord;
 		}
 
         /// <summary>
         /// Get the lastRecordRead immediately previous to the current lastRecordRead in the log file.  This call will swap to previous log files as required.
         /// </summary>
-        /// <returns></returns>
-		public LogRecord GetPrevRecord()
+        /// <returns>A single log record</returns>
+        public LogRecord GetPrevRecord()
 		{
             log.Debug("");
             ulong LastMessageNumber;
             LogRecord localRecord = new LogRecord();
-
-			try
-            {                
+                
                 if (this.LastRecordRead.OffsetToPrevRecord != 0)
 				{
                     log.Debug("this.lastRecordRead.OffsetToPrevRecord != 0");
@@ -953,12 +895,7 @@ namespace aaLogReader
                         throw new aaLogReaderException("Error attempting to open previous log file.");
                     }
 				}
-			}
-			catch(Exception ex)
-			{
-                log.Error(ex);
-                throw;				
-			}
+
 
             return localRecord;
 		}
@@ -967,15 +904,13 @@ namespace aaLogReader
         /// Get the log file path for a specific message number
         /// </summary>
         /// <param name="MessageNumber">Message number to search for</param>
-        /// <returns>Complete path to log file containing specific message number.  Will return "" if no log file found</returns>
+        /// <returns>Complete paths to log files containing specific message number.  Will return "" if no log file found</returns>
         public List<string> GetLogFilePathsForMessageNumber(ulong MessageNumber)
         {
             log.Debug("MessageNumber - " + MessageNumber);
 
             List<string> returnValue = new List<string>();
 
-            try
-            {
                 //Now try to find the specific file where the 
                 List<LogHeader> foundLogHeaders = this.IndexLogHeaders().FindAll(x => x.StartMsgNumber <= MessageNumber && MessageNumber <= x.EndMsgNumber).OrderBy(x => x.StartFileTime).ToList<LogHeader>();
 
@@ -990,12 +925,6 @@ namespace aaLogReader
                 {
                     log.WarnFormat("Could not find log file for MessageNumber {0}", MessageNumber);
                 }                
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
 
             return returnValue;
         }
@@ -1004,7 +933,7 @@ namespace aaLogReader
         /// Get the log file path for a specific message timestamp
         /// </summary>
         /// <param name="MessageFiletime">Message timestamp to search for</param>
-        /// <returns>Complete path to log file containing specific message timestamp.  Will return "" if no log file found</returns>
+        /// <returns>Complete paths to log files containing specific message timestamp.  Will return "" if no log file found</returns>
         public List<string> GetLogFilePathsForMessageTimestamp(DateTime MessageTimestamp)
         {
             return this.GetLogFilePathsForMessageFileTime((ulong)MessageTimestamp.ToFileTime());
@@ -1014,15 +943,13 @@ namespace aaLogReader
         /// Get the log file path for a specific message filetime
         /// </summary>
         /// <param name="MessageFiletime">Message filetime to search for</param>
-        /// <returns>Complete path to log file containing specific message filetime.  Will return "" if no log file found</returns>
+        /// <returns>Complete paths to log files containing specific message filetime.  Will return "" if no log file found</returns>
         public List<string> GetLogFilePathsForMessageFileTime(ulong MessageFiletime)
         {
             log.DebugFormat ("MessageFiletime - {0}",MessageFiletime);
 
             List<string> returnValue = new List<string>();
 
-            try
-            {
                 //Now try to find the specific file where the message is located based on timestamp
                 List<LogHeader> foundLogHeaders = this.IndexLogHeaders().FindAll(x => x.StartFileTime <= MessageFiletime && MessageFiletime <= x.EndFileTime).OrderBy(x => x.StartFileTime).ToList<LogHeader>();
 
@@ -1037,24 +964,22 @@ namespace aaLogReader
                 {
                     log.WarnFormat("Could not find log file for message filetime {0}", MessageFiletime);
                 }                
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
+
 
             return returnValue;
         }
         
+        /// <summary>
+        /// Return a single log record identified by the specific message number.  If no record is found a blank log record is returned.
+        /// </summary>
+        /// <param name="MessageNumber">Specific message number to search for</param>
+        /// <returns>A single log record</returns>
         public LogRecord GetRecordByMessageNumber(ulong MessageNumber)
         {
             log.DebugFormat("MessageNumber - {0}", MessageNumber);
 
             LogRecord returnValue = new LogRecord();
 
-            try
-            {
                 /* For optimization purposes first locate the log files that may contain the specific message number
                  We say file(s) because there is currently an issue with how the log system writes files that may repeat a message number
                  in that case will find the first match and return that
@@ -1101,16 +1026,16 @@ namespace aaLogReader
                         break;
                     }
                  }
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
 
             return returnValue;
         }
 
+        /// <summary>
+        ///  Return a single log record identified by the specific message filetime.  If no record is found a blank log record is returned.
+        /// </summary>
+        /// <param name="MessageFiletime">Message filetime to use when searching</param>
+        /// <param name="TimestampEarlyOrLate">Earliest = Message immediately before timestamp, Latest = Message immediately after timestamp</param>
+        /// <returns>A single log record</returns>
         public LogRecord GetRecordByFileTime(ulong MessageFiletime, EarliestOrLatest TimestampEarlyOrLate = EarliestOrLatest.Earliest)
         {
             log.DebugFormat("MessageFiletime - {0}", MessageFiletime);
@@ -1118,8 +1043,6 @@ namespace aaLogReader
             LogRecord returnValue = new LogRecord();
             bool foundRecord = false;
 
-            try
-            {
                 /* For optimization purposes first locate the log files that may contain a message with the specified filetime
                  We say file(s) because there is currently an issue with how the log system writes files that may overlap timestamps
                  in that case will find the first match and return that
@@ -1203,6 +1126,9 @@ namespace aaLogReader
                                     break;
                                 }
                             }
+
+                            // Get the previous record
+                            returnValue = GetPrevRecord();
                         }
                     }
 
@@ -1213,62 +1139,56 @@ namespace aaLogReader
                         break;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
 
             return returnValue;
         }
 
+        /// <summary>
+        ///  Return a single log record identified by the specific message timestamp.  If no record is found a blank log record is returned.
+        /// </summary>
+        /// <param name="MessageTimestamp">Message timestamp to use when searching</param>
+        /// <param name="TimestampEarlyOrLate">Earliest = Message immediately before timestamp, Latest = Message immediately after timestamp</param>
+        /// <returns>A single log record</returns>
         public LogRecord GetRecordByTimestamp(DateTime MessageTimestamp, EarliestOrLatest TimestampEarlyOrLate = EarliestOrLatest.Earliest)
         {
-            log.DebugFormat("MessageTimestamp - {0}", MessageTimestamp);
-            try
-            {
-                return this.GetRecordByFileTime((ulong)MessageTimestamp.ToFileTime(), TimestampEarlyOrLate);
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
+           log.DebugFormat("MessageTimestamp - {0}", MessageTimestamp);
+           return this.GetRecordByFileTime((ulong)MessageTimestamp.ToFileTime(), TimestampEarlyOrLate);
         }
 
+        /// <summary>
+        /// Get list of records bounded by the specified start message and specific count of messages including and after the message at the start message number.
+        /// </summary>
+        /// <param name="MessageNumber">Starting Message Number</param>
+        /// <param name="Count">Count of records to return</param>
+        /// <returns>List of Log Records</returns>
         public List<LogRecord> GetRecordsByStartMessageNumberAndCount(ulong MessageNumber, int Count)
         {
             log.DebugFormat("MessageNumber - {0}", MessageNumber);
             log.DebugFormat("Count - {0}", Count);                     
 
-            try
-            {
-                return this.GetRecordsByMessageNumberAndCount(MessageNumber, Count, SearchDirection.Forward);
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
+           return this.GetRecordsByMessageNumberAndCount(MessageNumber, Count, SearchDirection.Forward);
         }
 
+        /// <summary>
+        /// Get list of records bounded by the specified end message and specific count of messages including and before the message at the end message number.
+        /// </summary>
+        /// <param name="MessageNumber">Ending Message Number</param>
+        /// <param name="Count">Count of records to return</param>
+        /// <returns>List of Log Records</returns>
         public List<LogRecord> GetRecordsByEndMessageNumberAndCount(ulong MessageNumber, int Count)
         {
             log.DebugFormat("MessageNumber - {0}", MessageNumber);
             log.DebugFormat("Count - {0}", Count);
-
-            try
-            {
-                return this.GetRecordsByMessageNumberAndCount(MessageNumber, Count, SearchDirection.Back);
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
+            return this.GetRecordsByMessageNumberAndCount(MessageNumber, Count, SearchDirection.Back);
         }
 
+        /// <summary>
+        /// Get list of records bounded by the specified message number, specific count of messages, and search direction.
+        /// </summary>
+        /// <param name="MessageNumber">Specified starting Message Number</param>
+        /// <param name="Count">Count of records to return</param>
+        /// <param name="Direction">The direction to search, forwards or backwards</param>
+        /// <returns>List of Log Records</returns>
         public List<LogRecord> GetRecordsByMessageNumberAndCount(ulong MessageNumber, int Count, SearchDirection Direction = SearchDirection.Forward)
         {
             log.DebugFormat("MessageNumber - {0}", MessageNumber);
@@ -1276,9 +1196,7 @@ namespace aaLogReader
             log.DebugFormat("Direction - {0}", Direction.ToString());
 
             List<LogRecord> returnValue = new List<LogRecord>();
-
-            try
-            {                
+           
                 // Get the first recordin the list
                 LogRecord localRecord = this.GetRecordByMessageNumber(MessageNumber);
 
@@ -1308,43 +1226,31 @@ namespace aaLogReader
                         break;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
 
-            return returnValue;
-
+                return returnValue;
         }
 
-        public List<LogRecord> GetRecordsByStartandEndMessageNumber(ulong StartMessageNumber, ulong EndMessageNumber, int MaximumMessageCount = 0)
+        /// <summary>
+        /// Get list of records bounded by the specified start and end message number
+        /// </summary>
+        /// <param name="StartMessageNumber">Specified starting message number</param>
+        /// <param name="EndMessageNumber">Specified ending message number</param>        
+        /// <returns>List of Log Records</returns>
+        public List<LogRecord> GetRecordsByStartandEndMessageNumber(ulong StartMessageNumber, ulong EndMessageNumber)
         {
             log.DebugFormat("StartMessageNumber - {0}", StartMessageNumber);
             log.DebugFormat("EndMessageNumber - {0}", EndMessageNumber);
-            log.DebugFormat("MaximumMessageCount - {0}", MaximumMessageCount);
-
+            
             List<LogRecord> returnValue = new List<LogRecord>();
             LogRecord localRecord = new LogRecord();
 
-            try
-            {
-                if (StartMessageNumber > EndMessageNumber)
+            if (StartMessageNumber > EndMessageNumber)
                 {
                     // Reverse
                     log.WarnFormat("Start ({0}) and End ({0}) Message Numbers Reversed. Correcting before proceeding", StartMessageNumber, EndMessageNumber);
                     ulong temp = EndMessageNumber;
                     EndMessageNumber = StartMessageNumber;
                     StartMessageNumber = temp;
-                }
-
-                //If max message count = 0 then we should calculate a reasonable maximum count (+100 over) based off the spread between the messages.
-                // This should accomodate any funny business with log file changes in the middle and other oddities
-                if (MaximumMessageCount <= 0)
-                {                    
-                    MaximumMessageCount = (int)(EndMessageNumber - StartMessageNumber) + 100;
-                    log.DebugFormat("Calculating reasonable maximum message count {0}", MaximumMessageCount);
                 }
 
                 localRecord = this.GetRecordByMessageNumber(StartMessageNumber);
@@ -1367,26 +1273,24 @@ namespace aaLogReader
                         break;
                     }
                 }
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
 
             return returnValue;
         }
         
-        public List<LogRecord> GetRecordsByEndFileTimeAndCount(ulong EndFileTime, int MaximumMessageCount = 1000)
+        /// <summary>
+        /// Get list of records bounded by specified end message filetime and message count
+        /// </summary>
+        /// <param name="EndFileTime">Ending message filetime</param>
+        /// <param name="MessageCount"></param>
+        /// <returns>List of Log Records</returns>
+        public List<LogRecord> GetRecordsByEndFileTimeAndCount(ulong EndFileTime, int MessageCount = 1000)
         {
             log.DebugFormat("EndFileTime - {0}", EndFileTime);
-            log.DebugFormat("MaximumMessageCount - {0}", MaximumMessageCount);
+            log.DebugFormat("MaximumMessageCount - {0}", MessageCount);
             
             List<LogRecord> returnValue = new List<LogRecord>();
             LogRecord localRecord = new LogRecord();
 
-            try
-            {
                 //Find the exact message number and use the search by message number function
                 localRecord = this.GetRecordByFileTime(EndFileTime, EarliestOrLatest.Earliest);
 
@@ -1397,82 +1301,119 @@ namespace aaLogReader
                 }
 
                 //Record retrieval was succesful
-                return this.GetRecordsByEndMessageNumberAndCount(localRecord.MessageNumber, MaximumMessageCount);    
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }           
+                return this.GetRecordsByEndMessageNumberAndCount(localRecord.MessageNumber, MessageCount);              
         }
 
-        public List<LogRecord> GetRecordsByEndTimestampAndCount(DateTime EndTimestamp, int MaximumMessageCount = 1000)
+        /// <summary>
+        /// Get list of records bounded by specified end message timestamp and message count
+        /// </summary>
+        /// <param name="EndTimestamp">Ending message timestamp</param>
+        /// <param name="MessageCount"></param>
+        /// <returns>List of Log Records</returns>
+        public List<LogRecord> GetRecordsByEndTimestampAndCount(DateTime EndTimestamp, int MessageCount = 1000)
         {
             log.DebugFormat("EndTimestamp - {0}", EndTimestamp);
-            log.DebugFormat("MaximumMessageCount - {0}", MaximumMessageCount);
+            log.DebugFormat("MaximumMessageCount - {0}", MessageCount);
 
-            try
-            {
-                return this.GetRecordsByEndFileTimeAndCount((ulong)EndTimestamp.ToFileTime(), MaximumMessageCount);
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
+            return this.GetRecordsByEndFileTimeAndCount((ulong)EndTimestamp.ToFileTime(), MessageCount);
+
         }
 
-        public List<LogRecord> GetRecordsByStartFileTimeAndCount(ulong StartFileTime, int MaximumMessageCount = 1000)
+        /// <summary>
+        /// Get list of records bounded by specified start message filetime and message count
+        /// </summary>
+        /// <param name="EndFileTime">Ending message filetime</param>
+        /// <param name="MessageCount"></param>
+        /// <returns>List of Log Records</returns>
+        public List<LogRecord> GetRecordsByStartFileTimeAndCount(ulong StartFileTime, int MessageCount = 1000)
         {
             log.DebugFormat("StartFileTime - {0}", StartFileTime);
-            log.DebugFormat("MaximumMessageCount - {0}", MaximumMessageCount);
+            log.DebugFormat("MaximumMessageCount - {0}", MessageCount);
 
             List<LogRecord> returnValue = new List<LogRecord>();
             LogRecord localRecord = new LogRecord();
 
-            try
+            //Find the exact message number and use the search by message number function
+            localRecord = this.GetRecordByFileTime(StartFileTime, EarliestOrLatest.Latest);
+
+            if (!localRecord.ReturnCode.Status)
             {
-                //Find the exact message number and use the search by message number function
-                localRecord = this.GetRecordByFileTime(StartFileTime, EarliestOrLatest.Latest);
-
-                if (!localRecord.ReturnCode.Status)
-                {
-                    log.WarnFormat("Can't locate a record considering filetime {0}", StartFileTime);
-                    return returnValue;
-                }
-
-                //Record retrieval was succesful
-                return this.GetRecordsByStartMessageNumberAndCount(localRecord.MessageNumber, MaximumMessageCount);
+                log.WarnFormat("Can't locate a record considering filetime {0}", StartFileTime);
+                return returnValue;
             }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }          
+
+            //Record retrieval was succesful
+            return this.GetRecordsByStartMessageNumberAndCount(localRecord.MessageNumber, MessageCount);        
         }
 
-        public List<LogRecord> GetRecordsByStartTimestampAndCount(DateTime StartTimestamp, int MaximumMessageCount = 1000)
+        /// <summary>
+        /// Get list of records bounded by specified start message timestamp and message count
+        /// </summary>
+        /// <param name="StartTimestamp">Starting message timestamp</param>
+        /// <param name="MessageCount"></param>
+        /// <returns>List of Log Records</returns>
+        public List<LogRecord> GetRecordsByStartTimestampAndCount(DateTime StartTimestamp, int MessageCount = 1000)
         {
             log.DebugFormat("StartTimestamp - {0}", StartTimestamp);
-            log.DebugFormat("MaximumMessageCount - {0}", MaximumMessageCount);
+            log.DebugFormat("MaximumMessageCount - {0}", MessageCount);
 
-            try
-            {
-                return this.GetRecordsByStartFileTimeAndCount((ulong)StartTimestamp.ToFileTime(), MaximumMessageCount);
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
+            return this.GetRecordsByStartFileTimeAndCount((ulong)StartTimestamp.ToFileTime(), MessageCount);
+
         }
 
-        //TODO
-        public List<LogRecord> GetRecordsByStartAndEndFileTime()
+        /// <summary>
+        /// Get list of records bounded by the start and end file time
+        /// </summary>
+        /// <param name="StartFileTime">Starting filetime for search</param>
+        /// <param name="EndFileTime">Ending filetime for search</param>
+        /// <returns>List of Log Records</returns>
+        public List<LogRecord> GetRecordsByStartAndEndFileTime(ulong StartFileTime, ulong EndFileTime)
         {
-            throw new NotImplementedException();
+            log.DebugFormat("StartFileTime - {0}", StartFileTime);
+            log.DebugFormat("EndFileTime - {0}", EndFileTime);
+            
+            List<LogRecord> returnValue = new List<LogRecord>();
+
+            //Find the exact message number and use the search by message number function
+            LogRecord startRecord = this.GetRecordByFileTime(StartFileTime, EarliestOrLatest.Latest);
+
+            if (!startRecord.ReturnCode.Status)
+            {
+                log.WarnFormat("Can't locate a starting record considering filetime {0}", StartFileTime);
+                return returnValue;
+            }
+
+            LogRecord endRecord = this.GetRecordByFileTime(EndFileTime , EarliestOrLatest.Earliest);
+
+            if (!endRecord.ReturnCode.Status)
+            {   
+                //If we can't find a record then just default to the latest record
+                endRecord = this.GetUnreadRecords(1,"",true).First<LogRecord>();
+
+                if (!endRecord.ReturnCode.Status)
+                {   
+                    log.WarnFormat("Can't locate an ending record considering filetime {0}", EndFileTime);
+                    return returnValue;
+                }
+            }
+
+            return this.GetRecordsByStartandEndMessageNumber(startRecord.MessageNumber, endRecord.MessageNumber);            
         }
 
+        /// <summary>
+        /// Get list of records bounded by the start and end timestamp
+        /// </summary>
+        /// <param name="StartTimeStamp">Starting timestamp for search</param>
+        /// <param name="EndTimeStamp">Ending timestamp for search</param>
+        /// <returns>List of Log Records</returns>
+        public List<LogRecord> GetRecordsByStartAndEndTimeStamp(DateTime StartTimeStamp, DateTime EndTimeStamp)
+        {
+            log.DebugFormat("StartTimeStamp - {0}", StartTimeStamp);
+            log.DebugFormat("EndTimeStamp - {0}", EndTimeStamp);
+
+            return this.GetRecordsByStartAndEndFileTime((ulong)StartTimeStamp.ToFileTime(), (ulong)EndTimeStamp.ToFileTime());
+
+        }
         /// <summary>
         /// Get messages starting from the last lastRecordRead working backwards.
         /// </summary>
@@ -1480,52 +1421,43 @@ namespace aaLogReader
         /// <param name="messagePatternToStop">Message pattern to match for ending search</param>
         /// <param name="IgnoreCacheFile">Ignore the cache file and read all messages up to maximum or message pattern</param>
         /// <returns></returns>
-        public List<LogRecord> GetRecords(ulong maximumMessages = 1000, string messagePatternToStop = "", bool IgnoreCacheFile = false, ulong earliestMessageNumber = ulong.MaxValue)        
+        public List<LogRecord> GetUnreadRecords(ulong maximumMessages = 1000, string messagePatternToStop = "", bool IgnoreCacheFile = false)        
         {
-            try
-            {
                 log.DebugFormat ("maximumMessages - {0}", maximumMessages.ToString());
                 log.DebugFormat("messagePatternToStop - {0}", messagePatternToStop);
-                log.DebugFormat("IgnoreCacheFile - {0}",IgnoreCacheFile);
-                log.DebugFormat("startMessageNumber - {0}", earliestMessageNumber.ToString());
+                log.DebugFormat("IgnoreCacheFile - {0}",IgnoreCacheFile);                
                 
                 ulong lastMessageNumber = ulong.MinValue;
 
-                // If we are not explicitely ignoring the cache file AND we haven't specified a starting message number
-                // then read the cache file to rigure out where we stopped last time.
-                if ((!IgnoreCacheFile) && (earliestMessageNumber == ulong.MaxValue))
-                {
-                    string cacheFilePath = this.GetStatusCacheFilePath();
-                    log.Debug("cacheFilePath - " + cacheFilePath);
-
-                    // If the cache file exists and we should not ignore it
-                    if (File.Exists(cacheFilePath))
+                    // If we are not explicitely ignoring the cache file AND we haven't specified a starting message number
+                    // then read the cache file to rigure out where we stopped last time.
+                    if ((!IgnoreCacheFile))
                     {
-                        // Get the JSON from the file
-                        string objectJSONFromCacheFile = File.ReadAllText(this.GetStatusCacheFilePath());
+                        string cacheFilePath = this.GetStatusCacheFilePath();
+                        log.Debug("cacheFilePath - " + cacheFilePath);
 
-                        // Deserialize into the Log Record
-                        LogRecord lastRecordFromCacheFile = JsonConvert.DeserializeObject<LogRecord>(objectJSONFromCacheFile);
-
-                        log.Debug("lastRecordFromCacheFile - " + lastRecordFromCacheFile.ToJSON());
-
-                        // Get the last message number from the retrieved lastRecordRead if it's available
-                        if (lastRecordFromCacheFile != null)
+                        // If the cache file exists and we should not ignore it
+                        if (File.Exists(cacheFilePath))
                         {
-                            lastMessageNumber = lastRecordFromCacheFile.MessageNumber;
+                            // Get the JSON from the file
+                            string objectJSONFromCacheFile = File.ReadAllText(this.GetStatusCacheFilePath());
+
+                            // Deserialize into the Log Record
+                            LogRecord lastRecordFromCacheFile = JsonConvert.DeserializeObject<LogRecord>(objectJSONFromCacheFile);
+
+                            log.Debug("lastRecordFromCacheFile - " + lastRecordFromCacheFile.ToJSON());
+
+                            // Get the last message number from the retrieved lastRecordRead if it's available
+                            if (lastRecordFromCacheFile != null)
+                            {
+                                lastMessageNumber = lastRecordFromCacheFile.MessageNumber;
+                            }
+
+                            log.DebugFormat("lastMessageNumber - {0}", lastMessageNumber.ToString());
                         }
-
-                        log.DebugFormat("lastMessageNumber - {0}",lastMessageNumber.ToString());
                     }
-                }
 
-                return this.GetRecordsInternal(lastMessageNumber,earliestMessageNumber, maximumMessages, messagePatternToStop);
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
+                    return this.GetRecordsInternal(lastMessageNumber, maximumMessages, messagePatternToStop);
         }
 
         /// <summary>
@@ -1536,7 +1468,7 @@ namespace aaLogReader
         /// <param name="maximumMessages">Maximum number of messages to return</param>
         /// <param name="messagePatternToStop">Message pattern to match for ending search</param>
         /// <returns></returns>
-        private List<LogRecord> GetRecordsInternal(ulong stopReadMessageNumber = ulong.MinValue, ulong earliestMessageNumber = ulong.MaxValue, ulong maximumMessages = 1000, string messagePatternToStop = "")
+        private List<LogRecord> GetRecordsInternal(ulong stopReadMessageNumber = ulong.MinValue, ulong maximumMessages = 1000, string messagePatternToStop = "")
         {
             List<LogRecord> logRecordList = new List<LogRecord>();
             LogRecord localRecord; 
@@ -1545,8 +1477,7 @@ namespace aaLogReader
             
             try
             {                
-                log.Debug("stopReadMessageNumber - " + stopReadMessageNumber.ToString());
-                log.Debug("startReadMessageNumber - " + earliestMessageNumber.ToString());
+                log.Debug("stopReadMessageNumber - " + stopReadMessageNumber.ToString());                
                 log.Debug("maximumMessages - " + maximumMessages.ToString());
                 log.Debug("messagePatternToStop - " + messagePatternToStop);
                 
@@ -1590,15 +1521,6 @@ namespace aaLogReader
                     
                     log.Debug("GetLastRecord Message Number - " + localRecord.MessageNumber);
                     log.Debug("GetLastRecord localRecord.ReturnCode.Status - " + localRecord.ReturnCode.Status);
-
-                    // Start to iterate through the records to find the appropriate starting record
-                    log.Debug(string.Format("Searching for starting message number {0}", earliestMessageNumber));
-                    while(localRecord.MessageNumber > earliestMessageNumber)
-                    {
-                        localRecord = GetPrevRecord();
-                    }
-
-                    log.Debug(string.Format("Completed search for starting message.  Current message number is {0}", localRecord.MessageNumber));
 
                     // If we get a lastRecordRead then add to the list and start iterating backwards through the message list.
                     if (localRecord.ReturnCode.Status)
@@ -1653,8 +1575,8 @@ namespace aaLogReader
             }
             catch(Exception ex)
             {
+                // Eat the exception here
                 log.Error(ex);
-                throw;
             }
 
             return logRecordList;
@@ -1667,8 +1589,6 @@ namespace aaLogReader
             log.Debug("LogRecordList.Count - " + LogRecordList.Count.ToString());
             log.Debug("Filter - " + JsonConvert.SerializeObject(RecordFilter));
 
-                try
-                {
                     switch(RecordFilter.Field.ToLower())
                     {
 
@@ -1750,12 +1670,6 @@ namespace aaLogReader
                         default:
                             break;
                     }
-                }
-                catch(Exception ex)
-                {
-                    log.Error(ex);
-                    throw;
-                }
         }
 
         private bool ShouldGetNextRecord(LogRecord lastRecord,ulong logRecordCount, ulong lastReadMessageNumber, ulong maximumMessages, string messagePatternToStop)
@@ -1808,9 +1722,8 @@ namespace aaLogReader
             FileTimeStruct localFileTimeStruct;
             ulong returnFileTime;
 
-            try
-            {
-                localFileTimeStruct = new FileTimeStruct();
+
+            localFileTimeStruct = new FileTimeStruct();
 
                 // DateTime is an 8 byte value with a Low Byte and High Byte.
                 // We use a custom structure called file time with Low Byte and High Byte Elements
@@ -1820,12 +1733,6 @@ namespace aaLogReader
                 localFileTimeStruct.dwHighDateTime = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
 
                 returnFileTime = localFileTimeStruct.value;
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
 
             return returnFileTime;
         }
@@ -1838,42 +1745,20 @@ namespace aaLogReader
         /// <returns></returns>
         private DateTime GetDateTimeFromByteArray(byte[] byteArray, long startingOffset)
         {
-
             DateTime localDate;
             FileTimeStruct localFileTime;
-
-            try
-            {
 
                 localFileTime = new FileTimeStruct();
 
                 // DateTime is an 8 byte value with a Low Byte and High Byte.
                 // We use a custom structure called file time with Low Byte and High Byte Elements
                 // Then in the FileTimeStruct struct we calculate the value by combining the high byte and low byte
-                //this._sTime.dwLowDateTime = BitConverter.ToUInt32(byteArray, (int)startingOffset);
-                //this._sTime.dwHighDateTime = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
-
-                log.Debug("Low Byte - " + BitConverter.ToUInt32(byteArray, (int)startingOffset).ToString());
-                log.Debug("High Byte - " + BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4)).ToString());
 
                 localFileTime.dwLowDateTime = BitConverter.ToUInt32(byteArray, (int)startingOffset);
                 localFileTime.dwHighDateTime = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
 
-                //localDate = DateTime.Parse((DateTime.FromFileTime((long)this._sTime.value).ToString("MM/dd/yyyy hh:mm:ss.fff tt")));
-
-                //localDate = DateTime.Parse((DateTime.FromFileTime((long)localFileTime.value).ToString("MM/dd/yyyy hh:mm:ss.fff tt")));
                 localDate = DateTime.FromFileTime((long)localFileTime.value);
                 
-                log.Debug("Calculated FileTime - " + localFileTime.value.ToString());
-                log.Debug("Now FileTime - " + DateTime.Now.ToFileTime().ToString());
-                log.Debug("Calculated DateTime - " + localDate.ToString("yyyy-MM-dd hh:mm:ss.fff tt"));
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;
-            }
-
             return localDate;
         }
 		
@@ -1888,8 +1773,6 @@ namespace aaLogReader
             string returnValue;
             int fieldLength;
             
-            try
-            {
                 // Initialize to blank
                 returnValue = "";
 
@@ -1918,13 +1801,6 @@ namespace aaLogReader
                    
                     returnValue = "";
                 }
-
-            }
-            catch(Exception ex)
-            {
-                log.Error(ex);
-                throw;                
-            }
 
             return returnValue;
 
@@ -2001,7 +1877,7 @@ namespace aaLogReader
             catch(Exception ex)
             {
                 log.Error(ex);
-                throw;
+                returnValue = 0;
             }
 
             return returnValue;
@@ -2028,7 +1904,6 @@ namespace aaLogReader
             catch(Exception ex)
             {
                 log.Error(ex);
-                throw;
             }
         
             return returnValue;
@@ -2039,21 +1914,26 @@ namespace aaLogReader
         /// Write a text file out with metadata that can be used if the application is closed and reopened to read logs again
         /// </summary>
         /// <param name="CacheRecord">Complete record to write out containing cache information</param>
-        public bool WriteStatusCacheFile(LogRecord CacheRecord)
+        public ReturnCodeStruct WriteStatusCacheFile(LogRecord CacheRecord)
         {
             log.Debug("");
             log.Debug("CacheRecord - " + CacheRecord.ToJSON());
 
+            ReturnCodeStruct returnValue;
+
             try
             {            
                 System.IO.File.WriteAllText(this.GetStatusCacheFilePath(), this.GetLastRecord().ToJSON());
-                return true;
+                returnValue = new ReturnCodeStruct { Status = true, Message = "" };
             }
             catch(Exception ex)
             {
                 log.Error(ex);
-                throw;
-            }            
+                returnValue = new ReturnCodeStruct { Status = false, Message = ex.Message};
+            }
+
+            return returnValue;
+
         }
 
         /// <summary>
@@ -2072,7 +1952,8 @@ namespace aaLogReader
             catch(Exception ex)
             {
                 log.Error(ex);
-                throw;
+                localRecord.ReturnCode.Status = false;
+                localRecord.ReturnCode.Message = ex.Message;
             }
 
             return localRecord;
