@@ -40,6 +40,13 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <DocumentationFile>bin\Release\aaLogReader.XML</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,7 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Struct\FileTimeStruct.cs" />
     <Compile Include="Struct\LogRecordFilterStruct.cs" />
-    <Compile Include="Struct\aaLogReaderOptionsStruct.cs" />
+    <Compile Include="Struct\OptionsStruct.cs" />
     <Compile Include="Struct\SessionIDSegmentsStruct.cs" />
     <Compile Include="Struct\ReturnCodeStruct.cs" />
     <Compile Include="Testing\HeaderTesting.cs" />
@@ -81,13 +88,15 @@
     <Compile Include="Types\aaLogReaderException.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="doc\Options.md" />
     <None Include="LICENSE" />
     <None Include="log.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="Types\LogHeaderFormat.md" />
-    <None Include="Types\LogRecordFormat.md" />
+    <None Include="doc\LogHeaderFormat.md" />
+    <None Include="doc\LogRecordFormat.md" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
