@@ -1622,7 +1622,8 @@ namespace aaLogReader
                             break;
 
                         case "processid":
-                            LogRecordList = LogRecordList.Where<LogRecord>(x => RecordFilter.Filter.Contains(x.ProcessID.ToString())).ToList();
+                            Regex ProcessIDRegexSearch = new Regex(RecordFilter.Filter, RegexOptions.IgnoreCase);
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => ProcessIDRegexSearch.IsMatch(x.ProcessID.ToString())).ToList();                            
                             break;
 
                         case "threadid":
