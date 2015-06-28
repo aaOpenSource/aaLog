@@ -23,7 +23,7 @@ namespace aaLogReader
         private ReturnCodeStruct _returnCloseValue;
 		private FileStream _fileStream;
         private string _currentLogFilePath;
-        private aaLogReaderOptionsStruct _options;
+        private OptionsStruct _options;
 
         #endregion
         
@@ -40,7 +40,7 @@ namespace aaLogReader
             log.Debug("Create aaLogReader");            
 
             // Initialize with default options
-            Options = new aaLogReaderOptionsStruct();
+            Options = new OptionsStruct();
 
             this.Initialize();
         }
@@ -49,8 +49,8 @@ namespace aaLogReader
         /// <summary>
         /// Constructor using specificed options
         /// </summary>       
-        ///<param name="InitializationOptions">InitializationOptions passed as an aaLogReaderOptionsStruct object </param>
-        public aaLogReader(aaLogReaderOptionsStruct InitializationOptions)
+        ///<param name="InitializationOptions">InitializationOptions passed as an OptionsStruct object </param>
+        public aaLogReader(OptionsStruct InitializationOptions)
         {
             // Setup logging
             log4net.Config.BasicConfigurator.Configure();
@@ -175,7 +175,7 @@ namespace aaLogReader
             private set { _currentLogFilePath = value; }
         }
 
-        public aaLogReaderOptionsStruct Options
+        public OptionsStruct Options
         {
             get { return _options; }
             set { _options = value; }
