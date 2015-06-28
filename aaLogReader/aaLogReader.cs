@@ -23,7 +23,7 @@ namespace aaLogReader
         private ReturnCodeStruct _returnCloseValue;
 		private FileStream _fileStream;
         private string _currentLogFilePath;
-        private aaLogReaderOptionsStruct _options;
+        private OptionsStruct _options;
 
         #endregion
         
@@ -40,7 +40,7 @@ namespace aaLogReader
             log.Debug("Create aaLogReader");            
 
             // Initialize with default options
-            Options = new aaLogReaderOptionsStruct();
+            Options = new OptionsStruct();
 
             this.Initialize();
         }
@@ -49,8 +49,8 @@ namespace aaLogReader
         /// <summary>
         /// Constructor using specificed options
         /// </summary>       
-        ///<param name="InitializationOptions">InitializationOptions passed as an aaLogReaderOptionsStruct object </param>
-        public aaLogReader(aaLogReaderOptionsStruct InitializationOptions)
+        ///<param name="InitializationOptions">InitializationOptions passed as an OptionsStruct object </param>
+        public aaLogReader(OptionsStruct InitializationOptions)
         {
             // Setup logging
             log4net.Config.BasicConfigurator.Configure();
@@ -175,7 +175,7 @@ namespace aaLogReader
             private set { _currentLogFilePath = value; }
         }
 
-        public aaLogReaderOptionsStruct Options
+        public OptionsStruct Options
         {
             get { return _options; }
             set { _options = value; }
@@ -932,7 +932,7 @@ namespace aaLogReader
         /// <summary>
         /// Get the log file path for a specific message timestamp
         /// </summary>
-        /// <param name="MessageFiletime">Message timestamp to search for</param>
+        /// <param name="MessageTimestamp">Message timestamp to search for</param>
         /// <returns>Complete paths to log files containing specific message timestamp.  Will return "" if no log file found</returns>
         public List<string> GetLogFilePathsForMessageTimestamp(DateTime MessageTimestamp)
         {
@@ -1322,7 +1322,7 @@ namespace aaLogReader
         /// <summary>
         /// Get list of records bounded by specified start message filetime and message count
         /// </summary>
-        /// <param name="EndFileTime">Ending message filetime</param>
+        /// <param name="StartFileTime">Starting message filetime</param>
         /// <param name="MessageCount"></param>
         /// <returns>List of Log Records</returns>
         public List<LogRecord> GetRecordsByStartFileTimeAndCount(ulong StartFileTime, int MessageCount = 1000)
@@ -1414,6 +1414,7 @@ namespace aaLogReader
             return this.GetRecordsByStartAndEndFileTime((ulong)StartTimeStamp.ToFileTime(), (ulong)EndTimeStamp.ToFileTime());
 
         }
+
         /// <summary>
         /// Get messages starting from the last lastRecordRead working backwards.
         /// </summary>
@@ -1509,14 +1510,11 @@ namespace aaLogReader
                 // Short circuit if there are no new records
                 if (this.CurrentLogHeader.EndMsgNumber <= stopReadMessageNumber)
                 {
-                    log.Debug(string.Format("Short circuit return because this.logHeader.MsgLastNumber <= stopReadMessageNumber {0} <= {1}",this.CurrentLogHeader.EndMsgNumber,stopReadMessageNumber));
+                    log.Debug(string.Format("Short circuit return because this.logHeader.MsgLastNumber <= stopReadMessageNumber {0} <= {1} so we have read all of the messages",this.CurrentLogHeader.EndMsgNumber,stopReadMessageNumber));
                     return logRecordList;
                 }
 
-                // Check the header to see if any new records have been added
-                //if(this.CurrentLogHeader.EndMsgNumber > stopReadMessageNumber)
-                //{ 
-                    // Start with the last lastRecordRead
+                    // Start by getting the current last record in the current log file
                     localRecord = this.GetLastRecord();
                     
                     log.Debug("GetLastRecord Message Number - " + localRecord.MessageNumber);
@@ -1535,8 +1533,6 @@ namespace aaLogReader
 
                         getAnotherRecord = this.ShouldGetNextRecord(localRecord, (ulong)logRecordList.Count, stopReadMessageNumber, maximumMessages, messagePatternToStop);
 
-                        //getAnotherRecord = localRecord.ReturnCodeStruct.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > stopReadMessageNumber) && (logRecordList.Count < maximumMessages);
-
                         log.Debug("getAnotherRecord - " + getAnotherRecord);
 
                         while (getAnotherRecord)
@@ -1551,8 +1547,6 @@ namespace aaLogReader
                             }
 
                             // Calculate if we should get another lastRecordRead
-                            //getAnotherRecord = localRecord.ReturnCodeStruct.Status && (localRecord.OffsetToNextRecord > 0) && (localRecord.MessageNumber > stopReadMessageNumber) && (logRecordList.Count < maximumMessages);
-                            
                             getAnotherRecord = this.ShouldGetNextRecord(localRecord, (ulong)logRecordList.Count, stopReadMessageNumber, maximumMessages, messagePatternToStop);
 
                             log.Debug("getAnotherRecord - " + getAnotherRecord);
@@ -1561,7 +1555,6 @@ namespace aaLogReader
                         // Write out the cache file if we read records
                         this.WriteStatusCacheFile(logRecordList.OrderByDescending(item => item.MessageNumber).First());
                     }                    
-                //}
 
                 // After all records have been retrieved, apply filter
                 // TODO: Consider profiling application at this layer vs during actual record retrieval.  The issue with at record retrieval is that it might interfere with 
@@ -1629,7 +1622,8 @@ namespace aaLogReader
                             break;
 
                         case "processid":
-                            LogRecordList = LogRecordList.Where<LogRecord>(x => RecordFilter.Filter.Contains(x.ProcessID.ToString())).ToList();
+                            Regex ProcessIDRegexSearch = new Regex(RecordFilter.Filter, RegexOptions.IgnoreCase);
+                            LogRecordList = LogRecordList.Where<LogRecord>(x => ProcessIDRegexSearch.IsMatch(x.ProcessID.ToString())).ToList();                            
                             break;
 
                         case "threadid":
@@ -1810,7 +1804,7 @@ namespace aaLogReader
         /// Cast an array of byteArray to a string
         /// </summary>
         /// <param name="byteArray">Byte array containing lastRecordRead data</param>
-        /// <param name="startingOffset">Starting offset for the data field</param>
+        /// <param name="StartOffset">Starting offset for the data field</param>
         /// <param name="Length">Length of field</param>
         /// <returns></returns>
         private string GetStringFromBytes(byte[] byteArray, int StartOffset, int Length)

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace aaLogReader
 {
-    public class aaLogReaderOptionsStruct
+    public class OptionsStruct
     {
         public string LogDirectory = @"C:\ProgramData\ArchestrA\LogFiles";
         public string CacheFileBaseName = "aaLogReaderCache";

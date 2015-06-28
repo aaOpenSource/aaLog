@@ -70,9 +70,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="options - Copy.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="options.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
