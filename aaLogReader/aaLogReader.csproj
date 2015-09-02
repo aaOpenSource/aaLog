@@ -69,10 +69,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="aaLgxReader.cs" />
     <Compile Include="aaLogReader.cs" />
     <Compile Include="Enum\enumSearchDirection.cs" />
     <Compile Include="Enum\enumEarliestOrLatest.cs" />
     <Compile Include="Enum\enumExportFormat.cs" />
+    <Compile Include="Helpers\ByteArrayExtensions.cs" />
+    <Compile Include="Helpers\Fqdn.cs" />
+    <Compile Include="Helpers\StreamExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Struct\FileTimeStruct.cs" />
     <Compile Include="Struct\LogRecordFilterStruct.cs" />
