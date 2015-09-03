@@ -21,7 +21,7 @@ namespace aaLogReader
     /// <returns>LogHeader</returns>
     /// <remarks>
     /// The header in an aaLGX file does not contain all of the fields that the header 
-    /// in an aaLOG file. The following fields on the LogHeader will not be set:
+    /// in an aaLOG file has. The following fields on the LogHeader will not be set:
     /// StartMsgNumber
     /// EndMsgNumber
     /// Session
@@ -49,10 +49,15 @@ namespace aaLogReader
       {
         var header = ReadLogHeader(stream, filePath);
         var offset = header.OffsetFirstRecord;
+        // The record in an aaLGX file does not appear to have the 
+        // offset to the previous record in its data, so we'll track 
+        // it manually.
+        var previousOffset = 0;
         var maxOffset = header.OffsetLastRecord;
         while (offset <= maxOffset)
         {
-          var record = ReadLogRecord(stream, offset, header);
+          var record = ReadLogRecord(stream, offset, previousOffset, header);
+          previousOffset = offset;
           offset += record.RecordLength;
           yield return record;
         }
@@ -108,12 +113,14 @@ namespace aaLogReader
         : "";
     }
 
-    private static LogRecord ReadLogRecord(Stream stream, int offset, LogHeader header)
+    private static LogRecord ReadLogRecord(Stream stream, int offset, int previousOffset, LogHeader header)
     {
       LOG.DebugFormat("offset: {0}", offset);
 // ReSharper disable once UseObjectOrCollectionInitializer
       var record = new LogRecord();
       record.RecordLength = stream.GetInt(offset + 4);
+      record.OffsetToPrevRecord = previousOffset;
+      record.OffsetToNextRecord = checked(offset + record.RecordLength);
 
       stream.Seek(offset, SeekOrigin.Begin);
       var bytes = new byte[record.RecordLength];
