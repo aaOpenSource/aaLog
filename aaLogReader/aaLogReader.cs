@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using aaLogReader.Helpers;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Text;
@@ -2034,29 +2035,15 @@ namespace aaLogReader
         /// <returns></returns>
         private string GetFQDN()
         {
-            log.Debug("");
-
-            // Credits: http://stackoverflow.com/questions/804700/how-to-find-fqdn-of-local-machine-in-c-net
-
-            string hostName;
-
-            try
-            {
-                string domainName = IPGlobalProperties.GetIPGlobalProperties().DomainName;
-                hostName = Dns.GetHostName();
-
-                if ((!hostName.EndsWith(domainName) && (domainName != ""))) // if hostname does not already include domain name
-                {
-                    hostName += "." + domainName;   // add the domain name part
-                }
-             }
-            catch(Exception ex)
-            {
-                log.Warn(ex);
-                hostName = "";
-            }
-
-            return hostName;                    // return the fully qualified name
+          try
+          {
+            return Fqdn.GetFqdn();
+          }
+          catch (Exception ex)
+          {
+            log.Warn(ex);
+          }
+          return "";              // return the fully qualified name
         }
 
         ///// <summary>
