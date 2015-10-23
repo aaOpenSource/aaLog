@@ -85,10 +85,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="controllers\aalogcontroller.cs" />
-    <Compile Include="controllers\companiescontroller.cs" />
     <Compile Include="controllers\logrecordscontroller.cs" />
     <Compile Include="Datasources\aalogDataSource.cs" />
-    <Compile Include="models\company.cs" />
     <Compile Include="models\logrecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
