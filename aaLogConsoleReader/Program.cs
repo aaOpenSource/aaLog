@@ -50,7 +50,7 @@ namespace aaLogConsoleTester
 
                 string answer;
 
-            aaLogReader.aaLogReaderOptionsStruct testOptions = JsonConvert.DeserializeObject<aaLogReaderOptionsStruct>(System.IO.File.ReadAllText("options.json"));
+            aaLogReader.OptionsStruct testOptions = JsonConvert.DeserializeObject<OptionsStruct>(System.IO.File.ReadAllText("options.json"));
             testOptions.IgnoreCacheFileOnFirstRead = true;
           
             //testOptions.LogRecordPostFilters.Add(new LogRecordFilterStruct() { Field = "Message", Filter = "Warning 40|Message 41" });
@@ -104,53 +104,53 @@ namespace aaLogConsoleTester
                 List<LogRecord> records = new List<LogRecord>();
                 LogRecord record;
 
-                //log.Info("Back");
+                ////log.Info("Back");
+                ////sw.Start();
+                ////records = logReader.GetRecordsByStartMessageNumberAndCount(startmsg, count, SearchDirection.Back);
+
                 //sw.Start();
-                //records = logReader.GetRecordsByStartMessageNumberAndCount(startmsg, count, SearchDirection.Back);
+                ////records = logReader.GetRecordsByStartandEndMessageNumber(startmsg, endmsg, count);                
+                ////records = logReader.GetRecordsByEndMessageNumberAndCount(18064517, 10);
+                ////records = logReader.GetRecordsByStartMessageNumberAndCount(8064512, 30);
 
-                sw.Start();
-                //records = logReader.GetRecordsByStartandEndMessageNumber(startmsg, endmsg, count);                
-                //records = logReader.GetRecordsByEndMessageNumberAndCount(18064517, 10);
-                //records = logReader.GetRecordsByStartMessageNumberAndCount(8064512, 30);
+                ////record = logReader.GetRecordByTimestamp(DateTime.Parse("2015-06-27 13:42:33"));
+                ////records.Add(record);
+                ////record = logReader.GetRecordByTimestamp(DateTime.Parse("2015-06-27 13:42:33"),EarliestOrLatest.Latest);
+                ////records.Add(record);
 
-                //record = logReader.GetRecordByTimestamp(DateTime.Parse("2015-06-27 13:42:33"));
-                //records.Add(record);
-                //record = logReader.GetRecordByTimestamp(DateTime.Parse("2015-06-27 13:42:33"),EarliestOrLatest.Latest);
-                //records.Add(record);
-
-                //writelogs(logReader.GetRecordsByEndTimestampAndCount(DateTime.Parse("2015-06-27 13:42:33"),10));
-                //writelogs(logReader.GetRecordsByStartTimestampAndCount(DateTime.Parse("2015-06-27 13:42:33"), 10));
+                ////writelogs(logReader.GetRecordsByEndTimestampAndCount(DateTime.Parse("2015-06-27 13:42:33"),10));
+                ////writelogs(logReader.GetRecordsByStartTimestampAndCount(DateTime.Parse("2015-06-27 13:42:33"), 10));
                 
+                ////sw.Stop();
+                
+                ////log.InfoFormat("Found {0} messages", records.Count);
+
+                ////log.InfoFormat("Time - {0} millseconds", sw.ElapsedMilliseconds);
+
+                ////writelogs(records);
+
+                ////log.Info(JsonConvert.SerializeObject(records));
+                
+                ////sw.Stop();
+                ////log.InfoFormat("Time - {0}",sw.ElapsedMilliseconds);
+                ////log.InfoFormat("Count - {0}", records.Count);
+
+                //int count = 10;
+                ////ulong startmsg = 2534930;
+                ////ulong endmsg = 2559030;
+
+                //ulong startmsg = 7064310;
+                //ulong endmsg = 7064310;
+
+                //DateTime startTime = DateTime.Parse("2015-06-21 08:00:00");
+                ////DateTime endTime = new DateTime.Parse("2015-06-27 08:00:00");
+                //DateTime endTime = DateTime.Parse("2015-06-28 08:00:00");
+
+                //sw.Restart();                
+                //records = logReader.GetRecordsByStartAndEndTimeStamp(startTime, endTime);
                 //sw.Stop();
-                
-                //log.InfoFormat("Found {0} messages", records.Count);
-
-                //log.InfoFormat("Time - {0} millseconds", sw.ElapsedMilliseconds);
-
-                //writelogs(records);
-
-                //log.Info(JsonConvert.SerializeObject(records));
-                
-                //sw.Stop();
-                //log.InfoFormat("Time - {0}",sw.ElapsedMilliseconds);
+                //log.InfoFormat("Time - {0}", sw.ElapsedMilliseconds);
                 //log.InfoFormat("Count - {0}", records.Count);
-
-                int count = 10;
-                //ulong startmsg = 2534930;
-                //ulong endmsg = 2559030;
-
-                ulong startmsg = 7064310;
-                ulong endmsg = 7064310;
-
-                DateTime startTime = DateTime.Parse("2015-06-21 08:00:00");
-                //DateTime endTime = new DateTime.Parse("2015-06-27 08:00:00");
-                DateTime endTime = DateTime.Parse("2015-06-28 08:00:00");
-
-                sw.Restart();                
-                records = logReader.GetRecordsByStartAndEndTimeStamp(startTime, endTime);
-                sw.Stop();
-                log.InfoFormat("Time - {0}", sw.ElapsedMilliseconds);
-                log.InfoFormat("Count - {0}", records.Count);
 
                 //log.Info("Forward");
                 //sw.Restart();
@@ -414,7 +414,7 @@ namespace aaLogConsoleTester
                 //log.Info(logReader.GetRecordByMessageNumber(7839598).ToJSON()); log.Info(logReader.GetRecordByMessageNumber(7898405).ToJSON());
 
 
-                Console.ReadLine(); return;
+                //Console.ReadLine(); return;
 
             while (answer.ToLower() == "y")
             {
@@ -431,8 +431,8 @@ namespace aaLogConsoleTester
                     {
                         //string writeMsg = (lr.MessageNumber.ToString() + '\t' + lr.EventFileTime.ToString()  + '\t' + lr.EventDateTime.ToString("yyyy-MM-dd hh:mm:ss.fff tt") + '\t' + lr.LogFlag + '\t' + lr.Message);
                         string writeMsg = (lr.MessageNumber.ToString() +'\t' + lr.EventDateTime.ToString("yyyy-MM-dd hh:mm:ss.fff tt") + '\t' + lr.LogFlag + '\t' + lr.Message);
-                        //log.Info(writeMsg);
-                        Console.WriteLine(writeMsg);
+                        log.Info(writeMsg);
+                        //Console.WriteLine(writeMsg);
                     }
                 }
             }
