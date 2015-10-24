@@ -10,7 +10,7 @@ namespace aaLogReader.Tests.aaLgxReaderTests
     private const string LOG_FILE_PATH = @"aaLgxReaderTests\test.aaLGX";
 
     [Test]
-    public void Can_read_header()
+    public void aaLGX_Can_read_header()
     {
       var header = aaLgxReader.ReadLogHeader(LOG_FILE_PATH);
       Assert.That(header.LogFilePath, Is.EqualTo(LOG_FILE_PATH));
@@ -24,7 +24,7 @@ namespace aaLogReader.Tests.aaLgxReaderTests
     }
 
     [Test]
-    public void Reads_the_correct_number_of_records()
+    public void aaLGX_Reads_the_correct_number_of_records()
     {
       var header = aaLgxReader.ReadLogHeader(LOG_FILE_PATH);
       var records = aaLgxReader.ReadLogRecords(LOG_FILE_PATH);
@@ -33,7 +33,7 @@ namespace aaLogReader.Tests.aaLgxReaderTests
     }
 
     [Test]
-    public void Can_read_first_record()
+    public void aaLGX_Can_read_first_record()
     {
       var records = aaLgxReader.ReadLogRecords(LOG_FILE_PATH);
       var record = records.First();
@@ -53,7 +53,7 @@ namespace aaLogReader.Tests.aaLgxReaderTests
     }
 
     [Test]
-    public void Can_read_eighteenth_record()
+    public void aaLGX_Can_read_eighteenth_record()
     {
       // Picked this one because it has a long-ish message and a warning flag.
       var records = aaLgxReader.ReadLogRecords(LOG_FILE_PATH);
@@ -75,7 +75,7 @@ A network-related or instance-specific error occurred while establishing a conne
     }
 
     [Test]
-    public void Can_read_last_record()
+    public void aaLGX_Can_read_last_record()
     {
       var records = aaLgxReader.ReadLogRecords(LOG_FILE_PATH);
       var record = records.Last();
