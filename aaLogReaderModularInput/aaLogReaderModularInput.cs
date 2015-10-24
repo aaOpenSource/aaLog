@@ -134,8 +134,12 @@ namespace aaLogReaderModularInput
                 Int32 maxmessagecount = ((SingleValueParameter)(inputDefinition.Parameters["maxmessagecount"])).ToInt32();
                 Int32 cycletime = ((SingleValueParameter)(inputDefinition.Parameters["cycletime"])).ToInt32();
 
+                //Setup the options input
+                OptionsStruct localOptionsStruct = new OptionsStruct();
+                localOptionsStruct.LogDirectory = logfilepath;
+
                 // Initialize the log reader
-                aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader(logfilepath);
+                aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader(localOptionsStruct);
                 
                 // Write an entry to the Splunk system log indicating we have initialized
                 await eventWriter.LogAsync(Severity.Info, "Initialized Log reader for path " + logfilepath + " and message count " + maxmessagecount.ToString());
@@ -146,7 +150,7 @@ namespace aaLogReaderModularInput
                     await (Task.Delay(cycletime));
 
                     //Simple call to get all unread records, limiting the return count to max message count
-                    List<LogRecord> logRecords = logReader.GetUnreadRecords(maxmessagecount);
+                    List<LogRecord> logRecords = logReader.GetUnreadRecords((ulong)maxmessagecount);
 
                     // Loop through each lastRecordRead and send to Splunk
                     foreach (LogRecord record in logRecords)
