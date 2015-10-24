@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -43,11 +47,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="aaLgxReaderTests\CanReadaaLgxFile.cs" />
+    <Compile Include="aaLgxReaderTests\aaLgxReaderTests.cs" />
+    <Compile Include="aaLogReaderTests\aaLogReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="aaLgxReaderTests\test.aaLGX">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1440018667.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1440018667.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1440650332.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1440650332.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1442116958.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1442116958.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1444105162.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1444105162.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1444948384.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1444948384.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1445626381.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1445626381.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.header.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -57,6 +101,18 @@
       <Project>{028d0691-41c6-426e-b378-fb291425cf6d}</Project>
       <Name>aaLogReader</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="aaLogReaderTests\logFiles\emptycache">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="aaLogReaderTests\refFiles\blank.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
