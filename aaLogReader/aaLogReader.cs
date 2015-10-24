@@ -1713,23 +1713,21 @@ namespace aaLogReader
         /// <param name="startingOffset">Starting offset for the data field</param>
         /// <returns>Filetime in ulong format</returns>
         private ulong GetFileTimeFromByteArray(byte[] byteArray, long startingOffset)
-        {            
-            FileTimeStruct localFileTimeStruct;
-            ulong returnFileTime;
+        {
+
+            ulong lDt;
+            uint low = BitConverter.ToUInt32(byteArray, (int)startingOffset);
+            uint high = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
+
+            unchecked
+            {
+
+                lDt = (((ulong)high) << 32) | low;
+
+            }
 
 
-            localFileTimeStruct = new FileTimeStruct();
-
-                // DateTime is an 8 byte value with a Low Byte and High Byte.
-                // We use a custom structure called file time with Low Byte and High Byte Elements
-                // Then in the FileTimeStruct struct we calculate the value by combining the high byte and low byte
-
-                localFileTimeStruct.dwLowDateTime = BitConverter.ToUInt32(byteArray, (int)startingOffset);
-                localFileTimeStruct.dwHighDateTime = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
-
-                returnFileTime = localFileTimeStruct.value;
-
-            return returnFileTime;
+            return lDt;
         }
 
         /// <summary>
