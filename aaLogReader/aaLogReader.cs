@@ -1554,6 +1554,7 @@ namespace aaLogReader
                         }
 
                         // Write out the cache file if we read records
+                        // The log record to cache should be the latest record, by message number
                         this.WriteStatusCacheFile(logRecordList.OrderByDescending(item => item.MessageNumber).First());
                     }                    
 
@@ -1916,7 +1917,7 @@ namespace aaLogReader
 
             try
             {            
-                System.IO.File.WriteAllText(this.GetStatusCacheFilePath(), this.GetLastRecord().ToJSON());
+                System.IO.File.WriteAllText(this.GetStatusCacheFilePath(), CacheRecord.ToJSON());
                 returnValue = new ReturnCodeStruct { Status = true, Message = "" };
             }
             catch(Exception ex)
