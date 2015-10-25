@@ -97,6 +97,12 @@
     <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetLastRecord.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecord01.json" />
+    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecord02.json" />
+    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecord03.json" />
+    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast01.json" />
+    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast02.json" />
+    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast03.json" />
     <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.header.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -81,9 +81,6 @@ namespace aaLogReader.Tests.aaLogReaderTests
             Assert.AreEqual(refHeaderJSON, thisHeaderJSON);
         }
 
-        /// <summary>
-        /// Verify log file can be opened and closed without error
-        /// </summary>
         [Test]
         public void CloseCurrentLogFile()
         {
@@ -100,9 +97,6 @@ namespace aaLogReader.Tests.aaLogReaderTests
             Assert.That(rcs.Message.Length == 0);
         }
 
-        /// <summary>
-        /// Verify log file can be opened and closed without error
-        /// </summary>
         [Test]
         public void CurrentLogFilePath()
         {
@@ -117,9 +111,6 @@ namespace aaLogReader.Tests.aaLogReaderTests
             
         }
 
-        /// <summary>
-        /// Verify the first record can be retrieved correctly
-        /// </summary>
         [Test]
         public void GetFirstRecord()
         {
@@ -133,6 +124,47 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             Assert.AreEqual(json, JsonConvert.SerializeObject(lr),"Record contents did not match");
 
+        }
+
+        [Test]
+        public void GetNextRecordFromFirst()
+        {
+            aaLogReader alr = new aaLogReader();
+
+            alr.OpenLogFile(LOG_FILE_INSTANCE);
+
+            LogRecord lr = alr.GetFirstRecord();
+            lr = alr.GetNextRecord();
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecord01.json"), JsonConvert.SerializeObject(lr),"Next Record contents did not match");
+            //File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecord01.json", JsonConvert.SerializeObject(lr));
+
+            lr = alr.GetNextRecord();
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            
+            lr = alr.GetNextRecord();
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+        }
+
+        [Test]
+        public void GetNextRecordFromLast()
+        {
+            aaLogReader alr = new aaLogReader();
+
+            //Open a log file in the middle of the overall list of log files
+            alr.OpenLogFile(ROOT_FILE_PATH + @"\logfiles\2014R2-VS-WSP1442116958.aaLOG");
+
+            LogRecord lr = alr.GetLastRecord();
+            lr = alr.GetNextRecord();
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast01.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            //File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast01.json", JsonConvert.SerializeObject(lr));
+
+            lr = alr.GetNextRecord();
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            //File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast02.json", JsonConvert.SerializeObject(lr));
+
+            lr = alr.GetNextRecord();
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            //File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast03.json", JsonConvert.SerializeObject(lr));
         }
 
         [Test]
