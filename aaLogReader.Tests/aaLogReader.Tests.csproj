@@ -91,6 +91,12 @@
     <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1445626381.aaLOG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetFirstRecord.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetLastRecord.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.header.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
