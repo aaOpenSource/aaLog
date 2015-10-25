@@ -1,7 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-
 namespace aaLogReader
 {
     public struct FileTimeStruct
@@ -15,8 +14,12 @@ namespace aaLogReader
         public ulong @value
         {
             get
-            {               
-               return checked(checked((ulong)Math.Round((double)((float)this.dwHighDateTime) * (Math.Pow(2,32)))) + (ulong)this.dwLowDateTime);
+            {
+                ulong lDt;
+
+                lDt = (((ulong)dwHighDateTime) << 32) | dwLowDateTime;
+
+                return lDt;
             }
         }
     }
