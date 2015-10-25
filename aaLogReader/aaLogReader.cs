@@ -1716,19 +1716,12 @@ namespace aaLogReader
         private ulong GetFileTimeFromByteArray(byte[] byteArray, long startingOffset)
         {
 
-            ulong lDt;
-            uint low = BitConverter.ToUInt32(byteArray, (int)startingOffset);
-            uint high = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
+            FileTimeStruct fts = new FileTimeStruct();
 
-            unchecked
-            {
+            fts.dwLowDateTime = BitConverter.ToUInt32(byteArray, (int)startingOffset);
+            fts.dwHighDateTime = BitConverter.ToUInt32(byteArray, checked((int)startingOffset + 4));
 
-                lDt = (((ulong)high) << 32) | low;
-
-            }
-
-
-            return lDt;
+            return fts.value;
         }
 
         /// <summary>
