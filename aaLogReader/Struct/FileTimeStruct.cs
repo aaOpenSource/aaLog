@@ -1,10 +1,9 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-
 namespace aaLogReader
 {
-    public struct FileTime
+    public struct FileTimeStruct
     {
         [JsonIgnore]
         public uint dwLowDateTime;
@@ -16,7 +15,11 @@ namespace aaLogReader
         {
             get
             {
-                return checked(checked((ulong)Math.Round((double)((float)this.dwHighDateTime) * 4294967296)) + (ulong)this.dwLowDateTime);
+                ulong lDt;
+
+                lDt = (((ulong)dwHighDateTime) << 32) | dwLowDateTime;
+
+                return lDt;
             }
         }
     }

@@ -12,7 +12,6 @@
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,16 +40,26 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <DocumentationFile>bin\Release\aaLogReader.XML</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -60,30 +69,38 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="aaLgxReader.cs" />
     <Compile Include="aaLogReader.cs" />
+    <Compile Include="Enum\enumSearchDirection.cs" />
+    <Compile Include="Enum\enumEarliestOrLatest.cs" />
+    <Compile Include="Enum\enumExportFormat.cs" />
+    <Compile Include="Helpers\ByteArrayExtensions.cs" />
+    <Compile Include="Helpers\Fqdn.cs" />
+    <Compile Include="Helpers\StreamExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Struct\FileTime.cs" />
-    <Compile Include="Struct\SessionIDSegments.cs" />
-    <Compile Include="Struct\ReturnCode.cs" />
+    <Compile Include="Struct\FileTimeStruct.cs" />
+    <Compile Include="Struct\LogRecordFilterStruct.cs" />
+    <Compile Include="Struct\OptionsStruct.cs" />
+    <Compile Include="Struct\SessionIDSegmentsStruct.cs" />
+    <Compile Include="Struct\ReturnCodeStruct.cs" />
+    <Compile Include="Testing\HeaderTesting.cs" />
+    <Compile Include="Testing\RandomULong.cs" />
+    <Compile Include="Types\ILogHeader.cs" />
+    <Compile Include="Types\ILogRecord.cs" />
     <Compile Include="Types\LogRecord.cs" />
     <Compile Include="Types\LogHeader.cs" />
     <Compile Include="Types\aaLogReaderException.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="doc\Options.md" />
+    <None Include="LICENSE" />
     <None Include="log.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="Types\LogHeaderFormat.md" />
-    <None Include="Types\LogRecordFormat.md" />
+    <None Include="doc\LogHeaderFormat.md" />
+    <None Include="doc\LogRecordFormat.md" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
 </Project>

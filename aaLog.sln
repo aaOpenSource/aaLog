@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogGUITester", "aaLogForwarder\aaLogGUITester.csproj", "{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{87DCE6F5-542B-407F-97DC-9DD8A0B91C13}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogConsoleTester", "aaLogConsoleReader\aaLogConsoleTester.csproj", "{52754B83-33EC-4C89-AB0B-CB022747BBFF}"
@@ -29,6 +27,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogSavetoFileExample", "aaLogSavetoFileExample\aaLogSavetoFileExample.csproj", "{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogReaderModularInput", "aaLogReaderModularInput\aaLogReaderModularInput.csproj", "{5A559239-6B65-4F01-8D7D-B728FE5DA44C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogWebAPI", "aaLogWebAPI\aaLogWebAPI.csproj", "{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogReader.Tests", "aaLogReader.Tests\aaLogReader.Tests.csproj", "{A606F2E4-442B-4C64-96E5-8BB9318FF28C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,8 +49,8 @@ Global
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Debug|x86.Build.0 = Debug|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release - aaSplunkLogConsole|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release - aaSplunkLogConsole|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release - aaSplunkLogConsole|Any CPU
@@ -55,11 +59,13 @@ Global
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release|x86.ActiveCfg = Release|Any CPU
+		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release|x86.Build.0 = Release|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{028D0691-41C6-426E-B378-FB291425CF6D}.Debug|x86.Build.0 = Debug|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release - aaSplunkLogConsole|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release - aaSplunkLogConsole|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release - aaSplunkLogConsole|Any CPU
@@ -70,11 +76,13 @@ Global
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Release|x86.ActiveCfg = Release|Any CPU
+		{028D0691-41C6-426E-B378-FB291425CF6D}.Release|x86.Build.0 = Release|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Debug|x86.Build.0 = Debug|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release - aaSplunkLogConsole|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release - aaSplunkLogConsole|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release - aaSplunkLogConsole|Any CPU
@@ -83,11 +91,12 @@ Global
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release|x86.ActiveCfg = Release|Any CPU
+		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release|x86.Build.0 = Release|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Debug|x86.Build.0 = Debug|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release - aaSplunkLogConsole|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release - aaSplunkLogConsole|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release - aaSplunkLogConsole|Any CPU
@@ -98,11 +107,12 @@ Global
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|x86.ActiveCfg = Release|Any CPU
+		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|x86.Build.0 = Release|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|x86.Build.0 = Debug|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release|Any CPU
@@ -113,6 +123,52 @@ Global
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|x86.ActiveCfg = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|x86.Build.0 = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Debug|x86.Build.0 = Debug|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release - aaSplunkLogConsole|x86.ActiveCfg = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release|x86.ActiveCfg = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release - aaSplunkLogConsole|x86.ActiveCfg = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release|x86.ActiveCfg = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release - aaSplunkLogConsole|x86.ActiveCfg = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

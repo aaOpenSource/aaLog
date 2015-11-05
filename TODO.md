@@ -5,9 +5,11 @@ These are not issues or bugs, just a roadmap for my development.
 ## Major
 No major items at the moment
 
+- [] Complete Splunk Archestra Logs App  
+
 ## Minor
-- [ ] Improve logging for Info and Debug
-- [ ] Create Splunk Universal Forwarder configuration
+- [X] Improve logging for Info and Debug
+- [X] Create Splunk Universal Forwarder configuration
 
 ## Testing
 None planned at the moment

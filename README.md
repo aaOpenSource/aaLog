@@ -17,7 +17,7 @@ The first application that I plan to use the library for is an ultra simple cons
 
 Using the library with all the defaults could not be simpler. In two lines you can get an object of type list for all unread records.  You can explore the code int he library to see how we manage the return list with a default max on the messages that can be overwritten if desired.  This example is directly from the Splunk Console example program 
 
-
+```c#
 	// Instantiate a new log reader object            
 	aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader();
 	// Get all unread records
@@ -31,6 +31,7 @@ Using the library with all the defaults could not be simpler. In two lines you c
             Console.WriteLine(record.ToKVP());
         }
     }
+```
 
 In the example I am outputting the records in KVP (Key/Value Pair) format but I also have a method to output to JSON. What other formats do you need?  Just add them to the LogRecord class.  And of course contribute back to the library when you do :-).  
 
@@ -51,12 +52,22 @@ A simple GUI app that will send data to Splunk over a TCP connection.
 ###aaLogSplunkConsole
 A basic console app to send output to the STDOUT for consumption by Splunk or any other processing engine you wish.
 
+###aaLogReaderModularInput
+A Splunk modular input to simplify forwarding Archestra logs to [Splunk](http://www.splunk.com/).  To read about modular inputs for C# start with this link -
+[How to create modular inputs in Splunk SDK for C# v2.x](http://dev.splunk.com/view/csharp-sdk-pcl/SP-CAAAEY3)
+
+If you think at first blush that creating a modular input is a lot more work than just streaming data over TCP in KVP format you would be correct.  However, after you work through all of the details you will see that a modular input provides a package that provides for a much more consistent and repeatable experience for the end user.  It is important to note that you will require a Splunk Forwarder to be installed on the machine where you are collecting logs.  If this is not feasible then a standalone EXE that doesn't require an installation and run as a service might be a better option.
+
+
 ## Platforms
 
 All projects were compiled against .Net 4.0 but in concept you can probably go pretty far back as I don't believe I've used anything too exotic with the exception of Nuget packages for JSON parsing and Logging.
 
 ##Path Forward
 From here I would like for others to pick up the core and extend it with more sophisticated features as well as building full blown applications.  You can see a lot of my focus at the moment is getting these logs into Splunk.  However, there is no reason the community can't write more forwarders to other storage platforms.  My preference would be to keep the core library relatively clean and write your forwarders as separate projects that utilize the library. 
+
+## Build Notes
+For some reason, probably 100% due to my lack of understanding, when you Git Clone, the aaLogReader project does not build because it is missing a reference to log4Net.  I have found the easiest way to resolve this is to click on the missing reference in the list, change Copy Local to True and then rebuild.  This will go out and restore the nuget package.  Another method is to manage the NuGet references and uninstall/reinstall log4Net.  I have also had intermittent issues with the GuiTester complaining about mismatched assemblies related to the JSON package.  You can safely upgrade to version 6.08 if for some reason your version when you pull down is 6.06. If you have any more questions please feel free to give me a shout and I'll do my best to help/make up for my lack of mastery in the subject :-)
 
 ## TODO List
 

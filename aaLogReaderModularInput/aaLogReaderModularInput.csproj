@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="ZipFolder" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <FolderToCompress ParameterType="System.String" Required="true" />
+      <OutputFileName ParameterType="System.String" Required="true" />
+      <OverwriteExistingFile ParameterType="System.Boolean" Required="false" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.IO.Compression" />
+      <Using Namespace="System.IO.Compression" />
+      <Code Type="Fragment" Language="cs"><![CDATA[        
+            const int BufferSize = 64 * 1024;
+
+            var buffer = new byte[BufferSize];
+            var fileMode = OverwriteExistingFile ? FileMode.Create : FileMode.CreateNew;
+
+            Action<string, ZipArchive> addPathToZip = null;
+            addPathToZip = new Action<string, ZipArchive>((string path, ZipArchive zip) =>
+            {
+                 if ((File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory)
+                 {
+                     foreach (string p in Directory.GetFileSystemEntries(path))
+                     {
+                         addPathToZip(p, zip);
+                     }
+                 }
+                 else // It's not a directory
+                 {
+                     var archivePath = path.Substring(FolderToCompress.TrimEnd('\\', '/').Count() + 1);
+                     var archiveEntry = zip.CreateEntry(archivePath);
+                     using (var fs = new FileStream(path, FileMode.Open))
+                     using (var zipStream = archiveEntry.Open())
+                     {
+                         int bytesRead = -1;
+                         while ((bytesRead = fs.Read(buffer, 0, BufferSize)) > 0)
+                         {
+                             zipStream.Write(buffer, 0, bytesRead);
+                         }
+                     }
+                 };
+             });
+
+            using (var outputFileStream = new FileStream(OutputFileName, fileMode))
+            using (var archive = new ZipArchive(outputFileStream, ZipArchiveMode.Create))
+            {
+                addPathToZip(FolderToCompress, archive);
+            }    
+      ]]></Code>
+    </Task>
+  </UsingTask>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5A559239-6B65-4F01-8D7D-B728FE5DA44C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>aaLogReaderModularInput</RootNamespace>
+    <AssemblyName>aaLogReaderModularInput</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AppSkeletonPath>$(OutputPath)app\</AppSkeletonPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Splunk.Client">
+      <HintPath>..\packages\Splunk.Client.2.1.2\lib\portable-net45+win+wpa81\Splunk.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Splunk.ModularInputs">
+      <HintPath>..\packages\Splunk.ModularInputs.2.1.2\lib\net45\Splunk.ModularInputs.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="aaLogReaderModularInput.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <None Include="aaLogReaderModularInput\default\app.conf" />
+    <None Include="aaLogReaderModularInput\default\inputs.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderModularInput\README\inputs.conf.spec" />
+    <None Include="app.config" />
+    <None Include="LICENSE" />
+    <None Include="log.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\aaLog\aaLogReader\aaLogReader.csproj">
+      <Project>{028d0691-41c6-426e-b378-fb291425cf6d}</Project>
+      <Name>aaLogReader</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target> -->
+  <Target Name="AfterBuild">
+    <!-- At this point, we have a directory AppSkeleton in the project directory that
+         contains app.conf and inputs.conf.spec. -->
+    <ItemGroup>
+      <DLLsToInclude Include="$(OutputPath)\*.dll" />
+      <AppFilesToInclude Include="$(MSBuildProjectDirectory)\aaLogReaderModularInput\**\*.*" />
+    </ItemGroup>
+    <MakeDir Directories="$(AppSkeletonPath);$(AppSkeletonPath)\aaLogReaderModularInput" />
+    <Copy SourceFiles="@(AppFilesToInclude)" DestinationFolder="$(AppSkeletonPath)\aaLogReaderModularInput\%(RecursiveDir)" />
+    <Copy SourceFiles="$(OutputPath)\aaLogReaderModularInput.exe" DestinationFolder="$(AppSkeletonPath)\aaLogReaderModularInput\bin" />
+    <Copy SourceFiles="@(DLLsToInclude)" DestinationFolder="$(AppSkeletonPath)\aaLogReaderModularInput\bin" />
+    <Copy SourceFiles="@(DLLsToInclude)" DestinationFolder="$(AppSkeletonPath)\aaLogReaderModularInput\bin" />
+    <ZipFolder FolderToCompress="$(AppSkeletonPath)" OutputFileName="$(OutputPath)\aaLogReaderModularInput.spl" OverwriteExistingFile="true" />
+    <Message Importance="high" Text="Finished building .spl file in $(OutputPath)aaLogReaderModularInput.spl" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>REM Uncomment the 'goto Deploy' line below to deploy to your local Splunk instance on each build.
+REM You will need to either have the %25SPLUNK_HOME%25 environment variable set, or replace $(SPLUNK_HOME) with the path to your Splunk instance.
+REM You will also need to be running Visual Studio as an Administrator so that it has permissions to copy the files to Splunk
+goto Deploy
+
+:Deploy
+xcopy "$(ProjectDir)$(ProjectName)\*.*" "$(SPLUNK_HOME)\etc\apps\$(ProjectName)" /F /R /Y /I /E
+xcopy "$(TargetDir)\*.*" "$(SPLUNK_HOME)\etc\apps\$(ProjectName)\bin" /F /R /Y /I
+echo Deployed Application to $(SPLUNK_HOME)\etc\apps\$(ProjectName)</PostBuildEvent>
+  </PropertyGroup>
+</Project>

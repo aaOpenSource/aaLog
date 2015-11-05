@@ -4,7 +4,7 @@
  * Date: 4/19/2014
  * Time: 8:30 AM
  * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ * To change this template use Tools | aaLogReaderOptionsStruct | Coding | Edit Standard Headers.
  */
 using System;
 using System.Drawing;
@@ -90,7 +90,7 @@ namespace aaLogForwarder
             try
             {
 
-                //aaLogReader.LogRecord record = new LogRecord();
+                //aaLogReader.LogRecord lastRecordRead = new LogRecord();
 
                 Stopwatch sw = new Stopwatch();
 
@@ -98,7 +98,7 @@ namespace aaLogForwarder
 
                 sw.Reset();
                 sw.Start();
-                //List<LogRecord> records = logReader.GetUnreadRecords();
+                //List<LogRecord> records = logReader.GetRecordsInternal();
                 sw.Stop();
 
                 //addlog("Timer(ms) " + sw.ElapsedMilliseconds.ToString());
@@ -106,11 +106,11 @@ namespace aaLogForwarder
                 //addlog("Rate (records/s): " + ((int)(1000.0 * (float)records.Count / (float)sw.ElapsedMilliseconds)).ToString());
                 //addlog("");
                 //addlog(JsonConvert.SerializeObject(records, Formatting.Indented));
-                ////record = logReader.ReadStatusCacheFile();
-                //addlog(JsonConvert.SerializeObject(record, Formatting.Indented));
+                ////lastRecordRead = logReader.ReadStatusCacheFile();
+                //addlog(JsonConvert.SerializeObject(lastRecordRead, Formatting.Indented));
                 //addlog("");
                 //addlog(JsonConvert.SerializeObject(logReader.ReadLogHeader(), Formatting.Indented));
-                ////Debug.Print(JsonConvert.SerializeObject(record,Formatting.Indented));
+                ////Debug.Print(JsonConvert.SerializeObject(lastRecordRead,Formatting.Indented));
                
                 TcpClient vSocket = new System.Net.Sockets.TcpClient("localhost", 14500);
                 System.Net.Sockets.NetworkStream ServerStream = vSocket.GetStream();

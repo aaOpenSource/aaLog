@@ -4,10 +4,9 @@ using Newtonsoft.Json;
 
 namespace aaLogReader
 {
-    public struct ReturnCode
+    public struct ReturnCodeStruct
     {
         public bool Status;
-
         public string Message;
     }
 }
