@@ -103,7 +103,7 @@ namespace aaLogReader
                 // Initialize the internal byte array we will use later                
                 //this.byteArray = new byte[1];
                 
-                if (LogDirectory == "")
+                if (string.IsNullOrEmpty(LogDirectory))
                 {
                     // Open the current log file
                     returnValue = this.OpenCurrentLogFile();
@@ -140,7 +140,7 @@ namespace aaLogReader
                 localReturnCode.Message = "";
 
                 // Verify we have a file path
-                if (LogFilePath != "")
+                if (!string.IsNullOrEmpty(LogFilePath))
                 {
                     // Save the log path
                     this.currentLogFilePath = LogFilePath;
@@ -151,11 +151,12 @@ namespace aaLogReader
                     if ((this.globalFileStream.CanRead) && (this.globalFileStream.Length > 0))
                     {
                         log.Info("Opened log file " + LogFilePath);
+
                         // If opening the file was a success then go ahead and read in the header
-                        this.ReadLogHeader(this.globalFileStream);
+                        var header = this.ReadLogHeader(this.globalFileStream);
 
                         // Get the return code from the log header read
-                        localReturnCode = this.logHeader.ReturnCode;
+                        localReturnCode = header.ReturnCode;
 
                     }
                     else
@@ -192,7 +193,7 @@ namespace aaLogReader
 
                 
 
-                if (LogDirectory == "")
+                if (string.IsNullOrEmpty(LogDirectory))
                 {
                     LogDirectory = this.GetConfiguredLocalLogDirectory();
                 }
@@ -649,12 +650,14 @@ namespace aaLogReader
                     // Close the currently opened log file
                     this.globalFileStream.Close();
                     
-                    string newPreviousLogFile = string.Concat(new string[] {this.GetConfiguredLocalLogDirectory(), "\\", this.logHeader.PrevFileName });
+                    string newPreviousLogFile = Path.Combine(GetConfiguredLocalLogDirectory(), logHeader.PrevFileName);
                     if(this.OpenLogFile(newPreviousLogFile).Status)
                     {
                         localRecord = this.GetLastRecord();
                     }
+                    else
                     {
+                        log.ErrorFormat("Error attempting to open previous log file: {0}", newPreviousLogFile);
                         throw new aaLogReaderException("Error attempting to open previous log file.");
                     }
 
@@ -676,7 +679,7 @@ namespace aaLogReader
         /// </summary>
         /// <param name="maximumMessages">Maximum number of messages to return</param>
         /// <returns></returns>
-        public List<LogRecord>GetUnreadRecords(int maximumMessages = 1000)
+        public List<LogRecord> GetUnreadRecords(int maximumMessages = 1000)
         {            
             try
             {
@@ -713,7 +716,7 @@ namespace aaLogReader
         /// <param name="lastReadMessageNumber">Last message number previously read.</param>
         /// <param name="maximumMessages">Maximum number of messages to return</param>
         /// <returns></returns>
-        public List<LogRecord>GetUnreadRecords(ulong lastReadMessageNumber, int maximumMessages = 1000)
+        public List<LogRecord> GetUnreadRecords(ulong lastReadMessageNumber, int maximumMessages = 1000)
         {
             
 
@@ -785,8 +788,6 @@ namespace aaLogReader
         /// <returns></returns>
         private DateTime GetDateTimeFromByteArray(byte[] byteArray, long startingOffset)
         {
-            
-
             DateTime localDate;
 
             try
@@ -815,8 +816,6 @@ namespace aaLogReader
         /// <returns></returns>
         private string GetSingleStringFieldFromByteArray(byte[] byteArray, long startingOffset)
         {
-            
-
             string returnValue;
             int fieldLength;
             
@@ -1009,7 +1008,7 @@ namespace aaLogReader
         /// <returns></returns>
         private string GetStatusCacheFilePath()
         {
-            return Path.GetDirectoryName(this.currentLogFilePath) + "\\" + cacheFileName;
+            return Path.Combine(Path.GetDirectoryName(this.currentLogFilePath), cacheFileName);
         }
 
         /// <summary>
@@ -1021,7 +1020,20 @@ namespace aaLogReader
             //TODO: Figure out how to programatically determine the local log directory
             try
             {
-                return Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ArchestrA\Framework\Logger", "LogDir", @"C:\ProgramData\ArchestrA\LogFiles").ToString();
+                var result = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ArchestrA\Framework\Logger", "LogDir", "").ToString();
+                if (string.IsNullOrEmpty(result))
+                {
+                    var progData = System.Environment.GetEnvironmentVariable("ProgramData");
+                    var logPath = Path.Combine(progData, @"ArchestrA\LogFiles");
+                    if (Directory.Exists(logPath))
+                        result = logPath;
+                    else
+                    {
+                        // Use default path
+                        result = @"C:\ProgramData\ArchestrA\LogFiles";
+                    }
+                }
+                return result;
             }
             catch
             {
