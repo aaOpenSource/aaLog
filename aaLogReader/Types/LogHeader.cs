@@ -51,37 +51,37 @@ namespace aaLogReader
             {
 
                 localSB.Append("MsgStartingNumber=");
-                localSB.Append(((char)34).ToString() + this.MsgStartingNumber.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.Append("\"" + this.MsgStartingNumber.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\"");
 
                 localSB.Append(", MsgCount=");
-                localSB.Append(((char)34).ToString() + this.MsgCount + ((char)34).ToString());
+                localSB.Append("\"" + this.MsgCount + "\"");
 
                 localSB.Append(", MsgLastNumber=");
-                localSB.Append(((char)34).ToString() + this.MsgLastNumber + ((char)34).ToString());
+                localSB.Append("\"" + this.MsgLastNumber + "\"");
 
                 localSB.Append(", StartDateTime=");
-                localSB.Append(((char)34).ToString() + this.StartDateTime + ((char)34).ToString());
+                localSB.Append("\"" + this.StartDateTime + "\"");
 
                 localSB.Append(", EndDateTime=");
-                localSB.Append(((char)34).ToString() + this.EndDateTime + ((char)34).ToString());
+                localSB.Append("\"" + this.EndDateTime + "\"");
 
                 localSB.Append(", OffsetFirstRecord=");
-                localSB.Append(((char)34).ToString() + this.OffsetFirstRecord + ((char)34).ToString());
+                localSB.Append("\"" + this.OffsetFirstRecord + "\"");
 
                 localSB.Append(", OffsetLastRecord=");
-                localSB.Append(((char)34).ToString() + this.OffsetLastRecord + ((char)34).ToString());
+                localSB.Append("\"" + this.OffsetLastRecord + "\"");
 
                 localSB.Append(", ComputerName=");
-                localSB.Append(((char)34).ToString() + this.ComputerName + ((char)34).ToString());
+                localSB.Append("\"" + this.ComputerName + "\"");
 
                 localSB.Append(", Session=");
-                localSB.Append(((char)34).ToString() + this.Session + ((char)34).ToString());
+                localSB.Append("\"" + this.Session + "\"");
 
                 localSB.Append(", PrevFileName=");
-                localSB.Append(((char)34).ToString() + this.PrevFileName + ((char)34).ToString());
+                localSB.Append("\"" + this.PrevFileName + "\"");
 
                 localSB.Append(", HostFQDN=");
-                localSB.Append(((char)34).ToString() + this.HostFQDN + ((char)34).ToString());
+                localSB.Append("\"" + this.HostFQDN + "\"");
 
                 returnValue = localSB.ToString();
             }            
