@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogGUITester", "aaLogForwarder\aaLogGUITester.csproj", "{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}"
 EndProject
@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogSavetoFileExample", "aaLogSavetoFileExample\aaLogSavetoFileExample.csproj", "{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogGrowler", "aaLogGrowler\aaLogGrowler.csproj", "{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +115,24 @@ Global
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|x86.ActiveCfg = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Debug|x86.Build.0 = Debug|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release - aaSplunkLogConsole|x86.ActiveCfg = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release - aaSplunkLogConsole|x86.Build.0 = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release|x86.ActiveCfg = Release|Any CPU
+		{BEDF386C-5E97-4AF2-A74B-EB6F3867765A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
