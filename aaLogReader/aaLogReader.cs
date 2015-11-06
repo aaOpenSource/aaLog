@@ -203,7 +203,7 @@ namespace aaLogReader
                 log.Debug("LogFilePath - " + LogFilePath);
                 
                 // Verify we have a file path
-                if (LogFilePath != "")
+                if (!string.IsNullOrEmpty(LogFilePath))
                 {
                     log.Info("Opening log file " + LogFilePath);
 
@@ -218,12 +218,12 @@ namespace aaLogReader
                         log.DebugFormat("Opened log file {0}",LogFilePath);
                         
                         // If opening the file was a success then go ahead and read in the header
-                        this.ReadLogHeader(this._fileStream);
+                        var header = this.ReadLogHeader(this._fileStream);
 
                         // Get the return code from the log header read
-                        localReturnCode = this.CurrentLogHeader.ReturnCode;
+                        localReturnCode = header.ReturnCode;
 
-                        log.Debug("logHeader - " + this.CurrentLogHeader.ToJSON());
+                        log.Debug("logHeader - " + header.ToJSON());
                         log.Debug("localReturnCode - " + localReturnCode);
 
                     }
@@ -252,8 +252,8 @@ namespace aaLogReader
             ReturnCodeStruct localReturnCode;
             
             try
-            {                
-                if (LogDirectory == "")
+            {
+                if (string.IsNullOrEmpty(LogDirectory))
                 {
                     LogDirectory = this.GetLogDirectory();
                 }
@@ -879,7 +879,7 @@ namespace aaLogReader
                     // Close the currently opened log file
                     this._fileStream.Close();
                     
-                    string newPreviousLogFile = string.Concat(new string[] {this.GetLogDirectory(), "\\", this.CurrentLogHeader.PrevFileName });
+                    string newPreviousLogFile = Path.Combine(this.GetLogDirectory(), this.CurrentLogHeader.PrevFileName);
 
                     log.Debug("newPreviousLogFile - " + newPreviousLogFile);
 
@@ -890,10 +890,15 @@ namespace aaLogReader
                             localRecord = this.GetLastRecord();
                             log.Debug("localRecord.ReturnCode.Status - " + localRecord.ReturnCode.Status);
                         }
+                        else
+                        {
+                            log.ErrorFormat("Error attempting to open previous log file: {0}", newPreviousLogFile);
+                        }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        throw new aaLogReaderException("Error attempting to open previous log file.");
+                        log.ErrorFormat("Error attempting to open previous log file: {0} - {1}", newPreviousLogFile, ex.Message);
+                        throw new aaLogReaderException("Error attempting to open previous log file.", ex);
                     }
 				}
 
@@ -1961,7 +1966,7 @@ namespace aaLogReader
 
                 // Check the global options to determine the features that have been configured
 
-                if (Options.CacheFileNameCustom != "")
+                if (!string.IsNullOrEmpty(Options.CacheFileNameCustom))
                 {
                     cacheFileName = Options.CacheFileNameCustom;
                 }
@@ -1974,12 +1979,12 @@ namespace aaLogReader
                     cacheFileName = Options.CacheFileBaseName;
                 }
 
-                if(LogFilePath == "")
+                if (string.IsNullOrEmpty(LogFilePath))
                 {
                     LogFilePath = Path.GetDirectoryName(this.CurrentLogFilePath);
                 }
 
-                returnValue = LogFilePath + "\\" + cacheFileName;
+                returnValue = Path.Combine(LogFilePath, cacheFileName);
             }
             catch(Exception ex)
             {
@@ -2009,7 +2014,21 @@ namespace aaLogReader
                 }
                 else
                 {
+                    // Use the registry key
                     returnValue = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ArchestrA\Framework\Logger", "LogDir", Options.LogDirectory).ToString();
+                    if (string.IsNullOrEmpty(returnValue))
+                    {
+                        // Use %ProgramData%\ArchestrA\LogFiles
+                        var progData = System.Environment.GetEnvironmentVariable("ProgramData");
+                        var logPath = Path.Combine(progData, @"ArchestrA\LogFiles");
+                        if (Directory.Exists(logPath))
+                            returnValue = logPath;
+                        else
+                        {
+                            // Use default path
+                            returnValue = @"C:\ProgramData\ArchestrA\LogFiles";
+                        }
+                    }
                 }
             }
             catch(Exception ex)

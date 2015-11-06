@@ -26,8 +26,11 @@ namespace aaLogSavetoFileExample
         private void addlog(string Message)
         {
             try
-            {                
-                txtLog.AppendText(Environment.NewLine + Message);
+            {
+                if (txtLog.InvokeRequired)
+                    Invoke((Action)delegate { addlog(Message); });
+                else
+                    txtLog.AppendText(Environment.NewLine + Message);
             }
             catch (Exception ex)
             {
@@ -62,7 +65,7 @@ namespace aaLogSavetoFileExample
             {
                 foreach (LogRecord lr in records)
                 {
-                        file.WriteLine(lr.ToTSV());
+                    file.WriteLine(lr.ToTSV());
                 }
             }                
         }
