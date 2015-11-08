@@ -95,45 +95,22 @@ namespace aaLogReader
             StringBuilder localSB = new StringBuilder();
 
             try
-            {                
-                
-                localSB.Append("Timestamp=");
-                localSB.Append(((char)34).ToString() + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
-
-                localSB.Append(", LogFlag=");
-                localSB.Append(((char)34).ToString() + this.LogFlag + ((char)34).ToString());
-
-                localSB.Append(", Message=");
-                localSB.Append(((char)34).ToString() + this.Message + ((char)34).ToString());
-
-                localSB.Append(", HostFQDN=");
-                localSB.Append(((char)34).ToString() + this.HostFQDN + ((char)34).ToString());
-
+            {
+                localSB.AppendFormat("Timestamp=\"{0}\"", this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                localSB.AppendFormat(", LogFlag=\"{0}\"", this.LogFlag);
+                localSB.AppendFormat(", Message=\"{0}\"", this.Message);
+                localSB.AppendFormat(", HostFQDN=\"{0}\"", this.HostFQDN);
 
                 if (format == ExportFormat.Full)
                 {
                     // Use all parameters if we want a full format
-                    localSB.Append(", MessageNumber=");
-                    localSB.Append(((char)34).ToString() + this.MessageNumber.ToString() + ((char)34).ToString());
-
-                    localSB.Append(", ProcessID=");
-                    localSB.Append(((char)34).ToString() + this.ProcessID.ToString() + ((char)34).ToString());
-
-                    localSB.Append(", ThreadID=");
-                    localSB.Append(((char)34).ToString() + this.ThreadID.ToString() + ((char)34).ToString());
-
-                    localSB.Append(", Component=");
-                    localSB.Append(((char)34).ToString() + this.Component + ((char)34).ToString());
-
-                    localSB.Append(", ProcessName=");
-                    localSB.Append(((char)34).ToString() + this.ProcessName + ((char)34).ToString());
-
-                    localSB.Append(", SessionID=");
-                    localSB.Append(((char)34).ToString() + this.SessionID + ((char)34).ToString());
-
-                    localSB.Append(", EventFileTime=");
-                    localSB.Append(((char)34).ToString() + this.EventFileTime.ToString() + ((char)34).ToString());
-
+                    localSB.AppendFormat(", MessageNumber=\"{0}\"", this.MessageNumber);
+                    localSB.AppendFormat(", ProcessID=\"{0}\"", this.ProcessID);
+                    localSB.AppendFormat(", ThreadID=\"{0}\"", this.ThreadID);
+                    localSB.AppendFormat(", Component=\"{0}\"", this.Component);
+                    localSB.AppendFormat(", ProcessName=\"{0}\"", this.ProcessName);
+                    localSB.AppendFormat(", SessionID=\"{0}\"", this.SessionID);
+                    localSB.AppendFormat(", EventFileTime=\"{0}\"", this.EventFileTime);
                 }
                 returnValue = localSB.ToString();
             }
@@ -218,9 +195,9 @@ namespace aaLogReader
             try
             {
 
-                localSB.Append(((char)34).ToString() + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + ((char)34).ToString());
+                localSB.Append("\"" + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\"");
                 localSB.Append(Delimiter + this.LogFlag);
-                localSB.Append(Delimiter + ((char)34).ToString() + this.Message + ((char)34).ToString());
+                localSB.Append(Delimiter + "\"" + this.Message + "\"");
                 localSB.Append(Delimiter + this.HostFQDN);
 
                 if (format == ExportFormat.Full)
@@ -229,8 +206,8 @@ namespace aaLogReader
                     localSB.Append(Delimiter + this.MessageNumber.ToString());
                     localSB.Append(Delimiter + this.ProcessID.ToString());
                     localSB.Append(Delimiter + this.ThreadID.ToString());
-                    localSB.Append(Delimiter + ((char)34).ToString() + this.Component + ((char)34).ToString());
-                    localSB.Append(Delimiter + ((char)34).ToString() + this.ProcessName + ((char)34).ToString());
+                    localSB.Append(Delimiter + "\"" + this.Component + "\"");
+                    localSB.Append(Delimiter + "\"" + this.ProcessName + "\"");
                     localSB.Append(Delimiter + this.SessionID);
                     localSB.Append(Delimiter + this.EventFileTime.ToString());
                 }
