@@ -58,6 +58,8 @@ A Splunk modular input to simplify forwarding Archestra logs to [Splunk](http://
 
 If you think at first blush that creating a modular input is a lot more work than just streaming data over TCP in KVP format you would be correct.  However, after you work through all of the details you will see that a modular input provides a package that provides for a much more consistent and repeatable experience for the end user.  It is important to note that you will require a Splunk Forwarder to be installed on the machine where you are collecting logs.  If this is not feasible then a standalone EXE that doesn't require an installation and run as a service might be a better option.
 
+###aalogWebAPI
+A project to allow for acessing log file data as on ODATA feed over HTTP.  Currently there is only a single call `GetLogRecords` that calls `GetUnreadRecords` from the log reader library.
 
 ## Platforms
 
@@ -69,13 +71,19 @@ From here I would like for others to pick up the core and extend it with more so
 ## Build Notes
 For some reason, probably 100% due to my lack of understanding, when you Git Clone, the aaLogReader project does not build because it is missing a reference to log4Net.  I have found the easiest way to resolve this is to click on the missing reference in the list, change Copy Local to True and then rebuild.  This will go out and restore the nuget package.  Another method is to manage the NuGet references and uninstall/reinstall log4Net.  I have also had intermittent issues with the GuiTester complaining about mismatched assemblies related to the JSON package.  You can safely upgrade to version 6.08 if for some reason your version when you pull down is 6.06. If you have any more questions please feel free to give me a shout and I'll do my best to help/make up for my lack of mastery in the subject :-)
 
-## TODO List
+##Testing
+There are a small number of unit tests written using NUnit.  I would like to make this a priority in the coming months so we can maintain the code quality as more people contribute to the project.
 
-See my current roadmap and overall [TODO list](/TODO.md)
+## TODO List
+Check out the [Issues](//issues) List
+
+##Contributing
+Check out the [Contributing](/CONTRIBUTING.MD) file
 
 ## Contributors
 
 * [Andy Robinson](mailto:andy@phase2automation.com), Principal of [Phase 2 Automation](http://phase2automation.com).
+* See list of contributors on the repo for others
 
 ## Shoutouts to ma Peeps
 Thanks to Brian Gilmore (@BrianMGilmore) and Terry McCorkle (@0psys) of @splunk for validating the fact that this work will be very useful in supporting some of the bigger initiatives that have going on at Splunk, specifically around log collection in ICS for security. 
