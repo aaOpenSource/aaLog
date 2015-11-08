@@ -71,11 +71,13 @@ From here I would like for others to pick up the core and extend it with more so
 ## Build Notes
 For some reason, probably 100% due to my lack of understanding, when you Git Clone, the aaLogReader project does not build because it is missing a reference to log4Net.  I have found the easiest way to resolve this is to click on the missing reference in the list, change Copy Local to True and then rebuild.  This will go out and restore the nuget package.  Another method is to manage the NuGet references and uninstall/reinstall log4Net.  I have also had intermittent issues with the GuiTester complaining about mismatched assemblies related to the JSON package.  You can safely upgrade to version 6.08 if for some reason your version when you pull down is 6.06. If you have any more questions please feel free to give me a shout and I'll do my best to help/make up for my lack of mastery in the subject :-)
 
+Another issue I've found is that the reference JSON files for the unit tests are not getting copied to the output directory on build.  You might have to set this on your copy of the solution.
+
 ##Testing
 There are a small number of unit tests written using NUnit.  I would like to make this a priority in the coming months so we can maintain the code quality as more people contribute to the project.
 
 ## TODO List
-Check out the [Issues](//issues) List
+Check out the [Issues](/../../issues) List
 
 ##Contributing
 Check out the [Contributing](/CONTRIBUTING.MD) file
@@ -83,7 +85,7 @@ Check out the [Contributing](/CONTRIBUTING.MD) file
 ## Contributors
 
 * [Andy Robinson](mailto:andy@phase2automation.com), Principal of [Phase 2 Automation](http://phase2automation.com).
-* See list of contributors on the repo for others
+* See list of [Contributors](/../../graphs/contributors) on the repo for others
 
 ## Shoutouts to ma Peeps
 Thanks to Brian Gilmore (@BrianMGilmore) and Terry McCorkle (@0psys) of @splunk for validating the fact that this work will be very useful in supporting some of the bigger initiatives that have going on at Splunk, specifically around log collection in ICS for security. 
