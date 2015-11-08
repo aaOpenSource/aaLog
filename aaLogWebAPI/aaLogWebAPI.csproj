@@ -84,10 +84,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="controllers\aalogcontroller.cs" />
     <Compile Include="controllers\logrecordscontroller.cs" />
     <Compile Include="Datasources\aalogDataSource.cs" />
-    <Compile Include="models\logrecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
