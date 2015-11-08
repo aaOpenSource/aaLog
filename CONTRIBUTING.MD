@@ -17,7 +17,7 @@ We have a testing project that utilizes the NUnit framework.  Big opportunities 
 
 ## Submitting changes
 
-Please send a [GitHub Pull Request](/pull/new/master) with a clear list of what you've done (read more about [pull requests](http://help.github.com/pull-requests/)). When you send a pull request we will love you forever if you include test coverage. Please follow our loose coding conventions and make sure all of your commits are atomic (one feature per commit).
+Please send a [GitHub Pull Request](/../../pull/new/master) with a clear list of what you've done (read more about [pull requests](http://help.github.com/pull-requests/)). When you send a pull request we will love you forever if you include test coverage. Please follow our loose coding conventions and make sure all of your commits are atomic (one feature per commit).
 
 Always write a clear log message for your commits. One-line messages are fine for small changes, but bigger changes should look like this:
 
@@ -30,4 +30,5 @@ Always write a clear log message for your commits. One-line messages are fine fo
 Start reading our code and you'll get the hang of it. We optimize for readability:
 
 Thanks,
+
 Andy Robinson, Phase 2 Automation
