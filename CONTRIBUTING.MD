@@ -6,7 +6,7 @@ The best way to contribute, as with many other similarly new projects, is to jus
 
 ## Areas to contribute
 
-With such a young project we've got opportunities everywhere.  The best place to start is the [Issues](/issues) List
+With such a young project we've got opportunities everywhere.  The best place to start is the [Issues](/../issues) List
 
 ##Non-Wonderware Contributions
 If you want to help but you don't use Wonderware software it's not a problem.  If you take a look at our Testing project you can see we've included a number of reference log files that you can use for testing and development purposes.  Obviously it would be a little tricky since you can't use the built-in Log Viewer provided with the Wonderware applications but I think we've got most of the core log reader functions covered at this point.  Alternative areas you can help are improving test covereage, documentation, or possibly the Web API.
