@@ -26,6 +26,7 @@ namespace aaLogReader
         /// EndMsgNumber
         /// Session
         /// PrevFileName
+        /// FQDN
         /// </remarks>
         public static LogHeader ReadLogHeader(string filePath)
         {
