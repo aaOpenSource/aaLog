@@ -1,26 +1,29 @@
 ﻿using System.Linq;
 using aaLogReader.Helpers;
 using NUnit.Framework;
+using Newtonsoft.Json;
+using System.IO;
+
 
 namespace aaLogReader.Tests.aaLgxReaderTests
 {
   [TestFixture]
   public class aaLgxReaderTests
   {
-    private const string LOG_FILE_PATH = @"aaLgxReaderTests\test.aaLGX";
+        private const string ROOT_FILE_PATH = @"aaLgxReaderTests";
+        private const string LOG_FILE_PATH = ROOT_FILE_PATH + @"\logFiles";
+        private const string REF_FILE_PATH = ROOT_FILE_PATH + @"\refFiles";
+        private const string LOG_FILE_INSTANCE = LOG_FILE_PATH + @"\test.aaLGX";
 
-    [Test]
+        [Test]
     public void CanReadHeader()
     {
-      var header = aaLgxReader.ReadLogHeader(LOG_FILE_PATH);
-      Assert.That(header.LogFilePath, Is.EqualTo(LOG_FILE_PATH));
-      Assert.That(header.MsgCount, Is.EqualTo(683));
-      Assert.That(header.StartFileTime, Is.EqualTo(130783241810947628));
-      Assert.That(header.EndFileTime, Is.EqualTo(130783321279898572));
-      Assert.That(header.OffsetFirstRecord, Is.EqualTo(68));
-      Assert.That(header.OffsetLastRecord, Is.EqualTo(191760));
-      Assert.That(header.ComputerName, Is.EqualTo("DSA2014R2"));
-      Assert.That(header.HostFQDN, Is.EqualTo(Fqdn.GetFqdn()));
+            
+       LogHeader header = aaLgxReader.ReadLogHeader(LOG_FILE_INSTANCE);
+        //System.IO.File.WriteAllText(Path.Combine(REF_FILE_PATH, "CanReadHeader.json"), header.ToJSON());      
+       string headerCompareJSON = System.IO.File.ReadAllText(Path.Combine(REF_FILE_PATH, "CanReadHeader.json"));
+        Assert.AreEqual(header.ToJSON(),headerCompareJSON);
+
     }
 
     [Test]
