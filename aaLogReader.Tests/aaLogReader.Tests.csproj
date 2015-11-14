@@ -52,7 +52,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="aaLgxReaderTests\test.aaLGX">
+    <None Include="aaLgxReaderTests\refFiles\CanReadEighteenthRecord.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLgxReaderTests\refFiles\CanReadFirstRecord.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLgxReaderTests\refFiles\CanReadHeader.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLgxReaderTests\logFiles\test.aaLGX">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLgxReaderTests\refFiles\CanReadLastRecord.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1440018667.aaLDX">
@@ -104,6 +116,10 @@
     <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast02.json" />
     <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast03.json" />
     <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.header.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="log.config">
+      <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
