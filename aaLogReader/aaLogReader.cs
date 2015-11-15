@@ -369,8 +369,9 @@ namespace aaLogReader
 
             int readResult;
             LogHeader localHeader = new LogHeader();
-            int workingPosition = 0;
+            int workingOffset = 0;
             byte[] byteArray = new byte[1];
+            int fieldLength;
 
             try
             {
@@ -394,46 +395,44 @@ namespace aaLogReader
 
                 //Now read in the entire header, considering the header length from above
                 readResult = logFileStream.Read(byteArray, 0, headerLength);
-
-                // Log the actual information to the debug for review later
-                string headerString = GetStringFromBytes(byteArray, 0, headerLength);
-
+                
                 // Start to pick out the values
-
                 // Start Message Number
-                workingPosition = 20;
-                localHeader.StartMsgNumber = BitConverter.ToUInt64(byteArray, workingPosition);
+                workingOffset = 20;
+                localHeader.StartMsgNumber = BitConverter.ToUInt64(byteArray, workingOffset);
 
                 // Message Count
-                workingPosition = 28;
-                localHeader.MsgCount = (ulong)BitConverter.ToUInt32(byteArray, workingPosition);
+                workingOffset = 28;
+                localHeader.MsgCount = (ulong)BitConverter.ToUInt32(byteArray, workingOffset);
 
                 // Start and End FileTime
-                workingPosition = 32;
-                localHeader.StartFileTime = this.GetFileTimeFromByteArray(byteArray, workingPosition);
+                workingOffset = 32;
+                localHeader.StartFileTime = this.GetFileTimeFromByteArray(byteArray, workingOffset);
 
-                workingPosition = 40;
-                localHeader.EndFileTime = this.GetFileTimeFromByteArray(byteArray, workingPosition);
+                workingOffset = 40;
+                localHeader.EndFileTime = this.GetFileTimeFromByteArray(byteArray, workingOffset);
 
                 // Offset for the first lastRecordRead
-                workingPosition = 48;
-                localHeader.OffsetFirstRecord = (int)BitConverter.ToUInt32(byteArray, workingPosition);
+                workingOffset = 48;
+                localHeader.OffsetFirstRecord = (int)BitConverter.ToUInt32(byteArray, workingOffset);
 
                 // Offset for the last lastRecordRead
-                workingPosition = 52;
-                localHeader.OffsetLastRecord = (int)BitConverter.ToUInt32(byteArray, workingPosition);
+                workingOffset = 52;
+                localHeader.OffsetLastRecord = (int)BitConverter.ToUInt32(byteArray, workingOffset);
 
                 // Computer Name
-                workingPosition = 56;
-                localHeader.ComputerName = this.GetSingleStringFieldFromByteArray(byteArray, workingPosition);
+                workingOffset = 56;
+                localHeader.ComputerName = this.GetSingleStringFieldFromByteArray(byteArray, workingOffset, out fieldLength);
 
                 // Session
-                workingPosition = workingPosition + (localHeader.ComputerName.Length * 2) + 2;
-                localHeader.Session = this.GetSingleStringFieldFromByteArray(byteArray, workingPosition);
+                //workingOffset = workingOffset + (localHeader.ComputerName.Length * 2) + 2;
+                workingOffset = workingOffset + fieldLength + 2;
+                localHeader.Session = this.GetSingleStringFieldFromByteArray(byteArray, workingOffset, out fieldLength);
 
                 // Previous File Name
-                workingPosition = workingPosition + (localHeader.Session.Length * 2) + 2;
-                localHeader.PrevFileName = this.GetSingleStringFieldFromByteArray(byteArray, workingPosition);
+                //workingOffset = workingOffset + (localHeader.Session.Length * 2) + 2;
+                workingOffset = workingOffset + fieldLength + 2;
+                localHeader.PrevFileName = this.GetSingleStringFieldFromByteArray(byteArray, workingOffset, out fieldLength);
 
                 //HostFQDN
                 localHeader.HostFQDN = this.GetFQDN();
@@ -606,6 +605,7 @@ namespace aaLogReader
             LogRecord localRecord = new LogRecord();
             byte[] byteArray = new byte[1];
             int workingOffset = 0;
+            int fieldLength;
 
             try
             {
@@ -680,7 +680,7 @@ namespace aaLogReader
 
                 // Log Flag
                 workingOffset = 32;
-                localRecord.LogFlag = this.GetSingleStringFieldFromByteArray(byteArray, (long)workingOffset);
+                localRecord.LogFlag = this.GetSingleStringFieldFromByteArray(byteArray, workingOffset, out fieldLength);
 
                 /* 
                  * Calc new working offset based on length of previously retrieved field.
@@ -688,14 +688,17 @@ namespace aaLogReader
                  * length to find the proper byte offset
                  */
 
-                workingOffset = workingOffset + (localRecord.LogFlag.Length * 2) + 2;
-                localRecord.Component = this.GetSingleStringFieldFromByteArray(byteArray, (long)workingOffset);
+                //workingOffset = workingOffset + (localRecord.LogFlag.Length * 2) + 2;
+                workingOffset = workingOffset + fieldLength + 2;
+                localRecord.Component = this.GetSingleStringFieldFromByteArray(byteArray, workingOffset, out fieldLength);
 
-                workingOffset = workingOffset + (localRecord.Component.Length * 2) + 2;
-                localRecord.Message = this.GetSingleStringFieldFromByteArray(byteArray, (long)workingOffset);
+                //workingOffset = workingOffset + (localRecord.Component.Length * 2) + 2;
+                workingOffset = workingOffset + fieldLength + 2;
+                localRecord.Message = this.GetSingleStringFieldFromByteArray(byteArray, workingOffset, out fieldLength);
 
-                workingOffset = workingOffset + (localRecord.Message.Length * 2) + 2;
-                localRecord.ProcessName = this.GetSingleStringFieldFromByteArray(byteArray, (long)workingOffset);
+                //workingOffset = workingOffset + (localRecord.Message.Length * 2) + 2;
+                workingOffset = workingOffset + fieldLength + 2;
+                localRecord.ProcessName = this.GetSingleStringFieldFromByteArray(byteArray, workingOffset, out fieldLength);
 
                 // Get the host from the header information
                 localRecord.HostFQDN = ReadLogHeader().HostFQDN;
@@ -1759,122 +1762,27 @@ namespace aaLogReader
         /// </summary>
         /// <param name="byteArray">Byte array containing lastRecordRead data</param>
         /// <param name="startingOffset">Starting offset for the data field</param>
+        /// <param name="fieldLength">Field length to return back to caller</param>
         /// <returns></returns>
-        private string GetSingleStringFieldFromByteArray(byte[] byteArray, long startingOffset)
+        private string GetSingleStringFieldFromByteArray(byte[] byteArray, int startingOffset, out int fieldLength)
         {            
             string returnValue;
-            int fieldLength;
-            
-                // Initialize to blank
-                returnValue = "";
-
-                // Get the length of the string field
-                fieldLength = this.GetStringFieldInByteArrayLength(byteArray,startingOffset );
-                
-                if(fieldLength > 0)
-                {                    
-                    /* Get the string value from the byte array
-                     * We are using this method instead of Encoding.Unicode.GetString
-                     * because in the development environment this function returned strang
-                     * results in the form of Chinese characters when the value should
-                     * have been traditional EN-US text.
-                     */ 
-                    
-                    returnValue = this.GetStringFromBytes(byteArray, (int)startingOffset, fieldLength);
-
-                }
-                else
-                {
-                    /*
-                     * If field is zero length then just return a blank string.  
-                     * This should alert downstream logic that something's not quite right
-                     * but no need in complicating this function with handling of that error
-                     */
-                   
-                    returnValue = "";
-                }
-
-            return returnValue;
-
-        }
-
-        /// <summary>
-        /// Cast an array of byteArray to a string
-        /// </summary>
-        /// <param name="byteArray">Byte array containing lastRecordRead data</param>
-        /// <param name="StartOffset">Starting offset for the data field</param>
-        /// <param name="Length">Length of field</param>
-        /// <returns></returns>
-        private string GetStringFromBytes(byte[] byteArray, int StartOffset, int Length)
-        {
-            // Credits: http://stackoverflow.com/questions/472906/converting-a-string-to-byte-array-without-using-an-encoding-byte-by-byte           
-            char[] chars = new char[Length / sizeof(char)];
-            System.Buffer.BlockCopy(byteArray, StartOffset, chars, 0, Length);
-            return new string(chars);
-        }  
-
-        /// <summary>
-        /// Get the length of a string field in a byte array
-        /// </summary>
-        /// <param name="byteArray">Byte array containing lastRecordRead data</param>
-        /// <param name="startingOffset">Starting offset for the data field</param>
-        /// <returns></returns>
-        private int GetStringFieldInByteArrayLength(byte[] byteArray, long startingOffset)
-		{
-            
-            int returnValue;
-            ushort currentIntValue;
-            int calculatedLength;
-            int workingIndex;
-
-            /* 
-             * The concept of this function is fairly basic
-             * Start moving through the byte array from the start index 
-             * and keep going until you hit an int (2 byteArray), value = 0.  
-             * This signifies the end of the field
-             */
 
             try
             {
-                // Initialize the calculated length to 0
-                calculatedLength = 0;
-
-                // Cast startingOffset back down to an int
-                //int startingIndex = checked((int)startingOffset);
-                workingIndex = checked((int)startingOffset);
-
-                // Get the first byte value
-                currentIntValue = BitConverter.ToUInt16(byteArray, workingIndex);
-
-                // Loop until we hit a byte value of 0
-                while (currentIntValue != 0)
-                {
-                    currentIntValue = BitConverter.ToUInt16(byteArray, workingIndex);
-
-                    if (currentIntValue == 0)
-                    {
-                        // Found the 0 value.  Bail out.
-                        continue;
-                    }
-
-                    // Add to 2 byteArray to the the length and keep going.
-                    // We add 2 byteArray because in the previous statement we are working with 16 bit integer
-                    calculatedLength = calculatedLength + 2;
-                    //Index 
-                    workingIndex = checked(workingIndex + 2);
-                }
-
-                returnValue = checked(calculatedLength);
+                returnValue = byteArray.GetString(startingOffset, out fieldLength);
             }
             catch(Exception ex)
             {
                 log.Error(ex);
-                returnValue = 0;
+                returnValue = "";
+                fieldLength = 0;
             }
 
             return returnValue;
-        }
 
+        }
+        
         /// <summary>
         /// Extract SessionID segments from a byte array
         /// </summary>
