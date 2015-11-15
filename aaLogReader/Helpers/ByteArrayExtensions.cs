@@ -96,8 +96,8 @@ namespace aaLogReader.Helpers
         /// <summary>
         /// Extract SessionID segments from a byte array
         /// </summary>
-        /// <param name="byteArray">Byte array containing lastRecordRead data</param>
-        /// <param name="startingOffset">Starting offset for the data field</param>
+        /// <param name="bytes">Byte array containing lastRecordRead data</param>
+        /// <param name="offset">Starting offset for the data field</param>
         /// <returns></returns>
         public static SessionIDSegmentsStruct GetSessionIDSegments(this byte[] bytes, int offset)
         {
