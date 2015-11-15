@@ -5,8 +5,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
-
-
+using System;
 
 namespace aaLogReader.Tests.aaLogReaderTests
 {
@@ -190,7 +189,7 @@ namespace aaLogReader.Tests.aaLogReaderTests
             OptionsStruct options = new OptionsStruct();
             options.LogDirectory = LOG_FILE_PATH;
 
-            aaLogReader alr = new aaLogReader();
+            aaLogReader alr = new aaLogReader(options);
             
             List<LogHeader> logHeaders = alr.LogHeaderIndex;
 
@@ -212,7 +211,7 @@ namespace aaLogReader.Tests.aaLogReaderTests
             OptionsStruct options = new OptionsStruct();
             options.LogDirectory = LOG_FILE_PATH;
 
-            aaLogReader alr = new aaLogReader();
+            aaLogReader alr = new aaLogReader(options);
 
             List<LogHeader> logHeaders = alr.LogHeaderIndex;
             
@@ -232,8 +231,10 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             OptionsStruct options = new OptionsStruct();
             options.LogDirectory = LOG_FILE_PATH;
+            ulong RandomUlong;
+            System.Random rnd = new Random(DateTime.Now.Millisecond);
 
-            aaLogReader alr = new aaLogReader();
+            aaLogReader alr = new aaLogReader(options);
 
             List<LogHeader> logHeaders = alr.LogHeaderIndex;
 
@@ -244,10 +245,12 @@ namespace aaLogReader.Tests.aaLogReaderTests
                 Assert.That(alr.GetLogFilePathsForMessageNumber(lh.StartMsgNumber).Exists(x => x == lh.LogFilePath), "End Message Number log path not correctly identified");
                 Assert.That(alr.GetLogFilePathsForMessageNumber(lh.EndMsgNumber).Exists(x => x == lh.LogFilePath), "Start Mesage Number log path not correctly identified");
                 Assert.That(alr.GetLogFilePathsForMessageNumber((lh.StartMsgNumber + lh.EndMsgNumber) / 2).Exists(x => x == lh.LogFilePath), "Middle Message Number log path not correctly identified");
+                
+                RandomUlong = (ulong)rnd.Next(Convert.ToInt32(lh.MsgCount)) + lh.StartMsgNumber;
+                Assert.That(alr.GetLogFilePathsForMessageNumber(RandomUlong).Exists(x => x == lh.LogFilePath), "Random Message Number " + RandomUlong + " log path not correctly identified");
+
             }
 
-        }
-
-
+        }        
     }
 }

@@ -49,8 +49,6 @@
   <ItemGroup>
     <Compile Include="aaLgxReaderTests\aaLgxReaderTests.cs" />
     <Compile Include="aaLogReaderTests\aaLogReaderTests.cs" />
-    <Compile Include="aaLogReaderTests\temporary\HeaderTesting.cs" />
-    <Compile Include="aaLogReaderTests\temporary\RandomULong.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
