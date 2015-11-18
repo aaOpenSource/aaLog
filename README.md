@@ -76,6 +76,10 @@ Another issue I've found is that the reference JSON files for the unit tests are
 ##Testing
 There are a small number of unit tests written using NUnit.  I would like to make this a priority in the coming months so we can maintain the code quality as more people contribute to the project.
 
+##Chat Room
+
+[![Join the chat at https://gitter.im/aaOpenSource/aaLog](https://badges.gitter.im/Join%20Chat.svg)](https://https://gitter.im/aaOpenSource/aaLog)
+
 ## TODO List
 Check out the [Issues](/../../issues) List
 
