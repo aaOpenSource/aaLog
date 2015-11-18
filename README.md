@@ -78,7 +78,7 @@ There are a small number of unit tests written using NUnit.  I would like to mak
 
 ##Chat Room
 
-[![Join the chat at https://gitter.im/aaOpenSource/aaLog](https://badges.gitter.im/Join%20Chat.svg)](https://https://gitter.im/aaOpenSource/aaLog)
+[![Join the chat at https://gitter.im/aaOpenSource/aaLog](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aaOpenSource/aaLog)
 
 ## TODO List
 Check out the [Issues](/../../issues) List
