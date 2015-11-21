@@ -103,31 +103,31 @@
     <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1445626381.aaLOG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetFirstRecord.json">
+    <None Include="aaLogReaderTests\refFiles\GetFirstRecord.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetLastRecord.json">
+    <None Include="aaLogReaderTests\refFiles\GetLastRecord.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecord01.json">
+    <None Include="aaLogReaderTests\refFiles\GetNextRecord01.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecord02.json">
+    <None Include="aaLogReaderTests\refFiles\GetNextRecord02.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecord03.json">
+    <None Include="aaLogReaderTests\refFiles\GetNextRecord03.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast01.json">
+    <None Include="aaLogReaderTests\refFiles\GetNextRecordFromLast01.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast02.json">
+    <None Include="aaLogReaderTests\refFiles\GetNextRecordFromLast02.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast03.json">
+    <None Include="aaLogReaderTests\refFiles\GetNextRecordFromLast03.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\2014R2-VS-WSP1445626381.header.json">
+    <None Include="aaLogReaderTests\refFiles\ReadLogFileReadHeader.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="log.config">
