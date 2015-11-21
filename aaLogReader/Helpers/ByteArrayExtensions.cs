@@ -101,19 +101,14 @@ namespace aaLogReader.Helpers
         /// <returns></returns>
         public static string GetSessionID(this byte[] bytes, int offset)
         {
-
-            return string.Format("{0}.{1}.{2}.{3}", bytes[offset+3], bytes[offset+2], bytes[offset+1], bytes[offset]);
-
-            //SessionIDSegmentsStruct returnValue = new SessionIDSegmentsStruct();
-
-            //// Session ID segment is just 4 8 byte values in a row, but in reverse order
-            //returnValue.Segment1 = bytes[offset + 3];
-            //returnValue.Segment2 = bytes[offset + 2];
-            //returnValue.Segment3 = bytes[offset + 1];
-            //returnValue.Segment4 = bytes[offset];
-
-            //return returnValue;
-
+            try
+            {
+                return string.Format("{0}.{1}.{2}.{3}", bytes[offset + 3], bytes[offset + 2], bytes[offset + 1], bytes[offset]);
+            }
+            catch
+            {
+                return "0.0.0.0";
+            }
         }
     }
 }
