@@ -81,7 +81,6 @@
     <Compile Include="Struct\FileTimeStruct.cs" />
     <Compile Include="Struct\LogRecordFilterStruct.cs" />
     <Compile Include="Struct\OptionsStruct.cs" />
-    <Compile Include="Struct\SessionIDSegmentsStruct.cs" />
     <Compile Include="Struct\ReturnCodeStruct.cs" />
     <Compile Include="Types\ILogHeader.cs" />
     <Compile Include="Types\ILogRecord.cs" />

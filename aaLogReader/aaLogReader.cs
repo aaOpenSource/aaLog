@@ -653,7 +653,7 @@ namespace aaLogReader
                 localRecord.OffsetToNextRecord = checked((int)FileOffset + recordLength);
 
                 // Session ID
-                localRecord.SessionID = byteArray.GetSessionIDSegments(12).SessionID; //this._sessionSeg.SessionID;
+                localRecord.SessionID = byteArray.GetSessionID(12);
 
                 // Process ID
                 localRecord.ProcessID = byteArray.GetUInt32(16);

@@ -127,7 +127,7 @@ namespace aaLogReader
             stream.Read(bytes, 0, record.RecordLength);
 
             record.MessageNumber = bytes.GetULong(16);
-            record.SessionID = string.Format("{0}.{1}.{2}.{3}", bytes[27], bytes[26], bytes[25], bytes[24]);
+            record.SessionID = bytes.GetSessionID(24);//  string.Format("{0}.{1}.{2}.{3}", bytes[27], bytes[26], bytes[25], bytes[24]);
             record.ProcessID = (uint)bytes.GetInt(28);
             record.ThreadID = (uint)bytes.GetInt(32);
             record.EventFileTime = bytes.GetFileTime(36);
