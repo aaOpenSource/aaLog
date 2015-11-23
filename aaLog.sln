@@ -20,9 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		CONTRIBUTING.MD = CONTRIBUTING.MD
 		LICENSE = LICENSE
 		README.md = README.md
-		TODO.md = TODO.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogSavetoFileExample", "aaLogSavetoFileExample\aaLogSavetoFileExample.csproj", "{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}"
