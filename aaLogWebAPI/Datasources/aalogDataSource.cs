@@ -9,20 +9,14 @@ namespace aaLogWebAPI.Datasources
 {
     class aalogDataSource
     {
-        private static aaLogReader.aaLogReader logreader;
+        private aaLogReader.aaLogReader logreader;
 
-        private static aalogDataSource instance = null;
+        private static Lazy<aalogDataSource> instance =
+            new Lazy<aalogDataSource>(() => new aalogDataSource());
 
         public static aalogDataSource Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new aalogDataSource();
-                }
-                return instance;
-            }
+            get { return instance.Value; }
         }
 
         private aalogDataSource()
@@ -38,19 +32,7 @@ namespace aaLogWebAPI.Datasources
 
         public List<aaLogReader.LogRecord> GetLogRecords(ulong unreadcount = 1000, string stopmessagepattern = "", bool ignorecachefile = false)
         {
-            List<aaLogReader.LogRecord> returnLogs = new List<aaLogReader.LogRecord>();
-
-            try
-            {            
-                returnLogs = logreader.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile);
-            }
-            catch
-            {
-                // Do nothing
-            }
-
-           return returnLogs;
-
+            return logreader.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile);
         }
     }
 }
