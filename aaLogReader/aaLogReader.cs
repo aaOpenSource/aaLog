@@ -35,9 +35,6 @@ namespace aaLogReader
         /// </summary>
         public aaLogReader()
         {
-            // Setup logging
-            log4net.Config.BasicConfigurator.Configure();
-
             log.Debug("Create aaLogReader");            
 
             // Initialize with default options
@@ -53,9 +50,6 @@ namespace aaLogReader
         ///<param name="InitializationOptions">InitializationOptions passed as an OptionsStruct object </param>
         public aaLogReader(OptionsStruct InitializationOptions)
         {
-            // Setup logging
-            log4net.Config.BasicConfigurator.Configure();
-
             log.Debug("Create aaLogReader");
             log.Debug("Options - " + JsonConvert.SerializeObject(InitializationOptions));
 
