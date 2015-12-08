@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 using System.Net;
 using System.Net.NetworkInformation;
 
-[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log.config", Watch = true)]
 namespace aaLogReader
 {
 	public class aaLogReader : IDisposable
