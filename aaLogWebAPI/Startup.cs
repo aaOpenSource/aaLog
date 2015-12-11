@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Owin;
 using System.Web.Http;
 using System.Diagnostics;
+
 using Microsoft.OData.Edm;
 using System.Web.OData.Batch;
 using System.Web.OData.Builder;
@@ -21,17 +22,17 @@ namespace aaLogWebAPI
             var webApiConfiguration = ConfigureWebApi();
 
             // Use the extension method provided by the WebApi.Owin library:
-            app.UseWebApi(webApiConfiguration);            
+            app.UseWebApi(webApiConfiguration);
         }
 
         private HttpConfiguration ConfigureWebApi()
         {
             var config = new HttpConfiguration();
-            
+
             // Attribute routing.
             config.MapHttpAttributeRoutes();
 
-            config.MapODataServiceRoute("odata","odata", GetEdmModel(), null);
+            config.MapODataServiceRoute("odata", "odata", GetEdmModel(), null);
 
             config.EnsureInitialized();
 
@@ -43,7 +44,12 @@ namespace aaLogWebAPI
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.Namespace = "aaLogWebAPI";
             builder.ContainerName = "DefaultContainer";
-            builder.EntitySet<aaLogReader.LogRecord>("LogRecords");
+            builder.EntitySet<aaLogReader.LogRecord>("UnreadRecords");
+            builder.EntitySet<aaLogReader.LogRecord>("RecordByMessageNumber");
+            builder.EntitySet<aaLogReader.LogRecord>("RecordByFileTime");
+            builder.EntitySet<aaLogReader.LogRecord>("RecordByTimestamp");
+            builder.EntitySet<aaLogReader.LogRecord>("RecordsByStartMessageNumberAndCount");
+
             var edmModel = builder.GetEdmModel();
             return edmModel;
         }
