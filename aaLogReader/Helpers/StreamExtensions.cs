@@ -21,14 +21,16 @@ namespace aaLogReader.Helpers
       return bytes.GetInt();
     }
 
-    /// <summary>
-    /// Reads an unsigned 64-bit integer from the Stream starting at the given offset. 
-    /// It's assumed the value can be used to create a DateTime.
-    /// </summary>
-    /// <param name="stream">Stream</param>
-    /// <param name="offset">The starting position within the Stream</param>
-    /// <returns>ulong</returns>
-    public static ulong GetFileTime(this Stream stream, int offset)
+
+
+        /// <summary>
+        /// Reads an unsigned 64-bit integer from the Stream starting at the given offset. 
+        /// It's assumed the value can be used to create a DateTime.
+        /// </summary>
+        /// <param name="stream">Stream</param>
+        /// <param name="offset">The starting position within the Stream</param>
+        /// <returns>ulong</returns>
+        public static ulong GetFileTime(this Stream stream, int offset)
     {
       var bytes = new byte[8];
       stream.Seek(offset, SeekOrigin.Begin);
