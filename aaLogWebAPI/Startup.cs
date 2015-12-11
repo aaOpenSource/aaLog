@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Owin;
 using System.Web.Http;
 using System.Diagnostics;
-
 using Microsoft.OData.Edm;
 using System.Web.OData.Batch;
 using System.Web.OData.Builder;
@@ -34,45 +33,19 @@ namespace aaLogWebAPI
 
             config.MapODataServiceRoute("odata","odata", GetEdmModel(), null);
 
-            //config.MapODataServiceRoute("odata", null, GetEdmModel(), new DefaultODataBatchHandler(GlobalConfiguration.DefaultServer));
-            
             config.EnsureInitialized();
-
-            //All routing uses attributes to be explicit
-
-            //config.Routes.MapHttpRoute(
-            //    "aalogAPIV1",
-            //    "api/aalog/V1/",
-            //    new { controller = "aaLog" });
-
-            //config.Routes.MapHttpRoute(
-            //    "DefaultApi",
-            //    "api/{controller}/{id}",
-            //    new { id = RouteParameter.Optional });
-
-            //var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
-            //config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
 
             return config;
         }
 
         private static IEdmModel GetEdmModel()
         {
-            //try
-            //{
-                ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-                builder.Namespace = "aaLogWebAPI";
-                builder.ContainerName = "DefaultContainer";
-                builder.EntitySet<aaLogReader.LogRecord>("LogRecords");
-                var edmModel = builder.GetEdmModel();
-                return edmModel;
-            //}
-            //catch(Exception ex)
-            //{
-            //    Console.WriteLine(ex);
-            //    Debug.WriteLine(ex.ToString());
-            //    return null;
-            //}
+            ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+            builder.Namespace = "aaLogWebAPI";
+            builder.ContainerName = "DefaultContainer";
+            builder.EntitySet<aaLogReader.LogRecord>("LogRecords");
+            var edmModel = builder.GetEdmModel();
+            return edmModel;
         }
     }
 }
