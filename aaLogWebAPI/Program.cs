@@ -20,6 +20,7 @@ namespace aaLogWebAPI
             {
 
                 // Specify the URI to use for the local host:
+                ///TODO: Make port an option on startup
                 string baseUri = "http://localhost:8080";
 
                 Console.WriteLine("Starting web Server...");
@@ -28,7 +29,6 @@ namespace aaLogWebAPI
             }
             catch(Exception ex)
             {               
-                Console.WriteLine(ex.ToString());
                 Debug.WriteLine(ex.ToString());
             }
 
