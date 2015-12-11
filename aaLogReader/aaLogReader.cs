@@ -520,8 +520,6 @@ namespace aaLogReader
                 for(int i = 0; i < LogHeaderIndex.Count; i++)
                 {
 
-                    //log.InfoFormat("i {0}/{1}", i, LogHeaderIndex.Count);
-
                     /* Phase 1
                      * Sometimes the start or end filetimes are not captured correctly so in this step we will scan for start or end times that are 0 and correct them with best available information                
                     */
