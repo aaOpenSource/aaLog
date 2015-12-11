@@ -251,8 +251,7 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
         [Test]
         public void GetPrevRecord()
-        {
-            List<LogRecord>
+        {         
             aaLogReader alr = new aaLogReader();
 
             alr.OpenLogFile(LOG_FILE_INSTANCE);
