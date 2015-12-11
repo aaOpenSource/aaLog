@@ -15,13 +15,13 @@ using Microsoft.OData.Core;
 namespace aaLogWebAPI.Controllers
 {
     [EnableQuery]
-    public class LogRecordsController:ODataController
+    public class UnreadRecordsController:ODataController
     {
         public IHttpActionResult Get(ulong unreadcount = 1000, string stopmessagepattern = "", bool ignorecachefile = false)        
         {
             try
             {
-                return Ok(aalogDataSource.Instance.GetLogRecords(unreadcount, stopmessagepattern, ignorecachefile).AsQueryable());
+                return Ok(aalogDataSource.Instance.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile).AsQueryable());
             }
             catch (Exception ex)
             {
@@ -35,6 +35,51 @@ namespace aaLogWebAPI.Controllers
                     }
                 );
             }
+        }
+    }
+
+    [EnableQuery]
+    public class RecordByMessageNumberController : ODataController
+    {
+        public IHttpActionResult Get(ulong messageNumber)
+        {
+            return Ok(aalogDataSource.Instance.GetRecordByMessageNumber(messageNumber));
+        }
+    }
+
+    [EnableQuery]
+    public class RecordByFileTimeController : ODataController
+    {
+        public IHttpActionResult Get(ulong messageNumber, aaLogReader.EarliestOrLatest TimestampEarlyOrLate = aaLogReader.EarliestOrLatest.Earliest)
+        {
+            return Ok(aalogDataSource.Instance.GetRecordByFileTime(messageNumber, TimestampEarlyOrLate));
+        }
+    }
+
+    [EnableQuery]
+    public class RecordByTimestampController : ODataController
+    {
+        public IHttpActionResult Get(DateTime messageTimestamp, aaLogReader.EarliestOrLatest TimestampEarlyOrLate = aaLogReader.EarliestOrLatest.Earliest)
+        {
+            return Ok(aalogDataSource.Instance.GetRecordByTimestamp(messageTimestamp, TimestampEarlyOrLate));
+        }
+    }
+
+    [EnableQuery]
+    public class RecordsByStartMessageNumberAndCountController : ODataController
+    {
+        public IHttpActionResult Get(ulong messageNumber, int count = 10)
+        {
+            return Ok(aalogDataSource.Instance.GetRecordsByStartMessageNumberAndCount(messageNumber, count));
+        }
+    }
+
+    [EnableQuery]
+    public class RecordsByEndMessageNumberAndCountController : ODataController
+    {
+        public IHttpActionResult Get(ulong messageNumber, int count = 10)
+        {
+            return Ok(aalogDataSource.Instance.GetRecordsByEndMessageNumberAndCount(messageNumber, count));
         }
     }    
 }
