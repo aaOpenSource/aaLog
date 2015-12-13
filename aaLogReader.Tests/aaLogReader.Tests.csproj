@@ -34,8 +34,8 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.0.5813.39031, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -67,40 +67,430 @@
     <None Include="aaLgxReaderTests\refFiles\CanReadLastRecord.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1440018667.aaLDX">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449848572.aaLDX">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1440018667.aaLOG">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449848572.aaLOG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1440650332.aaLDX">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449893209.aaLDX">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1440650332.aaLOG">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449893209.aaLOG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1442116958.aaLDX">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449896215.aaLDX">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1442116958.aaLOG">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449896215.aaLOG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1444105162.aaLDX">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449896462.aaLDX">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1444105162.aaLOG">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449896462.aaLOG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1444948384.aaLDX">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897178.aaLDX">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1444948384.aaLOG">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897178.aaLOG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1445626381.aaLDX">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897181.aaLDX">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1445626381.aaLOG">
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897181.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897183.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897183.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897186.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897186.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897188.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897188.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897191.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897191.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897193.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897193.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897196.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897196.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897198.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897198.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897201.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897201.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897203.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897203.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897206.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897206.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897208.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897208.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897211.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897211.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897213.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897213.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897216.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897216.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897218.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897218.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897221.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897221.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897223.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897223.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897225.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897225.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897228.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897228.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897230.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897230.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897233.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897233.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897235.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897235.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897238.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897238.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897240.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897240.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897242.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897242.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897244.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897244.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897249.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897249.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897252.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897252.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897254.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897254.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897257.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897257.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897259.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897259.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897262.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897262.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897264.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897264.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897265.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897265.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897269.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897269.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897272.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897272.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897274.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897274.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897277.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897277.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897279.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897279.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897282.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897282.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897284.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897284.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897287.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897287.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897331.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897331.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897383.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897383.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897435.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897435.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897487.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897487.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897540.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897540.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897592.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897592.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897644.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897644.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897696.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897696.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897748.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897748.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897800.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897800.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897852.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897852.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897904.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449897904.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449898112.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449898112.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449898447.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449898447.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449898484.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449898484.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449898868.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449898868.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449899175.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449899175.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449899208.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449899208.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449947960.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449947960.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449947993.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449947993.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449948501.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449948501.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449949008.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449949008.aaLOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449973573.aaLDX">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449973573.aaLOG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="aaLogReaderTests\refFiles\GetFirstRecord.json">
@@ -127,6 +517,15 @@
     <None Include="aaLogReaderTests\refFiles\GetNextRecordFromLast03.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="aaLogReaderTests\refFiles\GetPrevRecord01.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\refFiles\GetPrevRecord02.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="aaLogReaderTests\refFiles\GetPrevRecord03.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="aaLogReaderTests\refFiles\ReadLogFileReadHeader.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -148,7 +547,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="aaLogReaderTests\logFiles\emptycache">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="aaLogReaderTests\refFiles\blank.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

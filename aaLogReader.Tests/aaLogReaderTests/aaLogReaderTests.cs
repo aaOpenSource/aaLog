@@ -14,7 +14,10 @@ namespace aaLogReader.Tests.aaLogReaderTests
     {
         private const string ROOT_FILE_PATH = @"aaLogReaderTests";
         private const string LOG_FILE_PATH = ROOT_FILE_PATH + @"\logFiles";
-        private const string LOG_FILE_INSTANCE = LOG_FILE_PATH + @"\2014R2-VS-WSP1445626381.aaLog";
+        private const string LOG_FILE_INSTANCE = LOG_FILE_PATH + @"\2014R2-VS-WSP1449897274.aaLog";
+        private const string LOG_FILE_INSTANCE_MIDDLE = LOG_FILE_PATH + @"\2014R2-VS-WSP1449897274.aaLog";
+
+        private const string TEMP_PATH = @"C:\LocalRepo\aaLog\aaLogReader.Tests\aaLogReaderTests";
 
         [TestFixtureSetUp]
         public void Setup()
@@ -72,8 +75,7 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             Assert.That(rcs.Status);
             Assert.That(rcs.Message.Length == 0);
-
-
+            
             string refHeaderJSON = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\ReadLogFileReadHeader.json");
             string thisHeaderJSON = JsonConvert.SerializeObject(alr.CurrentLogHeader);
 
@@ -118,7 +120,7 @@ namespace aaLogReader.Tests.aaLogReaderTests
             alr.OpenLogFile(LOG_FILE_INSTANCE);
 
             LogRecord lr = alr.GetFirstRecord();
-            
+
             string json = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetFirstRecord.json");
 
             Assert.AreEqual(json, JsonConvert.SerializeObject(lr),"Record contents did not match");
@@ -134,13 +136,13 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             LogRecord lr = alr.GetFirstRecord();
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord01.json"), JsonConvert.SerializeObject(lr),"Next Record contents did not match");           
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord01.json"), JsonConvert.SerializeObject(lr),"Next Record contents did not match for Iteration 1");           
 
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match for Iteration 2");
             
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match for Iteration 3");
         }
 
         [Test]
@@ -149,7 +151,7 @@ namespace aaLogReader.Tests.aaLogReaderTests
             aaLogReader alr = new aaLogReader();
 
             //Open a log file in the middle of the overall list of log files
-            alr.OpenLogFile(ROOT_FILE_PATH + @"\logfiles\2014R2-VS-WSP1442116958.aaLOG");
+            alr.OpenLogFile(LOG_FILE_INSTANCE_MIDDLE);
 
             LogRecord lr = alr.GetLastRecord();
             lr = alr.GetNextRecord();
@@ -171,6 +173,8 @@ namespace aaLogReader.Tests.aaLogReaderTests
             
             LogRecord lr = alr.GetLastRecord();
 
+
+            
             string json = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetLastRecord.json");
             
             Assert.AreEqual(json, JsonConvert.SerializeObject(lr), "Record contents did not match");
@@ -254,26 +258,18 @@ namespace aaLogReader.Tests.aaLogReaderTests
         {         
             aaLogReader alr = new aaLogReader();
 
-            alr.OpenLogFile(LOG_FILE_INSTANCE);
+            alr.OpenLogFile(LOG_FILE_INSTANCE_MIDDLE);
 
             LogRecord lr = alr.GetLastRecord();
             lr = alr.GetPrevRecord();
-
-            File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord01.json", JsonConvert.SerializeObject(lr));
-
-            //Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord01.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord01.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
 
             lr = alr.GetPrevRecord();
-            File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord02.json", JsonConvert.SerializeObject(lr));
-            //Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
 
             lr = alr.GetPrevRecord();
-            File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord04.json", JsonConvert.SerializeObject(lr));
-            //Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
-
-
-
-            Assert.That(false, "TODO");
+            //File.WriteAllText(TEMP_PATH + @"\refFiles\GetPrevRecord03.json", JsonConvert.SerializeObject(lr));
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");            
         }
 
         [Test]
