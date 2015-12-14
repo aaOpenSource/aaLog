@@ -99,18 +99,16 @@ namespace aaLogReader.Helpers
         /// <param name="bytes">Byte array containing lastRecordRead data</param>
         /// <param name="offset">Starting offset for the data field</param>
         /// <returns></returns>
-        public static SessionIDSegmentsStruct GetSessionIDSegments(this byte[] bytes, int offset)
+        public static string GetSessionID(this byte[] bytes, int offset)
         {
-            SessionIDSegmentsStruct returnValue = new SessionIDSegmentsStruct();
-
-            // Session ID segment is just 4 8 byte values in a row, but in reverse order
-            returnValue.Segment1 = bytes[offset + 3];
-            returnValue.Segment2 = bytes[offset + 2];
-            returnValue.Segment3 = bytes[offset + 1];
-            returnValue.Segment4 = bytes[offset];
-
-            return returnValue;
-
+            try
+            {
+                return string.Format("{0}.{1}.{2}.{3}", bytes[offset + 3], bytes[offset + 2], bytes[offset + 1], bytes[offset]);
+            }
+            catch
+            {
+                return "0.0.0.0";
+            }
         }
     }
 }

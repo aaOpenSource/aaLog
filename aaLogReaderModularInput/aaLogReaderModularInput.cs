@@ -80,16 +80,16 @@ namespace aaLogReaderModularInput
         /// <param name="validation">a Validation object specifying the new argument values.</param>
         /// <param name="errorMessage">an output parameter to pass back an error message.</param>
         /// <returns><tt>true</tt> if the arguments are valid and <tt>false</tt> otherwise.</returns>
-        public override bool Validate(Validation validation, out string errorMessage)
-        {
+        public override bool Validate(Splunk.ModularInputs.Validation validationItems, out string errorMessage)
+        { 
             bool returnValue = true;            
             errorMessage = "";
 
             try
             {
 
-                string logfilepath = ((SingleValueParameter)(validation.Parameters["logfilepath"])).ToString();
-                Int32 cycletimeint = ((SingleValueParameter)(validation.Parameters["cycletime"])).ToInt32();
+                string logfilepath = ((SingleValueParameter)(validationItems.Parameters["logfilepath"])).ToString();
+                Int32 cycletimeint = ((SingleValueParameter)(validationItems.Parameters["cycletime"])).ToInt32();
 
                 // Verify path is valid
                 if (returnValue && !System.IO.Directory.Exists(logfilepath))
@@ -166,7 +166,7 @@ namespace aaLogReaderModularInput
             catch (Exception ex)
             {
                 // Eat error message
-                eventWriter.LogAsync(Severity.Error, ex.ToString());
+                await eventWriter.LogAsync(Severity.Error, ex.ToString());
             }
         }
     }

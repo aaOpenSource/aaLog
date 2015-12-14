@@ -14,7 +14,10 @@ namespace aaLogReader.Tests.aaLogReaderTests
     {
         private const string ROOT_FILE_PATH = @"aaLogReaderTests";
         private const string LOG_FILE_PATH = ROOT_FILE_PATH + @"\logFiles";
-        private const string LOG_FILE_INSTANCE = LOG_FILE_PATH + @"\2014R2-VS-WSP1445626381.aaLog";
+        private const string LOG_FILE_INSTANCE = LOG_FILE_PATH + @"\2014R2-VS-WSP1449897274.aaLog";
+        private const string LOG_FILE_INSTANCE_MIDDLE = LOG_FILE_PATH + @"\2014R2-VS-WSP1449897274.aaLog";
+
+        private const string TEMP_PATH = @"C:\LocalRepo\aaLog\aaLogReader.Tests\aaLogReaderTests";
 
         [TestFixtureSetUp]
         public void Setup()
@@ -72,9 +75,8 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             Assert.That(rcs.Status);
             Assert.That(rcs.Message.Length == 0);
-
-
-            string refHeaderJSON = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.header.json");
+            
+            string refHeaderJSON = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\ReadLogFileReadHeader.json");
             string thisHeaderJSON = JsonConvert.SerializeObject(alr.CurrentLogHeader);
 
             Assert.AreEqual(refHeaderJSON, thisHeaderJSON);
@@ -118,8 +120,8 @@ namespace aaLogReader.Tests.aaLogReaderTests
             alr.OpenLogFile(LOG_FILE_INSTANCE);
 
             LogRecord lr = alr.GetFirstRecord();
-            
-            string json = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetFirstRecord.json");
+
+            string json = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetFirstRecord.json");
 
             Assert.AreEqual(json, JsonConvert.SerializeObject(lr),"Record contents did not match");
 
@@ -134,14 +136,13 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             LogRecord lr = alr.GetFirstRecord();
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecord01.json"), JsonConvert.SerializeObject(lr),"Next Record contents did not match");
-            //File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecord01.json", JsonConvert.SerializeObject(lr));
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord01.json"), JsonConvert.SerializeObject(lr),"Next Record contents did not match for Iteration 1");           
 
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match for Iteration 2");
             
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match for Iteration 3");
         }
 
         [Test]
@@ -150,20 +151,17 @@ namespace aaLogReader.Tests.aaLogReaderTests
             aaLogReader alr = new aaLogReader();
 
             //Open a log file in the middle of the overall list of log files
-            alr.OpenLogFile(ROOT_FILE_PATH + @"\logfiles\2014R2-VS-WSP1442116958.aaLOG");
+            alr.OpenLogFile(LOG_FILE_INSTANCE_MIDDLE);
 
             LogRecord lr = alr.GetLastRecord();
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast01.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
-            //File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast01.json", JsonConvert.SerializeObject(lr));
-
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecordFromLast01.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+      
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
-            //File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast02.json", JsonConvert.SerializeObject(lr));
-
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecordFromLast02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+      
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
-            //File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetNextRecordFromLast03.json", JsonConvert.SerializeObject(lr));
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecordFromLast03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
         }
 
         [Test]
@@ -175,9 +173,10 @@ namespace aaLogReader.Tests.aaLogReaderTests
             
             LogRecord lr = alr.GetLastRecord();
 
-            string json = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetLastRecord.json");
-            //File.WriteAllText(ROOT_FILE_PATH + @"\refFiles\2014R2-VS-WSP1445626381.GetLastRecord.json",JsonConvert.SerializeObject(lr));
 
+            
+            string json = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetLastRecord.json");
+            
             Assert.AreEqual(json, JsonConvert.SerializeObject(lr), "Record contents did not match");
 
         }
@@ -251,6 +250,208 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             }
 
-        }        
+        }
+    
+
+        [Test]
+        public void GetPrevRecord()
+        {         
+            aaLogReader alr = new aaLogReader();
+
+            alr.OpenLogFile(LOG_FILE_INSTANCE_MIDDLE);
+
+            LogRecord lr = alr.GetLastRecord();
+            lr = alr.GetPrevRecord();
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord01.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+
+            lr = alr.GetPrevRecord();
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+
+            lr = alr.GetPrevRecord();
+            //File.WriteAllText(TEMP_PATH + @"\refFiles\GetPrevRecord03.json", JsonConvert.SerializeObject(lr));
+            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");            
+        }
+
+        [Test]
+        public void GetRecordByMessageNumber()
+        {
+            Assert.That(false, "TODO");
+        }
+
+        [Test]
+        public void GetRecordByFileTime()
+        {
+            Assert.That(false, "TODO");
+        }
+
+        [Test()]
+        public void GetRecordByFileTimeTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordByTimestampTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void aaLogReaderTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void DisposeTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void OpenLogFileTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void OpenCurrentLogFileTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void CloseCurrentLogFileTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void ReadLogHeaderTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void ReadLogHeaderTest1()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetFirstRecordTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetLastRecordTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetNextRecordTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetPrevRecordTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetLogFilePathsForMessageNumberTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetLogFilePathsForMessageTimestampTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetLogFilePathsForMessageFileTimeTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordByMessageNumberTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByStartMessageNumberAndCountTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByEndMessageNumberAndCountTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByMessageNumberAndCountTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByStartandEndMessageNumberTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByEndFileTimeAndCountTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByEndTimestampAndCountTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByStartFileTimeAndCountTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByStartTimestampAndCountTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByStartAndEndFileTimeTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetRecordsByStartAndEndTimeStampTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [Test()]
+        public void GetUnreadRecordsTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+
     }
 }

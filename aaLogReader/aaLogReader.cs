@@ -513,8 +513,6 @@ namespace aaLogReader
                 for(int i = 0; i < LogHeaderIndex.Count; i++)
                 {
 
-                    //log.InfoFormat("i {0}/{1}", i, LogHeaderIndex.Count);
-
                     /* Phase 1
                      * Sometimes the start or end filetimes are not captured correctly so in this step we will scan for start or end times that are 0 and correct them with best available information                
                     */
@@ -646,7 +644,7 @@ namespace aaLogReader
                 localRecord.OffsetToNextRecord = checked((int)FileOffset + recordLength);
 
                 // Session ID
-                localRecord.SessionID = byteArray.GetSessionIDSegments(12).SessionID; //this._sessionSeg.SessionID;
+                localRecord.SessionID = byteArray.GetSessionID(12);
 
                 // Process ID
                 localRecord.ProcessID = byteArray.GetUInt32(16);
