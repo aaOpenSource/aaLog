@@ -6,6 +6,7 @@ namespace aaLogReader
         string Component { get; set; }
         DateTime EventDate { get; }
         DateTime EventDateTime { get; }
+        DateTime EventDateTimeUtc { get; }
         ulong EventFileTime { get; set; }
         int EventMillisec { get; }
         string EventTime { get; }
@@ -21,7 +22,7 @@ namespace aaLogReader
         string SessionID { get; set; }
         uint ThreadID { get; set; }
         string ToCSV(ExportFormat format = ExportFormat.Full);
-        string ToDelimitedString(char Delimiter = ',', ExportFormat format = ExportFormat.Full);
+        string ToDelimitedString(char Delimiter = ',', ExportFormat format = ExportFormat.Full, DateTimeKind kind = DateTimeKind.Unspecified);
         string ToJSON();
         string ToKVP(ExportFormat format = ExportFormat.Full);
         string ToTSV(ExportFormat format = ExportFormat.Full);
