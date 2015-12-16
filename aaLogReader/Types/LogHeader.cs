@@ -7,6 +7,8 @@ namespace aaLogReader
 {
     public class LogHeader : ILogHeader
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public string LogFilePath { get; set; }
 
         public ulong StartMsgNumber { get; set; }
@@ -20,18 +22,64 @@ namespace aaLogReader
             }                                
         }
 
-        public ulong StartFileTime { get; set; }
+        private ulong _startFileTime;
+        private DateTimeOffset _startDateTime;
 
-        public DateTime StartDateTime
+        public ulong StartFileTime
         {
-            get { return DateTime.FromFileTime((long)this.StartFileTime); }
+            get { return _startFileTime; }
+            set
+            {
+                _startFileTime = value;
+                _startDateTime = DateTimeOffset.FromFileTime((long)value);
+            }
         }
-        
-        public ulong EndFileTime { get; set; }
 
-        public DateTime EndDateTime
+        public DateTimeOffset StartDateTime
         {
-            get { return DateTime.FromFileTime((long)this.EndFileTime); }
+            get { return _startDateTime; }
+        }
+
+        [JsonIgnore]
+        public DateTime StartDateTimeLocal
+        {
+            get { return _startDateTime.LocalDateTime; }
+        }
+
+        [JsonIgnore]
+        public DateTime StartDateTimeUtc
+        {
+            get { return _startDateTime.UtcDateTime; }
+        }
+
+        private ulong _endFileTime;
+        private DateTimeOffset _endDateTime;
+
+        public ulong EndFileTime
+        {
+            get { return _endFileTime; }
+            set
+            {
+                _endFileTime = value;
+                _endDateTime = DateTimeOffset.FromFileTime((long)value);
+            }
+        }
+
+        public DateTimeOffset EndDateTime
+        {
+            get { return _endDateTime; }
+        }
+
+        [JsonIgnore]
+        public DateTime EndDateTimeLocal
+        {
+            get { return _endDateTime.LocalDateTime; }
+        }
+
+        [JsonIgnore]
+        public DateTime EndDateTimeUtc
+        {
+            get { return _endDateTime.UtcDateTime; }
         }
 
         public int OffsetFirstRecord { get; set; }
@@ -81,8 +129,9 @@ namespace aaLogReader
 
                 returnValue = localSB.ToString();
             }            
-            catch
+            catch (Exception ex)
             {
+                LogException(ex);
                 returnValue = "";
             }
 
@@ -119,8 +168,9 @@ namespace aaLogReader
 
                 returnValue = localSB.ToString();
             }
-            catch
+            catch (Exception ex)
             {
+                LogException(ex);
                 returnValue = "";
             }
 
@@ -174,8 +224,9 @@ namespace aaLogReader
 
                 returnValue = localSB.ToString();
             }
-            catch
+            catch (Exception ex)
             {
+                LogException(ex);
                 returnValue = "";
             }
 
@@ -190,6 +241,18 @@ namespace aaLogReader
         public string ToTSV()
         {
             return this.ToDelimitedString('\t');
+        }
+
+#if NET45_OR_GREATER
+        private void LogException(Exception ex, [CallerMemberName]string methodName = "")
+        {
+#else
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+        private void LogException(Exception ex)
+        {
+            string methodName = new System.Diagnostics.StackFrame(1, false).GetMethod().Name;
+#endif
+            log.Error(string.Format("{0}: {1} - {2}", methodName, ex.GetType().Name, ex.Message), ex);
         }
     }
 }
