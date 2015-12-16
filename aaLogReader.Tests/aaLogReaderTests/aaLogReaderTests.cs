@@ -11,15 +11,24 @@ using Newtonsoft.Json.Linq;
 namespace aaLogReader.Tests.aaLogReaderTests
 {
     [TestFixture]
-    public class aaLogReaderTests
+    public class aaLogReaderTests : aaLogBaseTest
     {
-        private static readonly string TEST_PATH = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        private static readonly string ROOT_FILE_PATH = Path.Combine(TEST_PATH, @"aaLogReaderTests");
-        private static readonly string LOG_FILE_PATH = Path.Combine(ROOT_FILE_PATH, @"logFiles");
-        private static readonly string LOG_FILE_INSTANCE = Path.Combine(LOG_FILE_PATH, @"2014R2-VS-WSP1449897274.aaLog");
-        private static readonly string LOG_FILE_INSTANCE_MIDDLE = Path.Combine(LOG_FILE_PATH, @"2014R2-VS-WSP1449897274.aaLog");
+        public readonly string LOG_FILE_PATH;
+        public readonly string LOG_FILE_INSTANCE;
+        public readonly string LOG_FILE_INSTANCE_MIDDLE;
 
-        private const string TEMP_PATH = @"C:\LocalRepo\aaLog\aaLogReader.Tests\aaLogReaderTests";
+        public static string GetRootFilePath
+        {
+            get { return Path.Combine(TEST_PATH, @"aaLogReaderTests"); }
+        }
+
+        public aaLogReaderTests()
+            : base(GetRootFilePath)
+        {
+            LOG_FILE_PATH = Path.Combine(ROOT_FILE_PATH, @"logFiles");
+            LOG_FILE_INSTANCE = Path.Combine(LOG_FILE_PATH, @"2014R2-VS-WSP1449897274.aaLog");
+            LOG_FILE_INSTANCE_MIDDLE = Path.Combine(LOG_FILE_PATH, @"2014R2-VS-WSP1449897274.aaLog");
+        }
 
         [OneTimeSetUp]
         public void Setup()
@@ -30,41 +39,6 @@ namespace aaLogReader.Tests.aaLogReaderTests
             {
                 File.Delete(filename);
             }
-        }
-
-        /// <summary>
-        /// Removes system specific entries from JSON objects
-        /// </summary>
-        /// <param name="obj"></param>
-        private void Cleanse(JObject obj)
-        {
-            obj.Remove("EventDateTime");
-            obj.Remove("StartDateTime");
-            obj.Remove("EndDateTime");
-            obj.Remove("HostFQDN");
-        }
-
-        private void Compare<T>(string fileName, T actualObj, string message = null)
-        {
-            var actualJson = JObject.FromObject(actualObj);
-            Compare(fileName, actualJson, message);
-        }
-
-        /// <summary>
-        /// Compares an actual JSON object result to a reference JSON file
-        /// </summary>
-        /// <param name="rootPath"></param>
-        /// <param name="fileName"></param>
-        /// <param name="actualJson"></param>
-        private void Compare(string fileName, JObject actualJson, string message = null)
-        {
-            string expectedText = File.ReadAllText(Path.Combine(ROOT_FILE_PATH, fileName));
-            var expectedJson = JObject.Parse(expectedText);
-
-            Cleanse(actualJson);
-            Cleanse(expectedJson);
-
-            Assert.AreEqual(expectedJson, actualJson, message);
         }
 
         [Test]
@@ -241,9 +215,9 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             foreach (LogHeader lh in logHeaders)
             {
-                Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.StartDateTime).Exists(x => x == lh.LogFilePath), "End Message Timestamp log path not correctly identified");
-                Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.EndDateTime).Exists(x => x == lh.LogFilePath), "Start Mesage Timestamp log path not correctly identified");
-                Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.StartDateTime.AddSeconds(lh.EndDateTime.Subtract(lh.StartDateTime).Seconds / 2)).Exists(x => x == lh.LogFilePath), "Middle Message Timestamp log path not correctly identified");
+                Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.StartDateTimeLocal).Exists(x => x == lh.LogFilePath), "End Message Timestamp log path not correctly identified");
+                Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.EndDateTimeLocal).Exists(x => x == lh.LogFilePath), "Start Mesage Timestamp log path not correctly identified");
+                Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.StartDateTimeLocal.AddSeconds(lh.EndDateTime.Subtract(lh.StartDateTime).Seconds / 2)).Exists(x => x == lh.LogFilePath), "Middle Message Timestamp log path not correctly identified");
             }
         }
 

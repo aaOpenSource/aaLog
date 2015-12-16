@@ -6,7 +6,8 @@ namespace aaLogReader
         string LogFilePath { get; set; }
         string ComputerName { get; set; }
         ulong EndFileTime { get; set; }
-        DateTime EndDateTime { get; }
+        DateTimeOffset EndDateTime { get; }
+        DateTime EndDateTimeLocal { get; }
         DateTime EndDateTimeUtc { get; }
         string HostFQDN { get; set; }
         ulong MsgCount { get; set; }
@@ -18,7 +19,8 @@ namespace aaLogReader
         ReturnCodeStruct ReturnCode { get; set; }
         string Session { get; set; }
         ulong StartFileTime { get; set; }
-        DateTime StartDateTime { get; }
+        DateTimeOffset StartDateTime { get; }
+        DateTime StartDateTimeLocal { get; }
         DateTime StartDateTimeUtc { get; }
         string ToCSV();
         string ToDelimitedString(char Delimiter = ',');

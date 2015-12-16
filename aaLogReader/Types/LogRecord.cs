@@ -36,7 +36,7 @@ namespace aaLogReader
         public uint ThreadID { get; set; }
 
         private ulong _eventFileTime;
-        private DateTime _eventDateTime;
+        private DateTimeOffset _eventDateTime;
 
         public ulong EventFileTime
         {
@@ -44,22 +44,28 @@ namespace aaLogReader
             set
             {
                 _eventFileTime = value;
-                _eventDateTime = DateTime.FromFileTime((long)value);
+                _eventDateTime = DateTimeOffset.FromFileTime((long)value);
             }
         }
 
         // TODO: Add UTC Offset for Exact Timestamp
         // public int EventUTCOffset; 
 
-        [JsonIgnore]
-        public DateTime EventDateTime
+        public DateTimeOffset EventDateTime
         {
             get { return _eventDateTime; }
         }
 
+        [JsonIgnore]
+        public DateTime EventDateTimeLocal
+        {
+            get { return _eventDateTime.LocalDateTime; }
+        }
+
+        [JsonIgnore]
         public DateTime EventDateTimeUtc
         {
-            get { return _eventDateTime.ToUniversalTime(); }
+            get { return _eventDateTime.UtcDateTime; }
         }
 
         [JsonIgnore]

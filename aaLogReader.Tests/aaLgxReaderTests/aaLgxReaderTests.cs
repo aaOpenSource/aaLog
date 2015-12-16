@@ -31,9 +31,8 @@ namespace aaLogReader.Tests.aaLgxReaderTests
         [Test]
         public void CanReadHeader()
         {
-            LogHeader header = aaLgxReader.ReadLogHeader(LOG_FILE_INSTANCE);
-            string compareJSON = System.IO.File.ReadAllText(Path.Combine(REF_FILE_PATH, "CanReadHeader.json"));
-            Assert.AreEqual(header.ToJSON(), compareJSON);
+            LogHeader actualHeader = aaLgxReader.ReadLogHeader(LOG_FILE_INSTANCE);
+            Compare(@"refFiles\CanReadHeader.json", actualHeader);
         }
 
         [Test]
@@ -50,8 +49,7 @@ namespace aaLogReader.Tests.aaLgxReaderTests
         {
             var records = aaLgxReader.ReadLogRecords(LOG_FILE_INSTANCE);
             var record = records.First();
-            string compareJSON = System.IO.File.ReadAllText(Path.Combine(REF_FILE_PATH, "CanReadFirstRecord.json"));
-            Assert.AreEqual(record.ToJSON(), compareJSON);
+            Compare(@"refFiles\CanReadFirstRecord.json", record);
         }
 
         [Test]
@@ -68,8 +66,7 @@ namespace aaLogReader.Tests.aaLgxReaderTests
         {
             var records = aaLgxReader.ReadLogRecords(LOG_FILE_INSTANCE);
             var record = records.Last();
-            string compareJSON = System.IO.File.ReadAllText(Path.Combine(REF_FILE_PATH, "CanReadLastRecord.json"));
-            Assert.AreEqual(record.ToJSON(), compareJSON);
+            Compare(@"refFiles\CanReadLastRecord.json", record);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace aaLogReader
         }
 
         private ulong _startFileTime;
-        private DateTime _startDateTime;
+        private DateTimeOffset _startDateTime;
 
         public ulong StartFileTime
         {
@@ -31,23 +31,29 @@ namespace aaLogReader
             set
             {
                 _startFileTime = value;
-                _startDateTime = DateTime.FromFileTime((long)value);
+                _startDateTime = DateTimeOffset.FromFileTime((long)value);
             }
         }
 
-        [JsonIgnore]
-        public DateTime StartDateTime
+        public DateTimeOffset StartDateTime
         {
             get { return _startDateTime; }
         }
 
+        [JsonIgnore]
+        public DateTime StartDateTimeLocal
+        {
+            get { return _startDateTime.LocalDateTime; }
+        }
+
+        [JsonIgnore]
         public DateTime StartDateTimeUtc
         {
-            get { return _startDateTime.ToUniversalTime(); }
+            get { return _startDateTime.UtcDateTime; }
         }
 
         private ulong _endFileTime;
-        private DateTime _endDateTime;
+        private DateTimeOffset _endDateTime;
 
         public ulong EndFileTime
         {
@@ -55,19 +61,25 @@ namespace aaLogReader
             set
             {
                 _endFileTime = value;
-                _endDateTime = DateTime.FromFileTime((long)value);
+                _endDateTime = DateTimeOffset.FromFileTime((long)value);
             }
         }
 
-        [JsonIgnore]
-        public DateTime EndDateTime
+        public DateTimeOffset EndDateTime
         {
             get { return _endDateTime; }
         }
 
+        [JsonIgnore]
+        public DateTime EndDateTimeLocal
+        {
+            get { return _endDateTime.LocalDateTime; }
+        }
+
+        [JsonIgnore]
         public DateTime EndDateTimeUtc
         {
-            get { return _endDateTime.ToUniversalTime(); }
+            get { return _endDateTime.UtcDateTime; }
         }
 
         public int OffsetFirstRecord { get; set; }
