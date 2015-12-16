@@ -52,19 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="aaLgxReaderTests\refFiles\CanReadEighteenthRecord.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLgxReaderTests\refFiles\CanReadFirstRecord.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLgxReaderTests\refFiles\CanReadHeader.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="aaLgxReaderTests\logFiles\test.aaLGX">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLgxReaderTests\refFiles\CanReadLastRecord.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449848572.aaLDX">
