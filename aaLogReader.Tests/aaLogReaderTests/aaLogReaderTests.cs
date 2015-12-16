@@ -6,28 +6,65 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace aaLogReader.Tests.aaLogReaderTests
 {
     [TestFixture]
     public class aaLogReaderTests
     {
-        private const string ROOT_FILE_PATH = @"aaLogReaderTests";
-        private const string LOG_FILE_PATH = ROOT_FILE_PATH + @"\logFiles";
-        private const string LOG_FILE_INSTANCE = LOG_FILE_PATH + @"\2014R2-VS-WSP1449897274.aaLog";
-        private const string LOG_FILE_INSTANCE_MIDDLE = LOG_FILE_PATH + @"\2014R2-VS-WSP1449897274.aaLog";
+        private static readonly string TEST_PATH = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        private static readonly string ROOT_FILE_PATH = Path.Combine(TEST_PATH, @"aaLogReaderTests");
+        private static readonly string LOG_FILE_PATH = Path.Combine(ROOT_FILE_PATH, @"logFiles");
+        private static readonly string LOG_FILE_INSTANCE = Path.Combine(LOG_FILE_PATH, @"2014R2-VS-WSP1449897274.aaLog");
+        private static readonly string LOG_FILE_INSTANCE_MIDDLE = Path.Combine(LOG_FILE_PATH, @"2014R2-VS-WSP1449897274.aaLog");
 
         private const string TEMP_PATH = @"C:\LocalRepo\aaLog\aaLogReader.Tests\aaLogReaderTests";
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
 
             // Cleanup any old cache files
-            foreach(string filename in Directory.GetFiles(LOG_FILE_PATH,"*cache*"))
+            foreach (string filename in Directory.GetFiles(LOG_FILE_PATH, "*cache*"))
             {
                 File.Delete(filename);
             }
+        }
+
+        /// <summary>
+        /// Removes system specific entries from JSON objects
+        /// </summary>
+        /// <param name="obj"></param>
+        private void Cleanse(JObject obj)
+        {
+            obj.Remove("EventDateTime");
+            obj.Remove("StartDateTime");
+            obj.Remove("EndDateTime");
+            obj.Remove("HostFQDN");
+        }
+
+        private void Compare<T>(string fileName, T actualObj, string message = null)
+        {
+            var actualJson = JObject.FromObject(actualObj);
+            Compare(fileName, actualJson, message);
+        }
+
+        /// <summary>
+        /// Compares an actual JSON object result to a reference JSON file
+        /// </summary>
+        /// <param name="rootPath"></param>
+        /// <param name="fileName"></param>
+        /// <param name="actualJson"></param>
+        private void Compare(string fileName, JObject actualJson, string message = null)
+        {
+            string expectedText = File.ReadAllText(Path.Combine(ROOT_FILE_PATH, fileName));
+            var expectedJson = JObject.Parse(expectedText);
+
+            Cleanse(actualJson);
+            Cleanse(expectedJson);
+
+            Assert.AreEqual(expectedJson, actualJson, message);
         }
 
         [Test]
@@ -54,7 +91,7 @@ namespace aaLogReader.Tests.aaLogReaderTests
             Assert.That(rcs.Status);
             Assert.That(rcs.Message.Length == 0);
         }
-        
+
         [Test]
         public void OpenLogFile()
         {
@@ -75,11 +112,8 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             Assert.That(rcs.Status);
             Assert.That(rcs.Message.Length == 0);
-            
-            string refHeaderJSON = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\ReadLogFileReadHeader.json");
-            string thisHeaderJSON = JsonConvert.SerializeObject(alr.CurrentLogHeader);
 
-            Assert.AreEqual(refHeaderJSON, thisHeaderJSON);
+            Compare(@"refFiles\ReadLogFileReadHeader.json", alr.CurrentLogHeader);
         }
 
         [Test]
@@ -101,15 +135,15 @@ namespace aaLogReader.Tests.aaLogReaderTests
         [Test]
         public void CurrentLogFilePath()
         {
-            aaLogReader alr = new aaLogReader();           
+            aaLogReader alr = new aaLogReader();
 
             ReturnCodeStruct rcs = alr.OpenLogFile(LOG_FILE_INSTANCE);
 
             Assert.That(rcs.Status);
             Assert.That(rcs.Message.Length == 0);
 
-            Assert.AreEqual(alr.CurrentLogFilePath, LOG_FILE_INSTANCE,"Current log file path did not match");
-            
+            Assert.AreEqual(alr.CurrentLogFilePath, LOG_FILE_INSTANCE, "Current log file path did not match");
+
         }
 
         [Test]
@@ -119,12 +153,8 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             alr.OpenLogFile(LOG_FILE_INSTANCE);
 
-            LogRecord lr = alr.GetFirstRecord();
-
-            string json = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetFirstRecord.json");
-
-            Assert.AreEqual(json, JsonConvert.SerializeObject(lr),"Record contents did not match");
-
+            LogRecord actualRecord = alr.GetFirstRecord();
+            Compare(@"refFiles\GetFirstRecord.json", actualRecord);
         }
 
         [Test]
@@ -136,13 +166,13 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             LogRecord lr = alr.GetFirstRecord();
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord01.json"), JsonConvert.SerializeObject(lr),"Next Record contents did not match for Iteration 1");           
+            Compare(@"refFiles\GetNextRecord01.json", lr, "Next Record contents did not match for Iteration 1");
 
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match for Iteration 2");
-            
+            Compare(@"refFiles\GetNextRecord02.json", lr, "Next Record contents did not match for Iteration 2");
+
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match for Iteration 3");
+            Compare(@"refFiles\GetNextRecord03.json", lr, "Next Record contents did not match for Iteration 3");
         }
 
         [Test]
@@ -155,13 +185,14 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             LogRecord lr = alr.GetLastRecord();
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecordFromLast01.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
-      
+            // TODO: Assert move to next log file
+            Compare(@"refFiles\GetNextRecordFromLast01.json", lr, "Next Record contents did not match 1");
+
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecordFromLast02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
-      
+            Compare(@"refFiles\GetNextRecordFromLast02.json", lr, "Next Record contents did not match 2");
+
             lr = alr.GetNextRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetNextRecordFromLast03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            Compare(@"refFiles\GetNextRecordFromLast03.json", lr, "Next Record contents did not match 3");
         }
 
         [Test]
@@ -170,35 +201,28 @@ namespace aaLogReader.Tests.aaLogReaderTests
             aaLogReader alr = new aaLogReader();
 
             alr.OpenLogFile(LOG_FILE_INSTANCE);
-            
+
             LogRecord lr = alr.GetLastRecord();
-
-
-            
-            string json = File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetLastRecord.json");
-            
-            Assert.AreEqual(json, JsonConvert.SerializeObject(lr), "Record contents did not match");
-
+            Compare(@"refFiles\GetLastRecord.json", lr, "Record contents did not match");
         }
 
         [Test]
         public void GetLogFilePathsForMessageFileTime()
         {
-
             OptionsStruct options = new OptionsStruct();
             options.LogDirectory = LOG_FILE_PATH;
 
             aaLogReader alr = new aaLogReader(options);
-            
+
             List<LogHeader> logHeaders = alr.LogHeaderIndex;
 
             // Loop through all entries in the header index and verify we correctly identify the first, last, and middle message
 
-            foreach(LogHeader lh in logHeaders)
+            foreach (LogHeader lh in logHeaders)
             {
-                Assert.That(alr.GetLogFilePathsForMessageFileTime(lh.EndFileTime).Exists(x=>x==lh.LogFilePath),"End FileTime log path not correctly identified");
+                Assert.That(alr.GetLogFilePathsForMessageFileTime(lh.EndFileTime).Exists(x => x == lh.LogFilePath), "End FileTime log path not correctly identified");
                 Assert.That(alr.GetLogFilePathsForMessageFileTime(lh.StartFileTime).Exists(x => x == lh.LogFilePath), "Start FileTime log path not correctly identified");
-                Assert.That(alr.GetLogFilePathsForMessageFileTime((lh.StartFileTime + lh.EndFileTime)/2).Exists(x => x == lh.LogFilePath), "Middle FileTime log path not correctly identified");                
+                Assert.That(alr.GetLogFilePathsForMessageFileTime((lh.StartFileTime + lh.EndFileTime) / 2).Exists(x => x == lh.LogFilePath), "Middle FileTime log path not correctly identified");
             }
 
         }
@@ -206,28 +230,26 @@ namespace aaLogReader.Tests.aaLogReaderTests
         [Test]
         public void GetLogFilePathsForMessageTimestamp()
         {
-
             OptionsStruct options = new OptionsStruct();
             options.LogDirectory = LOG_FILE_PATH;
 
             aaLogReader alr = new aaLogReader(options);
 
             List<LogHeader> logHeaders = alr.LogHeaderIndex;
-            
+
             // Loop through all entries in the header index and verify we correctly identify the first, last, and middle message
 
             foreach (LogHeader lh in logHeaders)
             {
                 Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.StartDateTime).Exists(x => x == lh.LogFilePath), "End Message Timestamp log path not correctly identified");
                 Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.EndDateTime).Exists(x => x == lh.LogFilePath), "Start Mesage Timestamp log path not correctly identified");
-                Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.StartDateTime.AddSeconds(lh.EndDateTime.Subtract(lh.StartDateTime).Seconds/2)).Exists(x => x == lh.LogFilePath), "Middle Message Timestamp log path not correctly identified");
+                Assert.That(alr.GetLogFilePathsForMessageTimestamp(lh.StartDateTime.AddSeconds(lh.EndDateTime.Subtract(lh.StartDateTime).Seconds / 2)).Exists(x => x == lh.LogFilePath), "Middle Message Timestamp log path not correctly identified");
             }
         }
 
         [Test]
         public void GetLogFilePathsForMessageNumber()
         {
-
             OptionsStruct options = new OptionsStruct();
             options.LogDirectory = LOG_FILE_PATH;
             ulong RandomUlong;
@@ -244,32 +266,29 @@ namespace aaLogReader.Tests.aaLogReaderTests
                 Assert.That(alr.GetLogFilePathsForMessageNumber(lh.StartMsgNumber).Exists(x => x == lh.LogFilePath), "End Message Number log path not correctly identified");
                 Assert.That(alr.GetLogFilePathsForMessageNumber(lh.EndMsgNumber).Exists(x => x == lh.LogFilePath), "Start Mesage Number log path not correctly identified");
                 Assert.That(alr.GetLogFilePathsForMessageNumber((lh.StartMsgNumber + lh.EndMsgNumber) / 2).Exists(x => x == lh.LogFilePath), "Middle Message Number log path not correctly identified");
-                
+
                 RandomUlong = (ulong)rnd.Next(Convert.ToInt32(lh.MsgCount)) + lh.StartMsgNumber;
                 Assert.That(alr.GetLogFilePathsForMessageNumber(RandomUlong).Exists(x => x == lh.LogFilePath), "Random Message Number " + RandomUlong + " log path not correctly identified");
 
             }
-
         }
-    
 
         [Test]
         public void GetPrevRecord()
-        {         
+        {
             aaLogReader alr = new aaLogReader();
 
             alr.OpenLogFile(LOG_FILE_INSTANCE_MIDDLE);
 
             LogRecord lr = alr.GetLastRecord();
             lr = alr.GetPrevRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord01.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            Compare(@"refFiles\GetPrevRecord01.json", lr, "Prev Record contents did not match 1");
 
             lr = alr.GetPrevRecord();
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord02.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");
+            Compare(@"refFiles\GetPrevRecord02.json", lr, "Prev Record contents did not match 2");
 
             lr = alr.GetPrevRecord();
-            //File.WriteAllText(TEMP_PATH + @"\refFiles\GetPrevRecord03.json", JsonConvert.SerializeObject(lr));
-            Assert.AreEqual(File.ReadAllText(ROOT_FILE_PATH + @"\refFiles\GetPrevRecord03.json"), JsonConvert.SerializeObject(lr), "Next Record contents did not match");            
+            Compare(@"refFiles\GetPrevRecord03.json", lr, "Prev Record contents did not match 3");
         }
 
         [Test]
