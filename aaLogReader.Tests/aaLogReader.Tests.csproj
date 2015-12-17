@@ -481,42 +481,6 @@
     <None Include="aaLogReaderTests\logFiles\2014R2-VS-WSP1449973573.aaLOG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="aaLogReaderTests\refFiles\GetFirstRecord.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetLastRecord.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetNextRecord01.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetNextRecord02.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetNextRecord03.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetNextRecordFromLast01.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetNextRecordFromLast02.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetNextRecordFromLast03.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetPrevRecord01.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetPrevRecord02.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\GetPrevRecord03.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="aaLogReaderTests\refFiles\ReadLogFileReadHeader.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="log.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -537,9 +501,6 @@
     <None Include="aaLogReaderTests\logFiles\emptycache">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="aaLogReaderTests\refFiles\blank.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
