@@ -43,8 +43,8 @@ namespace aaLogReader.Tests.aaLogReaderTests
         {
             ReturnCodeStruct rcs = _logReader.OpenCurrentLogFile(LOG_FILE_PATH);
 
-            Assert.That(rcs.Status, Is.True);
-            Assert.That(rcs.Message.Length, Is.EqualTo(0));
+            Assert.That(rcs.Status, Is.True, "Status is wrong");
+            Assert.That(rcs.Message.Length, Is.EqualTo(0), "Message.Length is wrong");
         }
 
         [Test]
@@ -52,8 +52,8 @@ namespace aaLogReader.Tests.aaLogReaderTests
         {
             ReturnCodeStruct rcs = _logReader.OpenCurrentLogFile();
 
-            Assert.That(rcs.Status, Is.True);
-            Assert.That(rcs.Message.Length, Is.EqualTo(0));
+            Assert.That(rcs.Status, Is.True, "Status is wrong");
+            Assert.That(rcs.Message.Length, Is.EqualTo(0), "Message.Length is wrong");
         }
 
         [Test]
@@ -61,8 +61,8 @@ namespace aaLogReader.Tests.aaLogReaderTests
         {
             ReturnCodeStruct rcs = _logReader.OpenLogFile(LOG_FILE_INSTANCE);
 
-            Assert.That(rcs.Status, Is.True);
-            Assert.That(rcs.Message.Length, Is.EqualTo(0));
+            Assert.That(rcs.Status, Is.True, "Status is wrong");
+            Assert.That(rcs.Message.Length, Is.EqualTo(0), "Message.Length is wrong");
         }
 
         [Test]
@@ -74,18 +74,18 @@ namespace aaLogReader.Tests.aaLogReaderTests
             Assert.That(rcs.Message.Length == 0);
 
             var header = _logReader.CurrentLogHeader;
-            Assert.That(header.LogFilePath, Is.Null);
-            Assert.That(header.StartMsgNumber, Is.EqualTo(60380));
-            Assert.That(header.MsgCount, Is.EqualTo(5));
-            Assert.That(header.EndMsgNumber, Is.EqualTo(60384));
-            Assert.That(header.StartFileTime, Is.EqualTo(130943708747330261));
-            Assert.That(header.EndFileTime, Is.EqualTo(130943708773045647));
-            Assert.That(header.OffsetFirstRecord, Is.EqualTo(160));
-            Assert.That(header.OffsetLastRecord, Is.EqualTo(718));
-            Assert.That(header.ComputerName, Is.EqualTo("2014R2-VS-WSP"));
-            Assert.That(header.Session, Is.EqualTo("Session"));
-            Assert.That(header.PrevFileName, Is.EqualTo("2014R2-VS-WSP1449897272.aaLOG"));
-            Assert.That(header.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(header.LogFilePath, Is.Null, "LogFilePath is wrong");
+            Assert.That(header.StartMsgNumber, Is.EqualTo(60380), "StartMsgNumber is wrong");
+            Assert.That(header.MsgCount, Is.EqualTo(5), "MsgCount is wrong");
+            Assert.That(header.EndMsgNumber, Is.EqualTo(60384), "EndMsgNumber is wrong");
+            Assert.That(header.StartFileTime, Is.EqualTo(130943708747330261), "StartFileTime is wrong");
+            Assert.That(header.EndFileTime, Is.EqualTo(130943708773045647), "EndFileTime is wrong");
+            Assert.That(header.OffsetFirstRecord, Is.EqualTo(160), "OffsetFirstRecord is wrong");
+            Assert.That(header.OffsetLastRecord, Is.EqualTo(718), "OffsetLastRecord is wrong");
+            Assert.That(header.ComputerName, Is.EqualTo("2014R2-VS-WSP"), "ComputerName is wrong");
+            Assert.That(header.Session, Is.EqualTo("Session"), "Session is wrong");
+            Assert.That(header.PrevFileName, Is.EqualTo("2014R2-VS-WSP1449897272.aaLOG"), "PrevFileName is wrong");
+            Assert.That(header.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
         }
 
         [Test]
@@ -93,13 +93,13 @@ namespace aaLogReader.Tests.aaLogReaderTests
         {
             ReturnCodeStruct rcs = _logReader.OpenLogFile(LOG_FILE_INSTANCE);
 
-            Assert.That(rcs.Status, Is.True);
-            Assert.That(rcs.Message.Length, Is.EqualTo(0));
+            Assert.That(rcs.Status, Is.True, "Status is wrong");
+            Assert.That(rcs.Message.Length, Is.EqualTo(0), "Message.Length is wrong");
 
             rcs = _logReader.CloseCurrentLogFile();
 
-            Assert.That(rcs.Status, Is.True);
-            Assert.That(rcs.Message.Length, Is.EqualTo(0));
+            Assert.That(rcs.Status, Is.True, "Status is wrong");
+            Assert.That(rcs.Message.Length, Is.EqualTo(0), "Message.Length is wrong");
         }
 
         [Test]
@@ -107,10 +107,10 @@ namespace aaLogReader.Tests.aaLogReaderTests
         {
             ReturnCodeStruct rcs = _logReader.OpenLogFile(LOG_FILE_INSTANCE);
 
-            Assert.That(rcs.Status, Is.True);
-            Assert.That(rcs.Message.Length, Is.EqualTo(0));
+            Assert.That(rcs.Status, Is.True, "Status is wrong");
+            Assert.That(rcs.Message.Length, Is.EqualTo(0), "Message.Length is wrong");
 
-            Assert.That(_logReader.CurrentLogFilePath, Is.EqualTo(LOG_FILE_INSTANCE));
+            Assert.That(_logReader.CurrentLogFilePath, Is.EqualTo(LOG_FILE_INSTANCE), "CurrentLogFilePath is wrong");
         }
 
         [Test]
@@ -119,16 +119,16 @@ namespace aaLogReader.Tests.aaLogReaderTests
             _logReader.OpenLogFile(LOG_FILE_INSTANCE);
 
             LogRecord lr = _logReader.GetFirstRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60380));
-            Assert.That(lr.ProcessID, Is.EqualTo(9672));
-            Assert.That(lr.ThreadID, Is.EqualTo(12224));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708747330261));
-            Assert.That(lr.LogFlag, Is.EqualTo("Info"));
-            Assert.That(lr.Component, Is.EqualTo("aaLogger"));
-            Assert.That(lr.Message, Is.EqualTo("Logger Started."));
-            Assert.That(lr.ProcessName, Is.EqualTo(""));
-            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60380), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(9672), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(12224), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708747330261), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Info"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("aaLogger"), "Component is wrong");
+            Assert.That(lr.Message, Is.EqualTo("Logger Started."), "Message is wrong");
+            Assert.That(lr.ProcessName, Is.EqualTo(""), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
         }
 
         [Test]
@@ -139,40 +139,40 @@ namespace aaLogReader.Tests.aaLogReaderTests
             LogRecord lr = _logReader.GetFirstRecord();
 
             lr = _logReader.GetNextRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60381));
-            Assert.That(lr.ProcessID, Is.EqualTo(6844));
-            Assert.That(lr.ThreadID, Is.EqualTo(6848));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708751488101));
-            Assert.That(lr.LogFlag, Is.EqualTo("Error"));
-            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"));
-            Assert.That(lr.Message, Is.EqualTo("LogGen_001.scr: Error Message 703"));
-            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"));
-            Assert.That(lr.SessionID, Is.EqualTo("40.119.32.23"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60381), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(6844), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(6848), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708751488101), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Error"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"), "Component is wrong");
+            Assert.That(lr.Message, Is.EqualTo("LogGen_001.scr: Error Message 703"), "Message is wrong");
+            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("40.119.32.23"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
 
             lr = _logReader.GetNextRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60382));
-            Assert.That(lr.ProcessID, Is.EqualTo(6844));
-            Assert.That(lr.ThreadID, Is.EqualTo(11372));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708752027927));
-            Assert.That(lr.LogFlag, Is.EqualTo("Info"));
-            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"));
-            Assert.That(lr.Message, Is.EqualTo("ServiceRestarter_001.scr: forcing restart of log viewer"));
-            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"));
-            Assert.That(lr.SessionID, Is.EqualTo("40.119.32.23"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60382), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(6844), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(11372), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708752027927), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Info"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"), "Component is wrong");
+            Assert.That(lr.Message, Is.EqualTo("ServiceRestarter_001.scr: forcing restart of log viewer"), "Message is wrong");
+            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("40.119.32.23"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
 
             lr = _logReader.GetNextRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60383));
-            Assert.That(lr.ProcessID, Is.EqualTo(9672));
-            Assert.That(lr.ThreadID, Is.EqualTo(12224));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708752067116));
-            Assert.That(lr.LogFlag, Is.EqualTo("Info"));
-            Assert.That(lr.Component, Is.EqualTo("aaLogger"));
-            Assert.That(lr.Message, Is.EqualTo("Logger Shutting down."));
-            Assert.That(lr.ProcessName, Is.EqualTo(""));
-            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60383), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(9672), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(12224), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708752067116), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Info"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("aaLogger"), "Component is wrong");
+            Assert.That(lr.Message, Is.EqualTo("Logger Shutting down."), "Message is wrong");
+            Assert.That(lr.ProcessName, Is.EqualTo(""), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
         }
 
         [Test]
@@ -185,40 +185,40 @@ namespace aaLogReader.Tests.aaLogReaderTests
             LogRecord lr = _logReader.GetLastRecord();
 
             lr = _logReader.GetNextRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60385));
-            Assert.That(lr.ProcessID, Is.EqualTo(9348));
-            Assert.That(lr.ThreadID, Is.EqualTo(10740));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708773045647));
-            Assert.That(lr.LogFlag, Is.EqualTo("Info"));
-            Assert.That(lr.Component, Is.EqualTo("aaLogger"));
-            Assert.That(lr.Message, Is.EqualTo("Logger Started."));
-            Assert.That(lr.ProcessName, Is.EqualTo(""));
-            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60385), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(9348), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(10740), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708773045647), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Info"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("aaLogger"), "Component is wrong");
+            Assert.That(lr.Message, Is.EqualTo("Logger Started."), "Message is wrong");
+            Assert.That(lr.ProcessName, Is.EqualTo(""), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
 
             lr = _logReader.GetNextRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60386));
-            Assert.That(lr.ProcessID, Is.EqualTo(6844));
-            Assert.That(lr.ThreadID, Is.EqualTo(11272));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708777415338));
-            Assert.That(lr.LogFlag, Is.EqualTo("Info"));
-            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"));
-            Assert.That(lr.Message, Is.EqualTo("ServiceRestarter_001.scr: forcing restart of log viewer"));
-            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"));
-            Assert.That(lr.SessionID, Is.EqualTo("55.2.254.255"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60386), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(6844), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(11272), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708777415338), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Info"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"), "Component is wrong");
+            Assert.That(lr.Message, Is.EqualTo("ServiceRestarter_001.scr: forcing restart of log viewer"), "Message is wrong");
+            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("55.2.254.255"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
 
             lr = _logReader.GetNextRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60387));
-            Assert.That(lr.ProcessID, Is.EqualTo(9348));
-            Assert.That(lr.ThreadID, Is.EqualTo(10740));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708777485254));
-            Assert.That(lr.LogFlag, Is.EqualTo("Info"));
-            Assert.That(lr.Component, Is.EqualTo("aaLogger"));
-            Assert.That(lr.Message, Is.EqualTo("Logger Shutting down."));
-            Assert.That(lr.ProcessName, Is.EqualTo(""));
-            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60387), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(9348), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(10740), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708777485254), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Info"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("aaLogger"), "Component is wrong");
+            Assert.That(lr.Message, Is.EqualTo("Logger Shutting down."), "Message is wrong");
+            Assert.That(lr.ProcessName, Is.EqualTo(""), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
         }
 
         [Test]
@@ -227,16 +227,16 @@ namespace aaLogReader.Tests.aaLogReaderTests
             _logReader.OpenLogFile(LOG_FILE_INSTANCE);
 
             LogRecord lr = _logReader.GetLastRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60384));
-            Assert.That(lr.ProcessID, Is.EqualTo(9348));
-            Assert.That(lr.ThreadID, Is.EqualTo(10740));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708773045647));
-            Assert.That(lr.LogFlag, Is.EqualTo("Info"));
-            Assert.That(lr.Component, Is.EqualTo("aaLogger"));
-            Assert.That(lr.Message, Is.EqualTo("Logger Started."));
-            Assert.That(lr.ProcessName, Is.EqualTo(""));
-            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60384), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(9348), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(10740), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708773045647), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Info"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("aaLogger"), "Component is wrong");
+            Assert.That(lr.Message, Is.EqualTo("Logger Started."), "Message is wrong");
+            Assert.That(lr.ProcessName, Is.EqualTo(""), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
         }
 
         [Test]
@@ -313,40 +313,40 @@ namespace aaLogReader.Tests.aaLogReaderTests
             LogRecord lr = _logReader.GetLastRecord();
 
             lr = _logReader.GetPrevRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60383));
-            Assert.That(lr.ProcessID, Is.EqualTo(9672));
-            Assert.That(lr.ThreadID, Is.EqualTo(12224));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708752067116));
-            Assert.That(lr.LogFlag, Is.EqualTo("Info"));
-            Assert.That(lr.Component, Is.EqualTo("aaLogger"));
-            Assert.That(lr.Message, Is.EqualTo("Logger Shutting down."));
-            Assert.That(lr.ProcessName, Is.EqualTo(""));
-            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60383), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(9672), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(12224), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708752067116), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Info"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("aaLogger"), "Component is wrong");
+            Assert.That(lr.Message, Is.EqualTo("Logger Shutting down."), "Message is wrong");
+            Assert.That(lr.ProcessName, Is.EqualTo(""), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("0.0.0.0"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
 
             lr = _logReader.GetPrevRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60382));
-            Assert.That(lr.ProcessID, Is.EqualTo(6844));
-            Assert.That(lr.ThreadID, Is.EqualTo(11372));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708752027927));
-            Assert.That(lr.LogFlag, Is.EqualTo("Info"));
-            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60382), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(6844), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(11372), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708752027927), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Info"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"), "Component is wrong");
             Assert.That(lr.Message, Is.EqualTo("ServiceRestarter_001.scr: forcing restart of log viewer"));
-            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"));
-            Assert.That(lr.SessionID, Is.EqualTo("40.119.32.23"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("40.119.32.23"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
 
             lr = _logReader.GetPrevRecord();
-            Assert.That(lr.MessageNumber, Is.EqualTo(60381));
-            Assert.That(lr.ProcessID, Is.EqualTo(6844));
-            Assert.That(lr.ThreadID, Is.EqualTo(6848));
-            Assert.That(lr.EventFileTime, Is.EqualTo(130943708751488101));
-            Assert.That(lr.LogFlag, Is.EqualTo("Error"));
-            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"));
+            Assert.That(lr.MessageNumber, Is.EqualTo(60381), "MessageNumber is wrong");
+            Assert.That(lr.ProcessID, Is.EqualTo(6844), "ProcessID is wrong");
+            Assert.That(lr.ThreadID, Is.EqualTo(6848), "ThreadID is wrong");
+            Assert.That(lr.EventFileTime, Is.EqualTo(130943708751488101), "EventFileTime is wrong");
+            Assert.That(lr.LogFlag, Is.EqualTo("Error"), "LogFlag is wrong");
+            Assert.That(lr.Component, Is.EqualTo("ScriptRuntime"), "Component is wrong");
             Assert.That(lr.Message, Is.EqualTo("LogGen_001.scr: Error Message 703"));
-            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"));
-            Assert.That(lr.SessionID, Is.EqualTo("40.119.32.23"));
-            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn));
+            Assert.That(lr.ProcessName, Is.EqualTo("aaEngine"), "ProcessName is wrong");
+            Assert.That(lr.SessionID, Is.EqualTo("40.119.32.23"), "SessionID is wrong");
+            Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
         }
 
         [Test]
