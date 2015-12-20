@@ -349,184 +349,184 @@ namespace aaLogReader.Tests.aaLogReaderTests
             Assert.That(lr.HostFQDN, Is.EqualTo(_expectedFqdn), "HostFQDN is wrong");
         }
 
-        [Test]
-        public void GetRecordByMessageNumber()
-        {
-            Assert.That(false, "TODO");
-        }
+        //[Test]
+        //public void GetRecordByMessageNumber()
+        //{
+        //    Assert.That(false, "TODO");
+        //}
 
-        [Test]
-        public void GetRecordByFileTime()
-        {
-            Assert.That(false, "TODO");
-        }
+        //[Test]
+        //public void GetRecordByFileTime()
+        //{
+        //    Assert.That(false, "TODO");
+        //}
 
-        [Test]
-        public void GetRecordByFileTimeTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordByFileTimeTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordByTimestampTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordByTimestampTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void aaLogReaderTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void aaLogReaderTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void DisposeTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void DisposeTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void OpenLogFileTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void OpenLogFileTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void OpenCurrentLogFileTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void OpenCurrentLogFileTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void CloseCurrentLogFileTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void CloseCurrentLogFileTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void ReadLogHeaderTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void ReadLogHeaderTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void ReadLogHeaderTest1()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void ReadLogHeaderTest1()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetFirstRecordTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetFirstRecordTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetLastRecordTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetLastRecordTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetNextRecordTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetNextRecordTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetPrevRecordTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetPrevRecordTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetLogFilePathsForMessageNumberTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetLogFilePathsForMessageNumberTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetLogFilePathsForMessageTimestampTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetLogFilePathsForMessageTimestampTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetLogFilePathsForMessageFileTimeTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetLogFilePathsForMessageFileTimeTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordByMessageNumberTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordByMessageNumberTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByStartMessageNumberAndCountTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByStartMessageNumberAndCountTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByEndMessageNumberAndCountTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByEndMessageNumberAndCountTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByMessageNumberAndCountTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByMessageNumberAndCountTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByStartandEndMessageNumberTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByStartandEndMessageNumberTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByEndFileTimeAndCountTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByEndFileTimeAndCountTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByEndTimestampAndCountTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByEndTimestampAndCountTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByStartFileTimeAndCountTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByStartFileTimeAndCountTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByStartTimestampAndCountTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByStartTimestampAndCountTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByStartAndEndFileTimeTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByStartAndEndFileTimeTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetRecordsByStartAndEndTimeStampTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetRecordsByStartAndEndTimeStampTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
 
-        [Test]
-        public void GetUnreadRecordsTest()
-        {
-            Assert.Fail("TODO");
-        }
+        //[Test]
+        //public void GetUnreadRecordsTest()
+        //{
+        //    Assert.Fail("TODO");
+        //}
     }
 }
