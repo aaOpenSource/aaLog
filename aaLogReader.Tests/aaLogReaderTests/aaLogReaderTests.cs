@@ -267,13 +267,13 @@ namespace aaLogReader.Tests.aaLogReaderTests
 
             foreach (LogHeader lh in logHeaders)
             {
-                Assert.That(_logReader.GetLogFilePathsForMessageTimestamp(lh.StartDateTime).Exists(x => x == lh.LogFilePath),
+                Assert.That(_logReader.GetLogFilePathsForMessageTimestamp(lh.StartDateTimeUtc).Exists(x => x == lh.LogFilePath),
                     "End Message Timestamp log path not correctly identified");
-                Assert.That(_logReader.GetLogFilePathsForMessageTimestamp(lh.EndDateTime).Exists(x => x == lh.LogFilePath),
+                Assert.That(_logReader.GetLogFilePathsForMessageTimestamp(lh.EndDateTimeUtc).Exists(x => x == lh.LogFilePath),
                     "Start Mesage Timestamp log path not correctly identified");
                 Assert.That(
                     _logReader.GetLogFilePathsForMessageTimestamp(
-                        lh.StartDateTime.AddSeconds(lh.EndDateTime.Subtract(lh.StartDateTime).Seconds/2))
+                        lh.StartDateTimeUtc.AddSeconds(lh.EndDateTime.Subtract(lh.StartDateTime).Seconds/2))
                         .Exists(x => x == lh.LogFilePath), "Middle Message Timestamp log path not correctly identified");
             }
         }
