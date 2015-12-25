@@ -1,13 +1,10 @@
-﻿using System;
+﻿using aaLogReader.Helpers;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using aaLogReader.Helpers;
-using Newtonsoft.Json;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Net;
-using System.Net.NetworkInformation;
 
 namespace aaLogReader
 {
