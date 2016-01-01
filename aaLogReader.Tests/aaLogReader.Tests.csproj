@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="aaLgxReaderTests\aaLgxReaderTests.cs" />
+    <Compile Include="aaLogBaseTest.cs" />
     <Compile Include="aaLogReaderTests\aaLogReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

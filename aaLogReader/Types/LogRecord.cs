@@ -10,6 +10,8 @@ namespace aaLogReader
     /// </summary>
     public class LogRecord : ILogRecord
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         // Default constructor
         public LogRecord()
         {
@@ -17,10 +19,10 @@ namespace aaLogReader
             this.ReturnCode.Message = "";
         }
 
-        [JsonIgnore]        
+        [JsonIgnore]
         public int RecordLength { get; set; }
 
-        [JsonIgnore]        
+        [JsonIgnore]
         public int OffsetToPrevRecord { get; set; }
 
         [JsonIgnore]
@@ -33,14 +35,37 @@ namespace aaLogReader
 
         public uint ThreadID { get; set; }
 
-        public ulong EventFileTime { get; set; }
+        private ulong _eventFileTime;
+        private DateTimeOffset _eventDateTime;
+
+        public ulong EventFileTime
+        {
+            get { return _eventFileTime; }
+            set
+            {
+                _eventFileTime = value;
+                _eventDateTime = DateTimeOffset.FromFileTime((long)value);
+            }
+        }
 
         // TODO: Add UTC Offset for Exact Timestamp
-        // public int EventUTCOffset; 
+        // public int EventUTCOffset;
 
-        public DateTime EventDateTime
+        public DateTimeOffset EventDateTime
         {
-            get { return DateTime.FromFileTime((long)this.EventFileTime); }
+            get { return _eventDateTime; }
+        }
+
+        [JsonIgnore]
+        public DateTime EventDateTimeLocal
+        {
+            get { return _eventDateTime.LocalDateTime; }
+        }
+
+        [JsonIgnore]
+        public DateTime EventDateTimeUtc
+        {
+            get { return _eventDateTime.UtcDateTime; }
         }
 
         [JsonIgnore]
@@ -61,7 +86,7 @@ namespace aaLogReader
         [JsonIgnore]
         public int EventMillisec
         {
-            get { return this.EventDateTime.Millisecond;}
+            get { return this.EventDateTime.Millisecond; }
         }
 
         public string LogFlag { get; set; }
@@ -114,14 +139,15 @@ namespace aaLogReader
                 }
                 returnValue = localSB.ToString();
             }
-            catch
+            catch (Exception ex)
             {
+                LogException(ex);
                 returnValue = "";
             }
 
             return returnValue;
         }
-        
+
         /// <summary>
         /// Get a header for a series of log records with a delimiter
         /// </summary>
@@ -156,14 +182,15 @@ namespace aaLogReader
 
                 returnValue = localSB.ToString();
             }
-            catch
+            catch (Exception ex)
             {
+                LogException(ex);
                 returnValue = "";
             }
 
             return returnValue;
         }
-        
+
         public static string Header(char Delimiter = ',', ExportFormat format = ExportFormat.Full)
         {
             LogRecord lr = new LogRecord();
@@ -186,7 +213,7 @@ namespace aaLogReader
         /// <param name="Delimiter">Delimiter to Use</param>
         /// <param name="format">Full or Minimal</param>
         /// <returns></returns>
-        public string ToDelimitedString(char Delimiter = ',', ExportFormat format = ExportFormat.Full)
+        public string ToDelimitedString(char Delimiter = ',', ExportFormat format = ExportFormat.Full, DateTimeKind kind = DateTimeKind.Unspecified)
         {
 
             string returnValue;
@@ -194,8 +221,10 @@ namespace aaLogReader
 
             try
             {
-
-                localSB.Append("\"" + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\"");
+                if (kind == DateTimeKind.Utc)
+                    localSB.Append("\"" + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\"");
+                else
+                    localSB.Append("\"" + this.EventDateTimeUtc.ToString("yyyy-MM-dd HH:mm:ss.fffZ") + "\"");
                 localSB.Append(Delimiter + this.LogFlag);
                 localSB.Append(Delimiter + "\"" + this.Message + "\"");
                 localSB.Append(Delimiter + this.HostFQDN);
@@ -214,8 +243,9 @@ namespace aaLogReader
 
                 returnValue = localSB.ToString();
             }
-            catch
+            catch (Exception ex)
             {
+                LogException(ex);
                 returnValue = "";
             }
 
@@ -229,7 +259,19 @@ namespace aaLogReader
 
         public string ToTSV(ExportFormat format = ExportFormat.Full)
         {
-            return this.ToDelimitedString('\t',format);
+            return this.ToDelimitedString('\t', format);
+        }
+
+#if NET45_OR_GREATER
+        private void LogException(Exception ex, [CallerMemberName]string methodName = "")
+        {
+#else
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+        private void LogException(Exception ex)
+        {
+            string methodName = new System.Diagnostics.StackFrame(1, false).GetMethod().Name;
+#endif
+            log.Error(string.Format("{0}: {1} - {2}", methodName, ex.GetType().Name, ex.Message), ex);
         }
     }
 }
