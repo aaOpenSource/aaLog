@@ -20,20 +20,23 @@ namespace aaLogWebAPI
             {
 
                 // Specify the URI to use for the local host:
-                ///TODO: Make port an option on startup
+                // TODO: Make port an option on startup
+                // Example: http://localhost:8080/odata/UnreadRecords?unreadcount=10
                 string baseUri = "http://localhost:8080";
 
-                Console.WriteLine("Starting web Server...");
-                WebApp.Start<Startup>(baseUri);                
-                Console.WriteLine("Server running at {0} - press Enter to quit. ", baseUri);
+                Console.WriteLine("Starting web Server... at " + baseUri);
+                using (var srv = WebApp.Start<Startup>(baseUri))
+                {
+                    Console.WriteLine("Server running at {0} - press Enter to quit. ", baseUri);
+                    Console.ReadLine();
+                }
             }
             catch(Exception ex)
-            {               
+            {
+                Console.Error.WriteLine(ex.GetType().Name + ": " + ex.Message);
                 Debug.WriteLine(ex.ToString());
+                Console.ReadLine();
             }
-
-            Console.ReadLine();
-                
         }
     }
 }
