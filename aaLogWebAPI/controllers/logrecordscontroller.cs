@@ -60,6 +60,13 @@ namespace aaLogWebAPI.Controllers
         {
             try
             {
+                //OkNegotiatedContentResult<IQueryable<aaLogReader.LogRecord>> = aalogDataSource.Instance.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile).AsQueryable();
+
+                var localResponse = Ok(aalogDataSource.Instance.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile).AsQueryable());
+                
+
+
+
                 return Ok(aalogDataSource.Instance.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile).AsQueryable());
             }
             catch (Exception ex)

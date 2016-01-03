@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogGUITester", "aaLogForwarder\aaLogGUITester.csproj", "{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}"
 EndProject
@@ -35,6 +35,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogReader.Tests", "aaLogR
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		aaLogWebAPI-Debug|Any CPU = aaLogWebAPI-Debug|Any CPU
+		aaLogWebAPI-Debug|Mixed Platforms = aaLogWebAPI-Debug|Mixed Platforms
+		aaLogWebAPI-Debug|x86 = aaLogWebAPI-Debug|x86
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x86 = Debug|x86
@@ -46,6 +49,11 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.aaLogWebAPI-Debug|Any CPU.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.aaLogWebAPI-Debug|x86.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.aaLogWebAPI-Debug|x86.Build.0 = aaLogWebAPI-Debug|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -60,6 +68,12 @@ Global
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release|x86.ActiveCfg = Release|Any CPU
 		{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}.Release|x86.Build.0 = Release|Any CPU
+		{028D0691-41C6-426E-B378-FB291425CF6D}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{028D0691-41C6-426E-B378-FB291425CF6D}.aaLogWebAPI-Debug|Any CPU.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{028D0691-41C6-426E-B378-FB291425CF6D}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{028D0691-41C6-426E-B378-FB291425CF6D}.aaLogWebAPI-Debug|Mixed Platforms.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{028D0691-41C6-426E-B378-FB291425CF6D}.aaLogWebAPI-Debug|x86.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{028D0691-41C6-426E-B378-FB291425CF6D}.aaLogWebAPI-Debug|x86.Build.0 = aaLogWebAPI-Debug|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -77,6 +91,11 @@ Global
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Release|x86.ActiveCfg = Release|Any CPU
 		{028D0691-41C6-426E-B378-FB291425CF6D}.Release|x86.Build.0 = Release|Any CPU
+		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.aaLogWebAPI-Debug|Any CPU.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.aaLogWebAPI-Debug|x86.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.aaLogWebAPI-Debug|x86.Build.0 = aaLogWebAPI-Debug|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -92,6 +111,11 @@ Global
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release|x86.ActiveCfg = Release|Any CPU
 		{52754B83-33EC-4C89-AB0B-CB022747BBFF}.Release|x86.Build.0 = Release|Any CPU
+		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.aaLogWebAPI-Debug|Any CPU.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.aaLogWebAPI-Debug|x86.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.aaLogWebAPI-Debug|x86.Build.0 = aaLogWebAPI-Debug|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -108,6 +132,11 @@ Global
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|x86.ActiveCfg = Release|Any CPU
 		{AD520B06-FC6D-4516-AB51-C6A87A8B9BC6}.Release|x86.Build.0 = Release|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.aaLogWebAPI-Debug|Any CPU.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.aaLogWebAPI-Debug|x86.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.aaLogWebAPI-Debug|x86.Build.0 = aaLogWebAPI-Debug|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -124,6 +153,11 @@ Global
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|x86.ActiveCfg = Release|Any CPU
 		{D38C492C-53EC-4F1B-98E7-CD7CD258E72D}.Release|x86.Build.0 = Release|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.aaLogWebAPI-Debug|Any CPU.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.aaLogWebAPI-Debug|x86.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.aaLogWebAPI-Debug|x86.Build.0 = aaLogWebAPI-Debug|Any CPU
 		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -139,6 +173,12 @@ Global
 		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5A559239-6B65-4F01-8D7D-B728FE5DA44C}.Release|x86.ActiveCfg = Release|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.aaLogWebAPI-Debug|Any CPU.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.aaLogWebAPI-Debug|Mixed Platforms.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.aaLogWebAPI-Debug|x86.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.aaLogWebAPI-Debug|x86.Build.0 = aaLogWebAPI-Debug|Any CPU
 		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -154,6 +194,12 @@ Global
 		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}.Release|x86.ActiveCfg = Release|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.aaLogWebAPI-Debug|Any CPU.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.aaLogWebAPI-Debug|Mixed Platforms.Build.0 = aaLogWebAPI-Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.aaLogWebAPI-Debug|x86.ActiveCfg = aaLogWebAPI-Debug|Any CPU
+		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.aaLogWebAPI-Debug|x86.Build.0 = aaLogWebAPI-Debug|Any CPU
 		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
