@@ -959,7 +959,7 @@ namespace aaLogReader
             List<string> returnValue = new List<string>();
 
             //Now try to find the specific file where the
-            List<LogHeader> foundLogHeaders = this.IndexLogHeaders().FindAll(x => x.StartMsgNumber <= MessageNumber && MessageNumber <= x.EndMsgNumber).OrderBy(x => x.StartFileTime).ToList<LogHeader>();
+            List<LogHeader> foundLogHeaders = this.IndexLogHeaders().FindAll(x => x.StartMsgNumber <= MessageNumber && MessageNumber <= x.EndMsgNumber).OrderByDescending(x => x.StartFileTime).ToList<LogHeader>();
 
             if (foundLogHeaders.Count > 0)
             {
