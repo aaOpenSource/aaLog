@@ -94,6 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="classes\FlexibleNegotiatedContentResult.cs" />
     <Compile Include="controllers\logrecordscontroller.cs" />
     <Compile Include="datasources\aalogDataSource.cs" />
     <Compile Include="Program.cs" />
