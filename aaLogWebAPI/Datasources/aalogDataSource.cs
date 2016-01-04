@@ -25,9 +25,9 @@ namespace aaLogWebAPI.Datasources
             logreader = new aaLogReader.aaLogReader();
         } 
 
-        public List<aaLogReader.LogRecord> GetUnreadRecords(ulong unreadcount = 1000, string stopmessagepattern = "", bool ignorecachefile = false)
+        public List<aaLogReader.LogRecord> GetUnreadRecords(ulong unreadcount = 1000, string stopmessagepattern = "", bool ignorecachefile = false, string cacheFileClientID = "")
         {
-            return logreader.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile);
+            return logreader.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile,cacheFileClientID);
         }
 
         public aaLogReader.LogRecord GetRecordByMessageNumber(ulong messageNumber)
@@ -44,8 +44,6 @@ namespace aaLogWebAPI.Datasources
         {
             return logreader.GetRecordByTimestamp(messageTimestamp, TimestampEarlyOrLate);
         }
-
-        //GetRecordsByStartMessageNumberAndCount
 
         public List<aaLogReader.LogRecord> GetRecordsByStartMessageNumberAndCount(ulong messageNumber, int count)
         {

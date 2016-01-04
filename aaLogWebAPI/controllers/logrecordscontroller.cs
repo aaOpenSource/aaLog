@@ -60,14 +60,22 @@ namespace aaLogWebAPI.Controllers
         {
             try
             {
-                //OkNegotiatedContentResult<IQueryable<aaLogReader.LogRecord>> = aalogDataSource.Instance.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile).AsQueryable();
+                // First get the client ID, if set from the request headers
+                string localClientID = Request.Headers.GetValues("clientid").First();
 
-                var localResponse = Ok(aalogDataSource.Instance.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile).AsQueryable());
+                //Create a GUID if the passed clientID is null or empty
+                if(string.IsNullOrEmpty(localClientID))
+                {
+                    localClientID = Guid.NewGuid().ToString();
+                }
                 
-
-
-
-                return Ok(aalogDataSource.Instance.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile).AsQueryable());
+                FlexibleNegotiatedContentResult<IQueryable<aaLogReader.LogRecord>> localResponse;
+                
+                // Use the clientID in the call to get the unread records.  This allows for tracking custom cache files on a client by client basis
+                // Add the clientID to the headers in the response
+                localResponse = new FlexibleNegotiatedContentResult<IQueryable<aaLogReader.LogRecord>>(HttpStatusCode.OK, aalogDataSource.Instance.GetUnreadRecords(unreadcount, stopmessagepattern, ignorecachefile,localClientID).AsQueryable(), this, response => response.Headers.Add("clientid", localClientID));
+                
+                return localResponse;
             }
             catch (Exception ex)
             {
