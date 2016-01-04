@@ -7,11 +7,15 @@ using System.Threading.Tasks;
 
 namespace aaLogWebAPI
 {
+
+
     public class TraceMessageMiddleware : OwinMiddleware
     {
+        
         public TraceMessageMiddleware(OwinMiddleware next)
             : base(next)
-        { }
+        {   
+        }
 
         /// <summary>
         /// Print the request information to the Console for debugging purposes.
@@ -26,8 +30,11 @@ namespace aaLogWebAPI
             var requestMethod = (string)env["owin.RequestMethod"];
             var requestQueryString = (string)env["owin.RequestQueryString"];
             var requestPathString = (string)env["owin.RequestPath"];
-            Console.WriteLine(string.Format("{0:yyyy-MM-dd HH:mm:ss} {1} {2} {3} {4}",
-                DateTime.Now, requestRemoteIpAddress, requestMethod, requestPathString, requestQueryString));
+
+            string logMessage = string.Format("{0:yyyy-MM-dd HH:mm:ss} {1} {2} {3} {4}",
+                DateTime.Now, requestRemoteIpAddress, requestMethod, requestPathString, requestQueryString);
+
+            Console.WriteLine(logMessage);
 
             return Next.Invoke(context);
         }
