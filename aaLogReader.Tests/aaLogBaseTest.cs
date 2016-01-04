@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace aaLogReader.Tests
@@ -82,6 +83,19 @@ namespace aaLogReader.Tests
             Assert.AreEqual(expected.SessionID, actual.SessionID, "SessionID is wrong");
             // This is not really a property of the source LogRecord, but of the reader
             //Assert.AreEqual(expected.HostFQDN, ExpectedFqdn, "HostFQDN is wrong");
+        }
+
+        public void AreEqual(List<LogRecord> expected,List<LogRecord> actual,string optionalMessage = null)
+        {
+            int expectedCount = expected.Count;
+            int actualCount = actual.Count;
+
+            Assert.AreEqual(expectedCount, actualCount, "Length of expected and actual are not equal.");
+
+            for (int i = 0; i <= expectedCount - 1; i++)
+            {
+                AreEqual(expected[i], actual[i], optionalMessage);
+            }            
         }
     }
 }
