@@ -9,21 +9,21 @@ namespace aaLogReaderModularInput
     public class Program : ModularInput
     {
         /// <summary>
-        /// Main method which dispatches to ModularInput.Run&lt;T&gt;.
+        /// Main method which dispatches to ModularInput.Run<>.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
         /// <returns>An exit code.</returns>
         public static int Main(string[] args)
         {
-            uint timeout_sec = 60;
+            //uint timeout_sec = 60;
 
-            #if DEBUG_VALIDATE
-                        return Run<Program>(args, DebuggerAttachPoints.ValidateArguments, timeout_sec);
-            #elif DEBUG_STREAMEVENTS
-                        return Run<Program>(args, DebuggerAttachPoints.StreamEvents, timeout_sec);
-            #else
+            //#if DEBUG_VALIDATE
+            //            return Run<Program>(args, DebuggerAttachPoints.ValidateArguments, timeout_sec);
+            //#elif DEBUG_STREAMEVENTS
+            //            return Run<Program>(args, DebuggerAttachPoints.StreamEvents, timeout_sec);
+            //#else
                         return Run<Program>(args);
-            #endif
+            //#endif
         }
 
         /// <summary>
