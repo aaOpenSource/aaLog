@@ -127,6 +127,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <None Include="aaLogReaderModularInput.zip" />
     <None Include="aaLogReaderModularInput\default\app.conf" />
     <None Include="aaLogReaderModularInput\default\inputs.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
