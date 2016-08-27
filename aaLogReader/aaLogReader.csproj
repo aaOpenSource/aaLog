@@ -19,11 +19,11 @@
     <!-- Move the comma delimiter to the end of each constant and remove the trailing comma when we're done.  -->
     <DefineConstants Condition=" !$(DefineConstants.Contains(', NET')) ">$(DefineConstants)$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", "")), </DefineConstants>
     <DefineConstants Condition=" $(DefineConstants.Contains(', NET')) ">$(DefineConstants.Remove($(DefineConstants.LastIndexOf(", NET"))))$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", "")), </DefineConstants>
-    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) >= 2.0 ">$(DefineConstants)NET20_OR_GREATER, </DefineConstants>
-    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) >= 3.5 ">$(DefineConstants)NET35_OR_GREATER</DefineConstants>
-    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) >= 4.0 ">$(DefineConstants)NET40_OR_GREATER</DefineConstants>
-    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) >= 4.5 ">$(DefineConstants)NET45_OR_GREATER</DefineConstants>
-    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) >= 4.6 ">$(DefineConstants)NET46_OR_GREATER</DefineConstants>
+    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 2.0 ">$(DefineConstants)NET20_OR_GREATER, </DefineConstants>
+    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 3.5 ">$(DefineConstants)NET35_OR_GREATER</DefineConstants>
+    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 4.0 ">$(DefineConstants)NET40_OR_GREATER</DefineConstants>
+    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 4.5 ">$(DefineConstants)NET45_OR_GREATER</DefineConstants>
+    <DefineConstants Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 4.6 ">$(DefineConstants)NET46_OR_GREATER</DefineConstants>
     <DefineConstants Condition=" $(DefineConstants.EndsWith(', ')) ">$(DefineConstants.Remove($(DefineConstants.LastIndexOf(", "))))</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
@@ -59,6 +59,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <DocumentationFile>bin\Release\aaLogReader.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'aaLogWebAPI-Debug|AnyCPU'">
+    <OutputPath>bin\aaLogWebAPI-Debug\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">

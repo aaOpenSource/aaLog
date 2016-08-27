@@ -364,6 +364,64 @@ namespace aaLogReader.Tests.aaLogReaderTests
             AreEqual(Expected_60383, actual);
         }
 
+        [Test]
+        public void GetUnreadRecords()
+        {
+            var logReader = GetLogReader();
+            
+            var unreadRecords = logReader.GetUnreadRecords(4, "", true);
+
+            var actual4 = logReader.GetLastRecord();
+            AreEqual(actual4, unreadRecords[0],"First record did not match");
+
+            var actual3 = logReader.GetPrevRecord();
+            AreEqual(actual3, unreadRecords[1]);
+
+            var actual2 = logReader.GetPrevRecord();
+            AreEqual(actual2, unreadRecords[2]);
+
+            var actual1 = logReader.GetPrevRecord();
+            AreEqual(actual1, unreadRecords[3],"Last record did not match");
+
+            var unreadRecordsUsingCache = logReader.GetUnreadRecords(4, "", false);
+
+            Assert.AreEqual(0, unreadRecordsUsingCache.Count, "Function should not return records when using cache file");
+        }
+
+        [Test]
+        public void GetUnreadRecordsIgnoreCacheFile()
+        {
+            var logReader = GetLogReader();
+
+            var unreadRecords = logReader.GetUnreadRecords(4, "", true);
+            Assert.AreEqual(4, unreadRecords.Count, "Function did not return correct number of records.");
+
+            var unreadRecords2 = logReader.GetUnreadRecords(4, "", true);
+            Assert.AreEqual(4, unreadRecords2.Count, "Function should return same records when ignoring cache file");
+
+            AreEqual(unreadRecords, unreadRecords2,"Function should return same results for second call when ignoring cache file");
+        }
+
+        [Test]
+        public void GetUnreadRecordsWithCustomClientID()
+        {
+            var logReader = GetLogReader();
+
+            var unreadRecords = logReader.GetUnreadRecords(4, "",false,"ClientID1");
+            unreadRecords = logReader.GetUnreadRecords(4, "", false, "ClientID1");
+            Assert.AreEqual(0, unreadRecords.Count, "Second call with same client ID did not return 0 records");
+        }
+
+        [Test]
+        public void GetUnreadRecordsWithDifferentCustomClientID()
+        {
+            var logReader = GetLogReader();
+
+            var unreadRecords = logReader.GetUnreadRecords(4, "", false, "ClientID1");
+            unreadRecords = logReader.GetUnreadRecords(4, "", false, "ClientID2");
+            Assert.AreEqual(4, unreadRecords.Count, "Second call with different client ID did not return records");
+        }
+
         //[Test]
         //public void GetRecordByFileTime()
         //{

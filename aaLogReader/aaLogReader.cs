@@ -1478,27 +1478,31 @@ namespace aaLogReader
         /// <param name="maximumMessages">Maximum number of messages to return</param>
         /// <param name="messagePatternToStop">Message pattern to match for ending search</param>
         /// <param name="IgnoreCacheFile">Ignore the cache file and read all messages up to maximum or message pattern</param>
+        /// <param name="cacheFileClientID">Custom client id used for tracking unread records</param>
         /// <returns></returns>
-        public List<LogRecord> GetUnreadRecords(ulong maximumMessages = 1000, string messagePatternToStop = "", bool IgnoreCacheFile = false)
+        public List<LogRecord> GetUnreadRecords(ulong maximumMessages = 1000, string messagePatternToStop = "", bool IgnoreCacheFile = false, string cacheFileClientID = null)
         {
             log.DebugFormat("maximumMessages - {0}", maximumMessages.ToString());
             log.DebugFormat("messagePatternToStop - {0}", messagePatternToStop);
             log.DebugFormat("IgnoreCacheFile - {0}", IgnoreCacheFile);
+            log.DebugFormat("cacheFileClientID - {0}", cacheFileClientID);
 
             ulong lastMessageNumber = ulong.MinValue;
+            string localCacheFilePath = "";
 
-            // If we are not explicitely ignoring the cache file AND we haven't specified a starting message number
+            // If we are not explicitly ignoring the cache file AND we haven't specified a starting message number
             // then read the cache file to rigure out where we stopped last time.
             if ((!IgnoreCacheFile))
             {
-                string cacheFilePath = this.GetStatusCacheFilePath();
-                log.Debug("cacheFilePath - " + cacheFilePath);
+                localCacheFilePath = GetStatusCacheFilePath("", cacheFileClientID);
+
+                log.Debug("localCacheFilePath - " + localCacheFilePath);
 
                 // If the cache file exists and we should not ignore it
-                if (File.Exists(cacheFilePath))
+                if (File.Exists(localCacheFilePath))
                 {
                     // Get the JSON from the file
-                    string objectJSONFromCacheFile = File.ReadAllText(this.GetStatusCacheFilePath());
+                    string objectJSONFromCacheFile = File.ReadAllText(localCacheFilePath);
 
                     // Deserialize into the Log Record
                     LogRecord lastRecordFromCacheFile = JsonConvert.DeserializeObject<LogRecord>(objectJSONFromCacheFile);
@@ -1515,7 +1519,7 @@ namespace aaLogReader
                 }
             }
 
-            return this.GetRecordsInternal(lastMessageNumber, maximumMessages, messagePatternToStop);
+            return this.GetRecordsInternal(lastMessageNumber, maximumMessages, messagePatternToStop, localCacheFilePath);
         }
 
         /// <summary>
@@ -1526,7 +1530,7 @@ namespace aaLogReader
         /// <param name="maximumMessages">Maximum number of messages to return</param>
         /// <param name="messagePatternToStop">Message pattern to match for ending search</param>
         /// <returns></returns>
-        private List<LogRecord> GetRecordsInternal(ulong stopReadMessageNumber = ulong.MinValue, ulong maximumMessages = 1000, string messagePatternToStop = "")
+        private List<LogRecord> GetRecordsInternal(ulong stopReadMessageNumber = ulong.MinValue, ulong maximumMessages = 1000, string messagePatternToStop = "", string cacheFilePath = null)
         {
             List<LogRecord> logRecordList = new List<LogRecord>();
             LogRecord localRecord;
@@ -1611,7 +1615,7 @@ namespace aaLogReader
 
                     // Write out the cache file if we read records
                     // The log record to cache should be the latest record, by message number
-                    this.WriteStatusCacheFile(logRecordList.OrderByDescending(item => item.MessageNumber).First());
+                    this.WriteStatusCacheFile(logRecordList.OrderByDescending(item => item.MessageNumber).First(), cacheFilePath);
                 }
 
                 // After all records have been retrieved, apply filter
@@ -1781,16 +1785,26 @@ namespace aaLogReader
         /// Write a text file out with metadata that can be used if the application is closed and reopened to read logs again
         /// </summary>
         /// <param name="CacheRecord">Complete record to write out containing cache information</param>
-        private ReturnCodeStruct WriteStatusCacheFile(LogRecord CacheRecord)
+        private ReturnCodeStruct WriteStatusCacheFile(LogRecord CacheRecord, string cacheFilePath = "")
         {
             log.Debug("");
             log.Debug("CacheRecord - " + CacheRecord.ToJSON());
 
             ReturnCodeStruct returnValue;
+            string localCacheFilepath;
 
             try
             {
-                System.IO.File.WriteAllText(this.GetStatusCacheFilePath(), CacheRecord.ToJSON());
+                if(string.IsNullOrEmpty(cacheFilePath))
+                {
+                    localCacheFilepath = this.GetStatusCacheFilePath();
+                }
+                else
+                {
+                    localCacheFilepath = cacheFilePath;
+                }
+
+                System.IO.File.WriteAllText(localCacheFilepath, CacheRecord.ToJSON());
                 returnValue = new ReturnCodeStruct { Status = true, Message = "" };
             }
             catch (Exception ex)
@@ -1806,19 +1820,24 @@ namespace aaLogReader
         /// <summary>
         /// Calculate the path to the cache file
         /// </summary>
+        /// <param name="CacheFileNameCustom">Custom cache file name for this local call instance</param>
+        /// <param name="LogFilePath">Custom path to log file directory</param>
         /// <returns></returns>
-        private string GetStatusCacheFilePath(string LogFilePath = "")
+        private string GetStatusCacheFilePath(string LogFilePath = "", string CacheFileNameCustom = "")
         {
-            log.Debug("");
+            log.DebugFormat("LogFilePath - {0}",LogFilePath);
+
             string returnValue = "";
 
             try
             {
                 string cacheFileName = "";
 
-                // Check the global options to determine the features that have been configured
-
-                if (!string.IsNullOrEmpty(Options.CacheFileNameCustom))
+                if(!string.IsNullOrEmpty(CacheFileNameCustom))
+                {
+                    cacheFileName = CacheFileNameCustom + "-cache";
+                }
+               else if (!string.IsNullOrEmpty(Options.CacheFileNameCustom))
                 {
                     cacheFileName = Options.CacheFileNameCustom;
                 }
