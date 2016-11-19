@@ -1785,7 +1785,7 @@ namespace aaLogReader
         /// Write a text file out with metadata that can be used if the application is closed and reopened to read logs again
         /// </summary>
         /// <param name="CacheRecord">Complete record to write out containing cache information</param>
-        private ReturnCodeStruct WriteStatusCacheFile(LogRecord CacheRecord, string cacheFilePath = "")
+        public static ReturnCodeStruct WriteStatusCacheFile(LogRecord CacheRecord, string cacheFilePath = "")
         {
             log.Debug("");
             log.Debug("CacheRecord - " + CacheRecord.ToJSON());
