@@ -1,13 +1,5 @@
 {
-  //"LogDirectory": "C:\\ProgramData\\ArchestrA\\LogFiles",
-  //"CacheFileBaseName": "aaLogReaderCache",
-  //"CacheFileNameCustom": "",
-  //"CacheFileAppendProcessNameToBaseFileName": true,
-  //"IgnoreCacheFileOnFirstRead": false,
   "ReadInterval": 1000,
-  "SplunkBaseAddress": "http://li1280-175.members.linode.com:8088",
-  "AuthorizationToken": "E7AF4023-A88E-41FD-9D17-4B4A6BAFCE44"
-
-  //"http": //li1280-175.members.linode.com:8000/
-  //"E7AF4023-A88E-41FD-9D17-4B4A6BAFCE44"
+  "SplunkBaseAddress": "http://localhost:8088",
+  "AuthorizationToken": "ADD81F16-6D0D-4803-82C9-8A959A311A4B"
 }
