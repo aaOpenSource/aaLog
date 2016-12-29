@@ -90,7 +90,7 @@ namespace aaLogSplunkHTTP
 
                 if (logRecords.Count > 0)
                 {
-                    var result = transmitRecords(_client, _splunkClientID, logRecords).Result;
+                    var result = TransmitValues(_client, _splunkClientID, logRecords.ToKVP()).Result;
                     
                     // If the last transmission was successful then capture the last record transmitted for the next read
                     if (result.StatusCode == HttpStatusCode.OK)
@@ -124,14 +124,14 @@ namespace aaLogSplunkHTTP
         /// <param name="client"></param>
         /// <param name="clientID"></param>
         /// <param name="records"></param>
-        static async Task<HttpResponseMessage> transmitRecords(HttpClient client, Guid clientID, List<LogRecord> records)
+        static async Task<HttpResponseMessage> TransmitValues(HttpClient client, Guid clientID, string kvpValues)
         {
 
             HttpResponseMessage responseMessage = new HttpResponseMessage();
 
             try
             {
-                responseMessage = await client.PostAsync("/services/collector/raw?channel=" + clientID, new StringContent(records.ToKVP()));
+                responseMessage = await client.PostAsync("/services/collector/raw?channel=" + clientID, new StringContent(kvpValues));
             }
             catch (Exception ex)
             {
