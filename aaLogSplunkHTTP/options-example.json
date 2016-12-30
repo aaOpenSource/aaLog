@@ -1,0 +1,19 @@
+{
+  "ReadInterval": 5000,
+  "MaximumReadInterval": 50000,
+  "MaxUnreadRecords": 1000,
+  "SplunkBaseAddress": "http://localhost:8088",
+  "SplunkAuthorizationToken": null,
+  "SplunkClientID": "4ca81fc4-225b-4999-9f66-a6bb6754c9ad",
+  "SplunkIgnoreSSLErrors": false,
+  "SplunkSourceHost": "WIN-PCQGQK0JJFB",
+  "SplunkSourceData": null,
+  "SplunkEventTimestampFormat": "yyyy-MM-dd HH:mm:ss.ffffff zz",
+  "CacheFilename": null,
+  "LogDirectory": "C:\\ProgramData\\ArchestrA\\LogFiles",
+  "CacheFileBaseName": "aaLogReaderCache",
+  "CacheFileNameCustom": "",
+  "CacheFileAppendProcessNameToBaseFileName": true,
+  "IgnoreCacheFileOnFirstRead": false,
+  "LogRecordPostFilters": []
+}
