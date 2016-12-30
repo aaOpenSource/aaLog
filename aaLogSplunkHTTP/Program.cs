@@ -36,9 +36,6 @@ namespace aaLogSplunkHTTP
             }
         }
 
-        //Setup Timer for reading logs
-        private static Timer readTimer;
-
         //Runtime Options Object
         private static Options runtimeOptions;
         internal static Options RuntimeOptions
@@ -94,8 +91,42 @@ namespace aaLogSplunkHTTP
             }
         }
 
+        //Setup Timer for reading logs
+        private static Timer readTimer;
+        public static Timer ReadTimer
+        {
+            get
+            {
+                if (readTimer == null)
+                {
+                    readTimer = new Timer();
+                }
+
+                return readTimer;
+            }
+
+            set
+            {
+                readTimer = value;
+            }
+        }
+
+        private static CommandOption optionsFilePathOption;
+        internal static CommandOption OptionsFilePathOption
+        {
+            get
+            {
+                return optionsFilePathOption;
+            }
+
+            set
+            {
+                optionsFilePathOption = value;
+            }
+        }
+
         #endregion
-        
+
         static int Main(string[] args)
         {
             // Setup logging
@@ -119,15 +150,10 @@ namespace aaLogSplunkHTTP
                 app.HelpOption("-?| -h| --help");
                 app.VersionOption("-v| --version", assembly.GetName().Version.MajorRevision.ToString(), assembly.GetName().Version.ToString());
 
-                var optionsFilePathOption = app.Option("-o| --optionsfile <PATH>", "Path to options file (Optional)", CommandOptionType.SingleValue);
+                OptionsFilePathOption = app.Option("-o| --optionsfile <PATH>", "Path to options file (Optional)", CommandOptionType.SingleValue);
 
                 app.OnExecute(() =>
                 {
-                    //Load runtime options
-                    RuntimeOptions = ReadOptionsFile(optionsFilePathOption);
-
-                    RuntimeOptions.MaxUnreadRecords = 3;
-
                     //Initialize the Log Reader
                     LogReader = new aaLogReader.aaLogReader(RuntimeOptions);
 
@@ -142,39 +168,21 @@ namespace aaLogSplunkHTTP
                     };
 
                     // Configure Timer
-                    readTimer = new Timer(RuntimeOptions.ReadInterval);
+                    ReadTimer.Interval = RuntimeOptions.ReadInterval;
 
                     // Create delegate to handle elapsed time event
-                    readTimer.Elapsed += ReadTimer_Elapsed;
+                    ReadTimer.Elapsed += ReadTimer_Elapsed;
 
                     //Start Timer
-                    readTimer.Start();
+                    ReadTimer.Start();
 
                     //Prevent console from exiting
                     Console.Read();
                     return 0;
                 });
 
-                //app.Command("clearcache", c =>
-                //{
-                //    c.Description = "Deletes the current cache file";
-                //    c.HelpOption("-?| -h| --help");
-
-                //    c.OnExecute(() =>
-                //    {
-                //        //Load runtime options
-                //        RuntimeOptions = ReadOptionsFile(optionsFilePathOption);
-
-                //        log.InfoFormat("Deleting cache file {0}", LogReader);
-                //        System.IO.File.Delete(CacheFileName);
-
-                //        return 0;
-                //    });
-                //});
-
                 app.Command("createdefaultoptionsfile", c =>
                 {
-
                     c.Description = "Create a default options.json file";
                     c.HelpOption("-?| -h| --help");
 
@@ -183,34 +191,15 @@ namespace aaLogSplunkHTTP
 
                     c.OnExecute(() =>
                     {
-                        var fileName = fileNameOption.Value() ?? "options.json";
-
-                        if (System.IO.File.Exists(fileName))
-                        {
-                            log.InfoFormat("{0} exists", fileName);
-
-                            if (!overWriteOption.HasValue())
-                            {
-                                log.InfoFormat("Applications options not set to overwrite {0}.  Specify options to overwrite or use different filename.", fileName);
-                                return 0;
-                            }
-                            else
-                            {
-                                log.InfoFormat("Overwriting {0}", fileName);
-                            }
-                        }
-
-                        System.IO.File.WriteAllText(fileName, JsonConvert.SerializeObject(new Options(), Formatting.Indented));
-
-                        log.InfoFormat("Wrote default options to {0}", fileName);
-
-                        return 0;
+                        return CreateDefaultOptionsFile(fileNameOption.Value() ?? "options.json", overWriteOption.HasValue());
                     });
                 });
 
-                //Debug the startup arguments
-                log.DebugFormat("Startup Arguments");
-                log.Debug(JsonConvert.SerializeObject(args));
+                //Debug the startup arguments                
+                log.DebugFormat("Startup Arguments {0}", JsonConvert.SerializeObject(args));
+
+                //Always make sure we load runtime options first
+                RuntimeOptions = ReadOptionsFile(OptionsFilePathOption);
 
                 // Run the application with arguments
                 return app.Execute(args);
@@ -223,7 +212,49 @@ namespace aaLogSplunkHTTP
                 return -1;
             }
         }
+        
+        /// <summary>
+        /// Write a default options file to disk
+        /// </summary>
+        /// <param name="fileName">Filename for the options file</param>
+        /// <param name="overWrite">Overwrite an existing file if it exists</param>
+        /// <returns></returns>
+        private static int CreateDefaultOptionsFile(string fileName = "options.json", bool overWrite = false)
+        {
+            try
+            {
+                if (System.IO.File.Exists(fileName))
+                {
+                    log.InfoFormat("{0} exists", fileName);
 
+                    if (!overWrite)
+                    {
+                        log.InfoFormat("Applications options not set to overwrite {0}.  Specify options to overwrite or use different filename.", fileName);
+                        return 0;
+                    }
+                    else
+                    {
+                        log.InfoFormat("Overwriting {0}", fileName);
+                    }
+                }
+
+                System.IO.File.WriteAllText(fileName, JsonConvert.SerializeObject(new Options(), Formatting.Indented));
+                log.InfoFormat("Wrote default options to {0}", fileName);
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Read an options file and return an Options object
+        /// </summary>
+        /// <param name="optionsFilePathOption">Path to options file</param>
+        /// <returns></returns>
         private static Options ReadOptionsFile(CommandOption optionsFilePathOption)
         {
             try
@@ -248,19 +279,20 @@ namespace aaLogSplunkHTTP
                 return null;
             }
         }
-
+        
         private static void ReadTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             ReadAndTransmitData(LogReader);
         }
 
+        /// <summary>
+        /// Read data and transmit via HTTP to Splunk
+        /// </summary>
+        /// <param name="logReader"></param>
         private static void ReadAndTransmitData(aaLogReader.aaLogReader logReader)
         {
-            // string kvpValue = "";
-
             try
             {
-
                 var logRecords = logReader.GetUnreadRecords(RuntimeOptions.MaxUnreadRecords);
 
                 if(logRecords.Count > 0)
@@ -274,7 +306,7 @@ namespace aaLogSplunkHTTP
                        if (readTimer.Interval != RuntimeOptions.ReadInterval)
                         {
                             //Reset timer interval
-                            ClearTimerBackoff(ref readTimer, RuntimeOptions);
+                            ClearTimerBackoff(ReadTimer, RuntimeOptions);
                         }
 
                        // Cache off the last record transmitted successfully
@@ -287,7 +319,7 @@ namespace aaLogSplunkHTTP
                         logReader.WriteStatusCacheFile(LastRecordTransmitted);
 
                         // Implement a timer backoff so we don't flood the endpoint
-                        IncrementTimerBackoff(ref readTimer, RuntimeOptions);
+                        IncrementTimerBackoff(ReadTimer, RuntimeOptions);
                         log.WarnFormat("HTTP Transmission not OK {0}", result);
                         }
                     }               
@@ -301,11 +333,11 @@ namespace aaLogSplunkHTTP
                 // Do Nothing
             }
         }
-        
+
         /// <summary>
         /// Slow down the timer by doubling the interval up to MaximumReadInterval
         /// </summary>
-        private static void IncrementTimerBackoff(ref Timer readTimer, Options runtimeOptions)
+        private static void IncrementTimerBackoff(Timer readTimer, Options runtimeOptions)
         {
             try
             {
@@ -331,7 +363,7 @@ namespace aaLogSplunkHTTP
         /// <summary>
         /// Slow down the timer by doubling the interval up to MaximumReadInterval
         /// </summary>
-        private static void ClearTimerBackoff(ref Timer readTimer, Options runtimeOptions)
+        private static void ClearTimerBackoff(Timer readTimer, Options runtimeOptions)
         {
             try
             {
@@ -347,6 +379,6 @@ namespace aaLogSplunkHTTP
                 // Set to a default read interval of 60000
                 readTimer.Interval = 60000;
             }
-        }        
+        }
     }
 }
