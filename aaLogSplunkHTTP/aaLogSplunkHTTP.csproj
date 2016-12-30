@@ -66,6 +66,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="options-example.json" />
     <None Include="options.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
