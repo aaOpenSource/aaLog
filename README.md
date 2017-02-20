@@ -1,6 +1,8 @@
 aaLog
 =================
 
+[![Join the chat at https://gitter.im/aaOpenSource/aaLog](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aaOpenSource/aaLog?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A library and some simple example projects to read binary log files produced by System Platform components.
 
 ## Motivation
