@@ -3,9 +3,51 @@
   "SplunkBaseAddress": "http://localhost:8088",
   "SplunkSourceData": "WonderwareSMCLog",
   "SplunkEventTimestampFormat": "yyyy-MM-dd HH:mm:ss.ffffff zz",
-  "MaxRecords": "5",
+  "MaxRecords": "100",
   "ReadInterval": "10000",
   //"LogDirectory": "C:\\temp\\aalogs"
+  "AALGXDirectory" : "C:\\build\\splunk\\import",
+  "LogRecordPostFilters": 
+		[
+		/*
+			{
+				"Field": "Message",
+				"Filter": "Warning 40|Message 41"
+			},
+			{
+				"Field": "Message",
+				"Filter": "Warning 40|Message 41"
+			},
+			{
+				"Field": "MessageNumberMin",
+				"Filter": "6826080"
+			},
+			{
+				"Field": "MessageNumberMax",
+				"Filter": "6826085"
+			},
+			{
+				"Field": "DateTimeMin",
+				"Filter": "2015-06-19 01:45:00"
+			},
+			{
+				"Field": "DateTimeMax",
+				"Filter": "2015-06-19 01:45:05"
+			},
+			{
+				"Field": "ProcessID",
+				"Filter": "7260"
+			},
+			{
+				"Field": "ThreadID",
+				"Filter": "7264"
+			},
+			*/
+			{
+				"Field": "Message",
+				"Filter": "Started"
+			}
+		]
 }
 
 

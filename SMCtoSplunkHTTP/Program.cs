@@ -367,6 +367,7 @@ namespace SMCtoSplunkHTTP
         {
             string kvpValue = "";
             List<LogRecord> logRecords = new List<LogRecord>();
+            List<LogRecord> lgxRecords = new List<LogRecord>();
 
             try
             {
@@ -388,48 +389,143 @@ namespace SMCtoSplunkHTTP
                     logRecords = AALogReader.GetRecordsByStartMessageNumberAndCount(lastMessageNumberWritten+1, (int)runtimeOptions.MaxRecords);
                 }
                 
-                //var logRecords = aaLogReader.GetUnreadRecords(runtimeOptions.MaxRecords);
+                log.InfoFormat("{0} records retrieved", logRecords.Count);
 
-                log.DebugFormat("{0} records retrieved", logRecords.Count);
+                if (logRecords.Count > 0)
+                {
+                    //Build the additional KVP values to Append
+                    var additionalKVPValues = new StringBuilder();
 
-                    if (logRecords.Count > 0)
-                    {
-                        //Build the additional KVP values to Append
-                        var additionalKVPValues = new StringBuilder();
-
-                        additionalKVPValues.AppendFormat("{0}=\"{1}\", ", "SourceHost", RuntimeOptions.SplunkSourceHost);
-                        additionalKVPValues.AppendFormat("{0}=\"{1}\", ", "SourceData", RuntimeOptions.SplunkSourceData);
+                    additionalKVPValues.AppendFormat("{0}=\"{1}\", ", "SourceHost", RuntimeOptions.SplunkSourceHost);
+                    additionalKVPValues.AppendFormat("{0}=\"{1}\", ", "SourceData", RuntimeOptions.SplunkSourceData);
     
-                        //Get the KVP string for the records
-                        kvpValue = logRecords.ToKVP(additionalKVPValues.ToString());
+                    //Get the KVP string for the records
+                    kvpValue = logRecords.ToKVP(additionalKVPValues.ToString());
 
-                        //Transmit the records
-                        var result = SplunkHTTPClient.TransmitValues(kvpValue);
+                    //Transmit the records
+                    var result = SplunkHTTPClient.TransmitValues(kvpValue);
 
-                        log.DebugFormat("Transmit Values Result - {0}", result);
+                    log.DebugFormat("Transmit Values Result - {0}", result);
 
-                        //If successful then write the last sequence value to disk
-                        if (result.StatusCode == HttpStatusCode.OK)
+                    //If successful then write the last sequence value to disk
+                    if (result.StatusCode == HttpStatusCode.OK)
+                    {
+
+                        log.DebugFormat("Writing Cache File");
+
+                        // Write the last sequence value to the cache value named for the SQLSequence Field.  Order the result set by the sequence field then select the first record
+                        WriteCacheFile(logRecords, CacheFilename, RuntimeOptions);
+
+                        if(ReadTimer.Interval != RuntimeOptions.ReadInterval)
                         {
+                            //Reset timer interval
+                            ClearTimerBackoff(ReadTimer, RuntimeOptions);
+                        }                            
+                    }
+                    else
+                    {
+                        // Implement a timer backoff so we don't flood the endpoint
+                        IncrementTimerBackoff(ReadTimer, RuntimeOptions);
+                        log.WarnFormat("HTTP Transmission not OK - {0}",result);
+                    }
+                }
 
-                            log.DebugFormat("Writing Cache File");
+                var aaLGXDirectory = runtimeOptions.AALGXDirectory ?? "";
 
-                            // Write the last sequence value to the cache value named for the SQLSequence Field.  Order the result set by the sequence field then select the first record
-                            WriteCacheFile(logRecords, CacheFilename, RuntimeOptions);
+                // Parse AALGX Files
+                if (aaLGXDirectory != "")
+                {
+                    
+                    log.InfoFormat("Reading aaLGX files from {0}", aaLGXDirectory);
 
-                            if(ReadTimer.Interval != RuntimeOptions.ReadInterval)
-                            {
-                                //Reset timer interval
-                                ClearTimerBackoff(ReadTimer, RuntimeOptions);
-                            }                            
+                    if (Directory.Exists(aaLGXDirectory))
+                    {
+                        var successFolder = aaLGXDirectory + "\\success";
+
+                        if (!Directory.Exists(successFolder))
+                        {
+                            Directory.CreateDirectory(successFolder);
                         }
-                        else
+                        
+                        var errorFolder = aaLGXDirectory + "\\error";
+
+                        if (!Directory.Exists(errorFolder))
                         {
-                            // Implement a timer backoff so we don't flood the endpoint
-                            IncrementTimerBackoff(ReadTimer, RuntimeOptions);
-                            log.WarnFormat("HTTP Transmission not OK - {0}",result);
+                            Directory.CreateDirectory(errorFolder);
+                        }
+
+                        string[] filesList = Directory.GetFiles(aaLGXDirectory, "*.aalgx");
+                        foreach (string fileName in filesList)
+                        {
+                            log.InfoFormat("Processing file {0}", fileName);
+                            var aaLGXRecords = aaLgxReader.ReadLogRecords(fileName);
+                            
+                            log.InfoFormat("Found {0} records in {1}", aaLGXRecords.Count(), fileName);
+
+                            if (aaLGXRecords.Count() > 0)
+                                {
+                                    //Build the additional KVP values to Append
+                                    var additionalKVPValues = new StringBuilder();
+
+                                    additionalKVPValues.AppendFormat("{0}=\"{1}\", ", "SourceHost", RuntimeOptions.SplunkSourceHost);
+                                    additionalKVPValues.AppendFormat("{0}=\"{1}\", ", "SourceData", RuntimeOptions.SplunkSourceData);
+    
+                                    //Get the KVP string for the records
+                                    kvpValue = aaLGXRecords.ToKVP(additionalKVPValues.ToString());
+
+                                    //Transmit the records
+                                    var result = SplunkHTTPClient.TransmitValues(kvpValue);
+
+                                    log.DebugFormat("Transmit Values Result - {0}", result);
+
+                                    //If successful then write the last sequence value to disk
+                                    if (result.StatusCode == HttpStatusCode.OK)
+                                    {
+                                        log.InfoFormat("Successfully transmitted {0} records from file {1}", aaLGXRecords.Count, fileName);
+                                        log.InfoFormat("Moving {0} to {1}", fileName, successFolder);
+                                        var destinationFilename = Path.Combine(successFolder, Path.GetFileName(fileName));
+
+                                        try
+                                        {
+                                            File.Move(fileName, destinationFilename);
+                                        }
+                                        catch
+                                        {
+                                            log.WarnFormat("Error moving {0} to {1}", fileName, destinationFilename);
+                                        }
+
+                                        if (ReadTimer.Interval != RuntimeOptions.ReadInterval)
+                                        {
+                                            //Reset timer interval
+                                            ClearTimerBackoff(ReadTimer, RuntimeOptions);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // Implement a timer backoff so we don't flood the endpoint
+                                        IncrementTimerBackoff(ReadTimer, RuntimeOptions);
+                                        log.WarnFormat("HTTP Transmission not OK - {0}", result);
+
+                                        log.InfoFormat("Moving {0} to {1}", fileName, errorFolder);
+                                        var destinationFilename = Path.Combine(errorFolder, Path.GetFileName(fileName));
+
+                                        try
+                                        {
+                                            File.Move(fileName, destinationFilename);
+                                        }
+                                        catch
+                                        {
+                                            log.WarnFormat("Error moving {0} to {1}", fileName, destinationFilename);
+                                        }
+                                }
+                            }
                         }
                     }
+                    else
+                    {
+                        log.WarnFormat("aaLGX Directory {0} does not exist.", aaLGXDirectory);
+                    }
+                }
             }
             catch (Exception ex)
             {

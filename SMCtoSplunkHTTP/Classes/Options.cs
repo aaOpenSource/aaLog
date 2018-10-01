@@ -53,6 +53,9 @@ namespace SMCtoSplunkHTTP
         [Description("Directory where aalog files are located.")]
         public string LogDirectory = @"C:\ProgramData\ArchestrA\LogFiles";
 
+        [Description("Directory where aalgx files are located waiting to be processed.")]
+        public string AALGXDirectory = @"";
+
         //[Description("Base filename for cache file.")]
         //public string CacheFileBaseName = "aaLogReaderCache";
 
