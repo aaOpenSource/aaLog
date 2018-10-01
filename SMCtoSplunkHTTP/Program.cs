@@ -110,12 +110,12 @@ namespace SMCtoSplunkHTTP
         }
 
         // Global aaLogReader
-        private static aaLogReader.aaLogReader aaLogReader;
+        private static aaLogReader.aaLogReader _aaLogReader;
         internal static aaLogReader.aaLogReader AALogReader
         {
             get
             {
-                if (aaLogReader == null)
+                if (_aaLogReader == null)
                 {
                     log.DebugFormat("Creating aaLogReader");
 
@@ -129,15 +129,15 @@ namespace SMCtoSplunkHTTP
                         LogDirectory = runtimeOptions.LogDirectory
                     };
 
-                    aaLogReader = new aaLogReader.aaLogReader(logReaderOptions);
+                    _aaLogReader = new aaLogReader.aaLogReader(logReaderOptions);
                 }
 
-                return aaLogReader;
+                return _aaLogReader;
             }
 
             set
             {
-                aaLogReader = value;
+                _aaLogReader = value;
             }
         }
 
@@ -147,7 +147,7 @@ namespace SMCtoSplunkHTTP
             {
                 if (string.IsNullOrEmpty(RuntimeOptions.CacheFilename))
                 {
-                    return RuntimeOptions.SplunkSourceData + ".txt";
+                    return RuntimeOptions.SplunkSourceData + "-cache.txt";
                 }
                 else
                 {
@@ -174,9 +174,6 @@ namespace SMCtoSplunkHTTP
 
         static int Main(string[] args)
         {
-            // Setup logging
-            log4net.Config.BasicConfigurator.Configure();
-
             try
             {
                 var assembly = Assembly.GetExecutingAssembly();
@@ -378,14 +375,17 @@ namespace SMCtoSplunkHTTP
 
                 if (lastMessageNumberWritten == 0)
                 {
+                    log.DebugFormat("Executing GetUnreadRecords for {0} records", runtimeOptions.MaxRecords);
                     // Get records starting with last log record and move backwards since we are working with no existing cache file     
                     //AALogReader.Options.IgnoreCacheFileOnFirstRead = true;
-                    logRecords = AALogReader.GetRecordsByEndTimestampAndCount(System.DateTime.Now.AddMinutes(1), (int)runtimeOptions.MaxRecords);
+                    //logRecords = AALogReader.GetRecordsByEndTimestampAndCount(System.DateTime.Now.AddMinutes(1), (int)runtimeOptions.MaxRecords);
+                    logRecords = AALogReader.GetUnreadRecords((ulong)runtimeOptions.MaxRecords);
                 }
                 else
                 {
+                    log.DebugFormat("Executing GetRecordsByStartMessageNumberAndCount for message number {0} with a maximum of {1} records", lastMessageNumberWritten + 1, runtimeOptions.MaxRecords);
                     // Get records based on last cached message number
-                    logRecords = aaLogReader.GetRecordsByStartMessageNumberAndCount(lastMessageNumberWritten + 1, (int)runtimeOptions.MaxRecords);
+                    logRecords = AALogReader.GetRecordsByStartMessageNumberAndCount(lastMessageNumberWritten+1, (int)runtimeOptions.MaxRecords);
                 }
                 
                 //var logRecords = aaLogReader.GetUnreadRecords(runtimeOptions.MaxRecords);
@@ -463,73 +463,6 @@ namespace SMCtoSplunkHTTP
                 log.Error(ex);
             }
         }
-            
-        /// <summary>
-        /// Calculate SQL query from options and cache values
-        /// </summary>
-        /// <param name="runtimeOptions">Runtime Options object</param>
-        /// <returns>String representing SQL Query based on provided runtime options</returns>
-        //private static string GetLogRecords(OptionsStruct runtimeOptions)
-        //{
-        //    string query = "";
-        //    string cachedSqlSequenceFieldValue;
-        //    DateTime cachedSqlSequenceFieldValueDateTime;
-        //    DateTimeStyles cacheDateTimeStyle;
-            
-        //    // Add the where clause if we can get the cached Sequence Field Value
-        //    try
-        //    {
-        //        query = runtimeOptions.SQLQuery;
-
-        //        if (string.IsNullOrEmpty(query))
-        //        {
-        //            throw new Exception("SQL Query in options file is empty or null");
-        //        }
-
-        //        //Get the base query and limit by TOP XX.  If there is no {{MaxRecords}} component then this statement makes no change to the query
-        //        query = query.Replace("{{MaxRecords}}", runtimeOptions.MaxRecords.ToString());
-
-        //        if (File.Exists(CacheFilename))
-        //        {
-        //            cachedSqlSequenceFieldValue = File.ReadAllText(CacheFilename) ?? string.Empty;
-        //        }
-        //        else
-        //        {
-        //            cachedSqlSequenceFieldValue = runtimeOptions.SQLSequenceFieldDefaultValue;
-        //        }
-
-        //        if (runtimeOptions.CacheWriteValueIsUTCTimestamp)
-        //        {
-        //            cacheDateTimeStyle = DateTimeStyles.AssumeUniversal;
-        //        }
-        //        else
-        //        {
-        //            cacheDateTimeStyle = DateTimeStyles.AssumeLocal;
-        //        }
-
-        //        if (DateTime.TryParseExact(cachedSqlSequenceFieldValue, runtimeOptions.CacheWriteValueStringFormat, CultureInfo.InvariantCulture, cacheDateTimeStyle, out cachedSqlSequenceFieldValueDateTime))
-        //        {
-        //            cachedSqlSequenceFieldValue = cachedSqlSequenceFieldValueDateTime.AddMilliseconds(runtimeOptions.CacheWriteValueTimestampMillisecondsAdd).ToString("yyyy-MM-dd HH:mm:ss.ffffff");
-        //        }
-
-        //        if (cachedSqlSequenceFieldValue != string.Empty)
-        //        {
-        //            query += runtimeOptions.SQLWhereClause.Replace("{{SQLSequenceField}}", runtimeOptions.SQLSequenceField).Replace("{{LastSQLSequenceFieldValue}}", cachedSqlSequenceFieldValue);
-        //        }
-
-        //        //Finally add the Order By Clause
-        //        query += runtimeOptions.SQLOrderByClause.Replace("{{SQLSequenceField}}", runtimeOptions.SQLSequenceField);
-
-        //        log.DebugFormat("SQL Query : {0}", query);
-        //    }
-        //    catch
-        //    {
-        //        // Do Nothing
-        //    }
-            
-        //    return query;
-        //}
-
         /// <summary>
         /// Slow down the timer by doubling the interval up to MaximumReadInterval
         /// </summary>

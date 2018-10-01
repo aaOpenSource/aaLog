@@ -390,7 +390,7 @@ namespace aaLogReader
         /// <returns>The log header for the file stream</returns>
         public LogHeader ReadLogHeader(FileStream logFileStream)
         {
-            log.DebugFormat("logFileStream length - ", logFileStream.Length);
+            //log.DebugFormat("logFileStream length - ", logFileStream.Length);
 
             int readResult;
             LogHeader localHeader = new LogHeader();
@@ -951,14 +951,16 @@ namespace aaLogReader
         /// Get the log file path for a specific message number
         /// </summary>
         /// <param name="MessageNumber">Message number to search for</param>
+        /// <param name="warnOnLogFileNotFound">Write a warning to the logger if a file is not found.  The default value is false</param>
         /// <returns>Complete paths to log files containing specific message number.  Will return "" if no log file found</returns>
-        public List<string> GetLogFilePathsForMessageNumber(ulong MessageNumber)
+        public List<string> GetLogFilePathsForMessageNumber(ulong MessageNumber, bool warnOnLogFileNotFound = false)
         {
             log.Debug("MessageNumber - " + MessageNumber);
 
             List<string> returnValue = new List<string>();
 
             //Now try to find the specific file where the
+            var t = this.IndexLogHeaders();
             List<LogHeader> foundLogHeaders = this.IndexLogHeaders().FindAll(x => x.StartMsgNumber <= MessageNumber && MessageNumber <= x.EndMsgNumber).OrderByDescending(x => x.StartFileTime).ToList<LogHeader>();
 
             if (foundLogHeaders.Count > 0)
@@ -970,7 +972,10 @@ namespace aaLogReader
             }
             else
             {
-                log.WarnFormat("Could not find log file for MessageNumber {0}", MessageNumber);
+                if (warnOnLogFileNotFound)
+                {
+                    log.WarnFormat("Could not find log file for MessageNumber {0}", MessageNumber);
+                }
             }
 
             return returnValue;
@@ -1469,7 +1474,6 @@ namespace aaLogReader
             log.DebugFormat("EndTimeStamp - {0}", EndTimeStamp);
 
             return this.GetRecordsByStartAndEndFileTime((ulong)StartTimeStamp.ToFileTime(), (ulong)EndTimeStamp.ToFileTime());
-
         }
 
         /// <summary>
@@ -1478,7 +1482,7 @@ namespace aaLogReader
         /// <param name="maximumMessages">Maximum number of messages to return</param>
         /// <param name="messagePatternToStop">Message pattern to match for ending search</param>
         /// <param name="IgnoreCacheFile">Ignore the cache file and read all messages up to maximum or message pattern</param>
-        /// <param name="cacheFileClientID">Custom client id used for tracking unread records</param>
+        /// <param name="cacheFileClientID">Custom client id used for tracking unread records</param>        
         /// <returns></returns>
         public List<LogRecord> GetUnreadRecords(ulong maximumMessages = 1000, string messagePatternToStop = "", bool IgnoreCacheFile = false, string cacheFileClientID = null)
         {
@@ -1486,7 +1490,7 @@ namespace aaLogReader
             log.DebugFormat("messagePatternToStop - {0}", messagePatternToStop);
             log.DebugFormat("IgnoreCacheFile - {0}", IgnoreCacheFile);
             log.DebugFormat("cacheFileClientID - {0}", cacheFileClientID);
-
+            
             ulong lastMessageNumber = ulong.MinValue;
             string localCacheFilePath = "";
 

@@ -13,7 +13,7 @@ using log4net;
 namespace SplunkHTTPUtility
 {
     class SplunkHTTP
-    {        
+    {
         private HttpClient client;
         public HttpClient Client
         {
@@ -119,7 +119,7 @@ namespace SplunkHTTPUtility
             SplunkBaseAddress = splunkBaseAddress;
             Setup();
         }
-        
+
         public void Setup()
         {
             Log.Debug("Setting up Splunk HTTP Collector");
@@ -132,7 +132,7 @@ namespace SplunkHTTPUtility
         /// </summary>
         /// <param name="kvpValues"></param>
         //public async Task<HttpResponseMessage> TransmitValues (string kvpValues)
-        public HttpResponseMessage TransmitValues (string kvpValues)        
+        public HttpResponseMessage TransmitValues(string kvpValues)
         {
             var responseMessage = new HttpResponseMessage();
             string uri = "/services/collector/raw?channel=" + ClientID;
