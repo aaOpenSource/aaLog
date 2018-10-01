@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogGUITester", "aaLogForwarder\aaLogGUITester.csproj", "{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogWebAPI", "aaLogWebAPI\aaLogWebAPI.csproj", "{7DDF62AB-BE62-4EDB-9870-0DE3F2A679CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogReader.Tests", "aaLogReader.Tests\aaLogReader.Tests.csproj", "{A606F2E4-442B-4C64-96E5-8BB9318FF28C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMCtoSplunkHTTP", "SMCtoSplunkHTTP\SMCtoSplunkHTTP.csproj", "{24511475-8AF2-4DB0-8BFB-E9E215970ACF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -215,8 +217,35 @@ Global
 		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A606F2E4-442B-4C64-96E5-8BB9318FF28C}.Release|x86.ActiveCfg = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.aaLogWebAPI-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.aaLogWebAPI-Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.aaLogWebAPI-Debug|x86.ActiveCfg = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.aaLogWebAPI-Debug|x86.Build.0 = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Debug|x86.Build.0 = Debug|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release - aaSplunkLogConsole|x86.ActiveCfg = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release - aaSplunkLogConsole|x86.Build.0 = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release|x86.ActiveCfg = Release|Any CPU
+		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CAD20215-2E39-4CB5-8F40-E2ABCFF837F4}
 	EndGlobalSection
 EndGlobal
