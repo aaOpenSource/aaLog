@@ -1042,51 +1042,88 @@ namespace aaLogReader
 
             LogRecord returnValue = new LogRecord();
 
-            /* For optimization purposes first locate the log files that may contain the specific message number
-             We say file(s) because there is currently an issue with how the log system writes files that may repeat a message number
-             in that case will find the first match and return that
-            */
-            foreach (string logFilePath in GetLogFilePathsForMessageNumber(messageNumber))
+            try
             {
-                // Get a reference to the log file by opening it
-                if (!OpenLogFile(logFilePath).Status)
+
+                /* For optimization purposes first locate the log files that may contain the specific message number
+                 We say file(s) because there is currently an issue with how the log system writes files that may repeat a message number
+                 in that case will find the first match and return that
+                */
+                foreach (string logFilePath in GetLogFilePathsForMessageNumber(messageNumber))
                 {
-                    throw new aaLogReaderException(string.Format("Error opening log file {0}", logFilePath));
-                }
-
-                //Get the header which should be loaded into a global in memory now
-                LogHeader localHeader = logHeader;
-
-                //Determine if we are closer to the beginning or end
-                if ((messageNumber - localHeader.StartMsgNumber) <= (localHeader.EndMsgNumber - messageNumber))
-                {
-                    //Looks like we are closer to beginning to start at beginning and go next
-                    returnValue = GetFirstRecord();
-
-                    // Start looping until we find the record we are looking for
-                    while (returnValue.ReturnCode.Status && returnValue.MessageNumber < messageNumber)
+                    // Get a reference to the log file by opening it
+                    if (!OpenLogFile(logFilePath).Status)
                     {
-                        returnValue = GetNextRecord();
+                        throw new aaLogReaderException(string.Format("Error opening log file {0}", logFilePath));
+                    }
+
+                    //Get the header which should be loaded into a global in memory now
+                    LogHeader localHeader = logHeader;
+
+                    log.DebugFormat(logHeader.ToJSON());
+
+                    //Break out calculation for determining start and end to handle issue of uLongs looping back around on -1
+                    var startAtBeginning = false;
+                    ulong startDiff = ulong.MinValue;
+                    ulong endDiff = ulong.MaxValue;
+
+                    if(messageNumber >= localHeader.StartMsgNumber)
+                    {
+                        startDiff = messageNumber - localHeader.StartMsgNumber;
+                    }
+                    else
+                    {
+                        startDiff = ulong.MaxValue;
+                    }
+
+                    if (messageNumber <= localHeader.EndMsgNumber)
+                    {
+                        endDiff = localHeader.EndMsgNumber - messageNumber;
+                    }
+                    else
+                    {
+                        endDiff = ulong.MinValue;
+                    }
+
+                    // Compare the distance to the end vs distance to start and determine if we should start at the beginnig or end of the log file
+                    startAtBeginning = (endDiff > startDiff);
+
+                    //Determine if we are closer to the beginning or end
+                    //if ((messageNumber - localHeader.StartMsgNumber) <= (localHeader.EndMsgNumber - messageNumber))
+                    if(startAtBeginning)
+                    {
+                        //Looks like we are closer to beginning to start at beginning and go next
+                        returnValue = GetFirstRecord();
+
+                        // Start looping until we find the record we are looking for
+                        while (returnValue.ReturnCode.Status && returnValue.MessageNumber < messageNumber)
+                        {
+                            returnValue = GetNextRecord();
+                        }
+                    }
+                    else
+                    {
+                        //Looks like we are closer to the end so start at end and go previous
+                        returnValue = GetLastRecord();
+
+                        // Start looping until we find the record we are looking for
+                        while (returnValue.ReturnCode.Status && returnValue.MessageNumber > messageNumber)
+                        {
+                            returnValue = GetPrevRecord();
+                        }
+                    }
+
+                    // Check to see if we have found our record
+                    if (returnValue.MessageNumber == messageNumber)
+                    {
+                        // Dump out of the for loop
+                        break;
                     }
                 }
-                else
-                {
-                    //Looks like we are closer to the end so start at end and go previous
-                    returnValue = GetLastRecord();
-
-                    // Start looping until we find the record we are looking for
-                    while (returnValue.ReturnCode.Status && returnValue.MessageNumber > messageNumber)
-                    {
-                        returnValue = GetPrevRecord();
-                    }
-                }
-
-                // Check to see if we have found our record
-                if (returnValue.MessageNumber == messageNumber)
-                {
-                    // Dump out of the for loop
-                    break;
-                }
+            }
+            catch(Exception ex)
+            {
+                log.Error(ex);
             }
 
             return returnValue;
