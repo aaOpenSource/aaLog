@@ -1,0 +1,11 @@
+﻿{
+  "SplunkAuthorizationToken": "1f486cca-8d97-4421-96d8-ae7ffdcd4330",
+  "SplunkBaseAddress": "http://192.168.126.142:8088",
+  "SplunkSourceData": "WonderwareSMCLog",
+  "SplunkEventTimestampFormat": "yyyy-MM-dd HH:mm:ss.ffffff zz",
+  "MaxRecords": "100",
+  "ReadInterval": "10000",
+  "LogDirectory": "C:\\temp\\aalogs"
+}
+
+

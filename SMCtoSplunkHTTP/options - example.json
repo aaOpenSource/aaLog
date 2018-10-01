@@ -1,0 +1,14 @@
+﻿{
+  // An example options file
+  "SplunkAuthorizationToken": "00000000-0000-0000-0000-00000000",
+  "SplunkBaseAddress": "http://yoursplunkserver:8088",
+  "SplunkSourceData": "WonderwareEvents",
+  "SQLConnectionString": "Data Source=(local);Initial Catalog=Runtime;Integrated Security=SSPI",
+  "SQLOrderByClause": " ORDER by {{SQLSequenceField}} DESC",
+  "SQLQuery": "SELECT TOP {{MaxRecords}} * FROM v_EventHistory ",
+  "SQLSequenceField": "EventStampUTC",
+  "SQLSequenceFieldDefaultValue": "2001-01-01",
+  "SQLTimestampField": "EventStampUTC",
+  "SQLWhereClause": " WHERE {{SQLSequenceField}} > '{{LastSQLSequenceFieldValue}}'",
+  "SplunkEventTimestampFormat": "yyyy-MM-dd HH:mm:ss.ffffff zz"
+}
