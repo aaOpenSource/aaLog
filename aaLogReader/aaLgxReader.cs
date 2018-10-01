@@ -43,9 +43,12 @@ namespace aaLogReader
         /// </summary>
         /// <param name="filePath">Full path to the aaLGX file to load.</param>
         /// <returns>IEnumerable of LogRecord</returns>
-        public static IEnumerable<LogRecord> ReadLogRecords(string filePath)
+        public static List<LogRecord> ReadLogRecords(string filePath)
         {
             LOG.InfoFormat("Reading log records: {0}", filePath);
+
+            var returnValue = new List<LogRecord>();
+
             using (var stream = OpenFileStream(filePath))
             {
                 var header = ReadLogHeader(stream, filePath);
@@ -60,9 +63,12 @@ namespace aaLogReader
                     var record = ReadLogRecord(stream, offset, previousOffset, header);
                     previousOffset = offset;
                     offset += record.RecordLength;
-                    yield return record;
+                    returnValue.Add(record);
+                    //yield return record;
                 }
             }
+
+            return returnValue;
         }
 
         private static Stream OpenFileStream(string filePath)
