@@ -34,6 +34,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'aaLogWebAPI-Debug|AnyCPU'">
     <OutputPath>bin\aaLogWebAPI-Debug\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-SMCtoSplunkHTTP|AnyCPU'">
+    <OutputPath>bin\Release-SMCtoSplunkHTTP\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
