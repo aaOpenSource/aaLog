@@ -27,6 +27,13 @@ namespace SMCtoSplunkHTTP
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+
+        internal static string GetExecutingDirectoryName()
+        {
+            var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
+            return new FileInfo(location.AbsolutePath).Directory.FullName;
+        }
+
         // HTTP Client for data transmission to Splunk
         private static SplunkHTTP splunkHTTPClient;
         internal static SplunkHTTP SplunkHTTPClient
@@ -70,7 +77,7 @@ namespace SMCtoSplunkHTTP
             {
                 if (runtimeOptions == null)
                 {
-                    runtimeOptions = JsonConvert.DeserializeObject<Options>(System.IO.File.ReadAllText("options.json"));
+                    runtimeOptions = ReadOptionsFile(OptionsFilePathOption);
                 }
 
                 return runtimeOptions;
@@ -248,9 +255,6 @@ namespace SMCtoSplunkHTTP
 
                 //Debug the startup arguments                
                 log.DebugFormat("Startup Arguments {0}",JsonConvert.SerializeObject(args));
-
-                //Always make sure we load runtime options first
-                RuntimeOptions = ReadOptionsFile(OptionsFilePathOption);
                 
                 // Run the application with arguments
                 return app.Execute(args);
@@ -332,9 +336,10 @@ namespace SMCtoSplunkHTTP
         {
             try
             {
-                var optionsPath = optionsFilePathOption.Value() ?? "options.json";
+                var optionsFilename = optionsFilePathOption.Value() ?? "options.json";
+                var optionsPath = Path.Combine(GetExecutingDirectoryName(), optionsFilename);
 
-                log.DebugFormat("Using options file {0}", optionsPath);
+                log.InfoFormat("Using options file {0}", optionsPath);
 
                 if (System.IO.File.Exists(optionsPath))
                 {
@@ -485,7 +490,20 @@ namespace SMCtoSplunkHTTP
                                         log.InfoFormat("Moving {0} to {1}", fileName, successFolder);
                                         var destinationFilename = Path.Combine(successFolder, Path.GetFileName(fileName));
 
+                                    if (File.Exists(destinationFilename))
+                                    {
+                                        log.WarnFormat("Deleting file {0} in preparation for move from {1}", destinationFilename, fileName);
                                         try
+                                        {
+                                            File.Delete(destinationFilename);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            log.Error(ex);
+                                        }
+                                    }
+
+                                    try
                                         {
                                             File.Move(fileName, destinationFilename);
                                         }
@@ -508,6 +526,19 @@ namespace SMCtoSplunkHTTP
 
                                         log.InfoFormat("Moving {0} to {1}", fileName, errorFolder);
                                         var destinationFilename = Path.Combine(errorFolder, Path.GetFileName(fileName));
+
+                                        if (File.Exists(destinationFilename))
+                                        {
+                                            log.WarnFormat("Deleting file {0} in preparation for move from {1}", destinationFilename, fileName);
+                                            try
+                                            {
+                                                File.Delete(destinationFilename);
+                                            }
+                                            catch(Exception ex)
+                                            {
+                                                log.Error(ex);
+                                            }
+                                        }
 
                                         try
                                         {
