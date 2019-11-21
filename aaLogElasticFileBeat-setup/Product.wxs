@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Following the tutorial at https://developingsoftware.com/wix-toolset-install-windows-service/-->
+
+<?define Name = "aaLogElasticFileBeat" ?>
+<?define Manufacturer = "aaOpenSource" ?>
+<?define Version = "0.9.4" ?>
+<?define UpgradeCode = "{9aea3b40-a042-4394-ac20-8560d0113196}" ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="$(var.Name)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
+		<Package InstallerVersion="300" Compressed="yes" />
+    <Media Id="1" Cabinet="aaLogElasticFileBeat.cab" EmbedCab="yes" />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		
+		<Feature Id="MainApplication" Title="Main Application" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="$(var.aaLogElasticFileBeat.TargetFileName)" />
+		</Feature>
+    <Feature Id="aaLogReader" Title="aaLogReader" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="$(var.aaLogReader.TargetFileName)" />
+    </Feature>
+    <Feature Id="log4net" Title="log4net" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="log4net" />
+    </Feature>
+    <Feature Id="Newtonsoft.Json" Title="Newtonsoft.Json" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="Newtonsoft.Json" />
+    </Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+        <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">
+          <Directory Id="INSTALLFOLDER" Name="$(var.Name)" />
+        </Directory>
+			</Directory>
+		</Directory>
+
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="$(var.aaLogElasticFileBeat.TargetFileName)">
+        <File Id="$(var.aaLogElasticFileBeat.TargetFileName)" Source="$(var.aaLogElasticFileBeat.TargetPath)" KeyPath="yes" />
+        <RemoveFile Id="ALLFILES" Name="*.*" On="both" />
+        <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Name="aaLogElasticFileBeat" DisplayName="$(var.Name)" 
+                        Description="A service that collects ArchestrA logs and uses Elastic FileBeat to ship to Elasticsearch" 
+                        Start="auto" ErrorControl="normal" />
+        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="aaLogElasticFileBeat" Wait="yes" />
+      </Component>
+      <Component Id="$(var.aaLogReader.TargetFileName)">
+        <File Id="$(var.aaLogReader.TargetFileName)" Source="$(var.aaLogReader.TargetPath)" KeyPath="yes" />
+      </Component>
+      <Component Id="log4net">
+        <File Id="log4net" Source="..\packages\log4net.2.0.5\lib\net40-full\log4net.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="Newtonsoft.Json">
+        <File Id="Newtonsoft.Json" Source="..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+		</ComponentGroup>
+	</Fragment>
+</Wix>

@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMCtoSplunkHTTP", "SMCtoSpl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogElasticFileBeat", "aaLogElasticFileBeat\aaLogElasticFileBeat.csproj", "{3EFD1293-2F52-4C52-A076-751BBC1E15F8}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "aaLogElasticFileBeat-setup", "aaLogElasticFileBeat-setup\aaLogElasticFileBeat-setup.wixproj", "{4D5F5983-C163-4A31-9336-0171BAEE7068}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		aaLogWebAPI-Debug|Any CPU = aaLogWebAPI-Debug|Any CPU
@@ -323,6 +325,34 @@ Global
 		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release-SMCtoSplunkHTTP|Mixed Platforms.Build.0 = Release|Any CPU
 		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release-SMCtoSplunkHTTP|x86.ActiveCfg = Release|Any CPU
 		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release-SMCtoSplunkHTTP|x86.Build.0 = Release|Any CPU
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.aaLogWebAPI-Debug|Any CPU.Build.0 = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.aaLogWebAPI-Debug|Mixed Platforms.Build.0 = Debug|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.aaLogWebAPI-Debug|x86.ActiveCfg = Debug|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.aaLogWebAPI-Debug|x86.Build.0 = Debug|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Debug|x86.ActiveCfg = Debug|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Debug|x86.Build.0 = Debug|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release - aaSplunkLogConsole|x86.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release - aaSplunkLogConsole|x86.Build.0 = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release|Any CPU.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release|Mixed Platforms.Build.0 = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release|x86.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release|x86.Build.0 = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release-SMCtoSplunkHTTP|Any CPU.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release-SMCtoSplunkHTTP|Any CPU.Build.0 = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release-SMCtoSplunkHTTP|Mixed Platforms.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release-SMCtoSplunkHTTP|Mixed Platforms.Build.0 = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release-SMCtoSplunkHTTP|x86.ActiveCfg = Release|x86
+		{4D5F5983-C163-4A31-9336-0171BAEE7068}.Release-SMCtoSplunkHTTP|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
