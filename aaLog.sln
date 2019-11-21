@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogGUITester", "aaLogForwarder\aaLogGUITester.csproj", "{DA29A942-0BCC-4A6F-89DC-779EBF17EC23}"
 EndProject
@@ -34,6 +34,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogReader.Tests", "aaLogReader.Tests\aaLogReader.Tests.csproj", "{A606F2E4-442B-4C64-96E5-8BB9318FF28C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMCtoSplunkHTTP", "SMCtoSplunkHTTP\SMCtoSplunkHTTP.csproj", "{24511475-8AF2-4DB0-8BFB-E9E215970ACF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaLogElasticFileBeat", "aaLogElasticFileBeat\aaLogElasticFileBeat.csproj", "{3EFD1293-2F52-4C52-A076-751BBC1E15F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -291,6 +293,36 @@ Global
 		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release-SMCtoSplunkHTTP|Mixed Platforms.Build.0 = Release-SMCtoSplunkHTTP|Any CPU
 		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release-SMCtoSplunkHTTP|x86.ActiveCfg = Release-SMCtoSplunkHTTP|Any CPU
 		{24511475-8AF2-4DB0-8BFB-E9E215970ACF}.Release-SMCtoSplunkHTTP|x86.Build.0 = Release-SMCtoSplunkHTTP|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.aaLogWebAPI-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.aaLogWebAPI-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.aaLogWebAPI-Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.aaLogWebAPI-Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.aaLogWebAPI-Debug|x86.ActiveCfg = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.aaLogWebAPI-Debug|x86.Build.0 = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Debug|x86.Build.0 = Debug|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release - aaSplunkLogConsole|Any CPU.ActiveCfg = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release - aaSplunkLogConsole|Any CPU.Build.0 = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release - aaSplunkLogConsole|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release - aaSplunkLogConsole|Mixed Platforms.Build.0 = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release - aaSplunkLogConsole|x86.ActiveCfg = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release - aaSplunkLogConsole|x86.Build.0 = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release|x86.Build.0 = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release-SMCtoSplunkHTTP|Any CPU.ActiveCfg = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release-SMCtoSplunkHTTP|Any CPU.Build.0 = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release-SMCtoSplunkHTTP|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release-SMCtoSplunkHTTP|Mixed Platforms.Build.0 = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release-SMCtoSplunkHTTP|x86.ActiveCfg = Release|Any CPU
+		{3EFD1293-2F52-4C52-A076-751BBC1E15F8}.Release-SMCtoSplunkHTTP|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
