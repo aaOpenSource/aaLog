@@ -10,11 +10,16 @@ using System.Timers;
 using System.Runtime.InteropServices;
 using aaLogReader;
 using System.IO;
+using YamlDotNet.Serialization;
 
 namespace aaLogElasticFileBeat
 {
     public partial class aaLogElasticFileBeat : ServiceBase
     {
+        int interval;
+        string binaryLocation;
+        string configLocation;
+
         //Taken from the tutorial on writing a Windows service
         //https://docs.microsoft.com/en-us/dotnet/framework/windows-services/walkthrough-creating-a-windows-service-application-in-the-component-designer
         public enum ServiceState
@@ -53,15 +58,53 @@ namespace aaLogElasticFileBeat
             localEventLog.Log = "Application";
         }
 
+        //Function to create default settings file in the install folder
+        //YAML is used because that is consistent with Elastic / Beats
+        private void writeNewSettingsFile(string configFilePath)
+        {
+            Dictionary<string, string> settingsDict = new Dictionary<string, string>();
+            settingsDict.Add("Interval", "60");
+            settingsDict.Add("BinaryLocation", @"C:\Program Files\filebeat\filebeat.exe");
+            settingsDict.Add("SettingsLocation", @"C:\Program Files\filebeat\filebeat.yml");
+
+            Serializer s = new Serializer();
+            using (StreamWriter outfile = File.CreateText(configFilePath))
+            {
+                s.Serialize(outfile, settingsDict);
+            }
+        }
+
         protected override void OnStart(string[] args)
         {
             //Log entry for starting
-            localEventLog.WriteEntry("Running OnStart", EventLogEntryType.Information);
+            //localEventLog.WriteEntry("Running OnStart", EventLogEntryType.Information);
+
+            //Check if the config file exists. If not, create it.
+            //Read the settings file and place settings in class variables
+            string localPathURI = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+            string localPath = System.IO.Path.GetDirectoryName(localPathURI.Substring(8, localPathURI.Length - 8));
+            string configFilePath = localPath + @"\aaLogElasticFileBeat.yml";
+            localEventLog.WriteEntry(configFilePath, EventLogEntryType.Information);
+            if (!File.Exists(configFilePath))
+            {
+                this.writeNewSettingsFile(configFilePath);
+            }
+
+            string configFileString = File.ReadAllText(configFilePath);
+            Deserializer configDeserializer = new Deserializer();
+            Dictionary<string, string> settingsDict = configDeserializer.Deserialize<Dictionary<string, string>>(configFileString);
+
+            this.interval = int.Parse(settingsDict["Interval"]) * 1000;
+            this.binaryLocation = settingsDict["BinaryLocation"];
+            this.configLocation = settingsDict["SettingsLocation"];
+
+            localEventLog.WriteEntry("Settings: Interval = " + this.interval.ToString() + "; Binary location = " + 
+                this.binaryLocation + "; Config file location = " + this.configLocation, EventLogEntryType.Information);
 
             //Set up the polling timer
             //TODO: make this interval configurable
             Timer pollingTimer = new Timer();
-            pollingTimer.Interval = 60000;
+            pollingTimer.Interval = this.interval;
             pollingTimer.Elapsed += new ElapsedEventHandler(this.PollingAction);
             pollingTimer.Start();
 
@@ -75,7 +118,7 @@ namespace aaLogElasticFileBeat
         protected override void OnStop()
         {
             //Log entry for stopping
-            localEventLog.WriteEntry("Running OnStop", EventLogEntryType.Information);
+            //localEventLog.WriteEntry("Running OnStop", EventLogEntryType.Information);
             
             //Update the state of the service
             ServiceStatus serviceStatus = new ServiceStatus();
@@ -102,15 +145,15 @@ namespace aaLogElasticFileBeat
             if (logRecords.Count > 0)
             {
                 //Log message
-                localEventLog.WriteEntry("Shipping entries, count:" + logRecords.Count().ToString(), EventLogEntryType.Information);
+                //localEventLog.WriteEntry("Shipping entries, count:" + logRecords.Count().ToString(), EventLogEntryType.Information);
                 
                 //Use a Process to run the filebeat binary
                 using (Process fileBeatProcess = new Process())
                 {
                     //Set up the process
                     //TODO: make locations configurable
-                    fileBeatProcess.StartInfo.FileName = @"C:\Program Files\filebeat\filebeat.exe";
-                    fileBeatProcess.StartInfo.Arguments = "-c \"C:\\Program Files\\filebeat\\filebeat.yml\" -e -once";
+                    fileBeatProcess.StartInfo.FileName = this.binaryLocation;
+                    fileBeatProcess.StartInfo.Arguments = "-c \"" + this.configLocation + "\" -e -once";
                     fileBeatProcess.StartInfo.UseShellExecute = false;
 
                     //Important: redirect standard input as this is how we will send the data to Filebeat
@@ -134,7 +177,7 @@ namespace aaLogElasticFileBeat
                     fileBeatProcess.WaitForExit();
 
                     //Log the end of the file
-                    localEventLog.WriteEntry("Finished shipping entries", EventLogEntryType.Information);
+                    //localEventLog.WriteEntry("Finished shipping entries", EventLogEntryType.Information);
                 }
             }
         }

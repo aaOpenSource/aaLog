@@ -3,7 +3,7 @@
 
 <?define Name = "aaLogElasticFileBeat" ?>
 <?define Manufacturer = "aaOpenSource" ?>
-<?define Version = "0.9.4" ?>
+<?define Version = "1.0.0" ?>
 <?define UpgradeCode = "{9aea3b40-a042-4394-ac20-8560d0113196}" ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Product Id="*" Name="$(var.Name)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
@@ -26,6 +26,10 @@
     <Feature Id="Newtonsoft.Json" Title="Newtonsoft.Json" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentRef Id="Newtonsoft.Json" />
+    </Feature>
+    <Feature Id="YamlDotNet" Title="YamlDotNet" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="YamlDotNet" />
     </Feature>
 	</Product>
 
@@ -55,6 +59,9 @@
       </Component>
       <Component Id="Newtonsoft.Json">
         <File Id="Newtonsoft.Json" Source="..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="YamlDotNet">
+        <File Id="YamlDotNet" Source="..\packages\YamlDotNet.8.0.0\lib\net35\YamlDotNet.dll" KeyPath="yes" />
       </Component>
     </DirectoryRef>
 	</Fragment>
