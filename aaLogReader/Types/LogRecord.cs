@@ -222,9 +222,9 @@ namespace aaLogReader
             try
             {
                 if (kind == DateTimeKind.Utc)
-                    localSB.Append("\"" + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\"");
-                else
                     localSB.Append("\"" + this.EventDateTimeUtc.ToString("yyyy-MM-dd HH:mm:ss.fffZ") + "\"");
+                else
+                    localSB.Append("\"" + this.EventDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\"");
                 localSB.Append(Delimiter + this.LogFlag);
                 localSB.Append(Delimiter + "\"" + this.Message + "\"");
                 localSB.Append(Delimiter + this.HostFQDN);
