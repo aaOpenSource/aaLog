@@ -1,0 +1,1 @@
+﻿aaLogCSVOuput.exe "2022-10-25" "2022-12-01" "c:\build\temp\output.csv"
