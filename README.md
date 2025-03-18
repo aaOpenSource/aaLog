@@ -18,19 +18,17 @@ The first application that I plan to use the library for is an ultra simple cons
 Using the library with all the defaults could not be simpler. In two lines you can get an object of type list for all unread records.  You can explore the code int he library to see how we manage the return list with a default max on the messages that can be overwritten if desired.  This example is directly from the Splunk Console example program 
 
 ```c#
-	// Instantiate a new log reader object            
-	aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader();
-	// Get all unread records
-    List<LogRecord> logRecords = logReader.GetUnreadRecords();
+// Instantiate a new log reader object            
+aaLogReader.aaLogReader logReader = new aaLogReader.aaLogReader();
+// Get all unread records
+List<LogRecord> logRecords = logReader.GetUnreadRecords();
 
-    // If we have any records then output kvp format to the console
-    if(logRecords.Count > 0)
-    {
-        foreach(LogRecord record in logRecords)
-        {
-            Console.WriteLine(record.ToKVP());
-        }
-    }
+// If we have any records then output kvp format to the console
+if(logRecords.Count > 0) {
+foreach(LogRecord record in logRecords){
+	    Console.WriteLine(record.ToKVP());
+	}
+}
 ```
 
 In the example I am outputting the records in KVP (Key/Value Pair) format but I also have a method to output to JSON. What other formats do you need?  Just add them to the LogRecord class.  And of course contribute back to the library when you do :-).  
@@ -83,7 +81,7 @@ There are a small number of unit tests written using NUnit.  I would like to mak
 ## TODO List
 Check out the [Issues](/../../issues) List
 
-##Contributing
+## Contributing
 Check out the [Contributing](/CONTRIBUTING.MD) file
 
 ## Contributors
